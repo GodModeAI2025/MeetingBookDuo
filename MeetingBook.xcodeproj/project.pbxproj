@@ -1,0 +1,1125 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		00102A929F1C3A9451F0D749 /* StorageProtection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B61B24FED25BDB99A4354B6 /* StorageProtection.swift */; };
+		07318250A7B97EB7F2CDA9AA /* StoreRetention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D45ACC5D7785769FF66E0A /* StoreRetention.swift */; };
+		07E16C7CF830713E9DDE9E2F /* SyncConflict.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2DFA1D09A40D9EF4763BBF /* SyncConflict.swift */; };
+		08DD6602343B6A2F166F783C /* ExportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814BF617071C2A2B9982CF98 /* ExportTests.swift */; };
+		0B487895D0B655BC208D0FE9 /* CloudKitSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8E987AFD80E1134B19A3671 /* CloudKitSyncService.swift */; };
+		0B9EF146B997F0AADC714E99 /* PersonalFontService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28967092B405FA6BF73B630 /* PersonalFontService.swift */; };
+		1040615C43F86A04156C7D0D /* PackageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91CEE6F09942D615684CCCFD /* PackageTests.swift */; };
+		109DDEB3210D015AF1303C6F /* StoreCausality.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5496B5B9208AF399C1B7E01 /* StoreCausality.swift */; };
+		1583F95EAC0E7A7D0DD9EF93 /* MeetingBookCore in Frameworks */ = {isa = PBXBuildFile; productRef = 6A5AFB27769CAC421C2E9929 /* MeetingBookCore */; };
+		17D740E416579DBBABF2AA11 /* ExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA27F981926D366DB1FAF1F1 /* ExportService.swift */; };
+		18C3F45BBB73B8C8D9291ABB /* WidgetSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDEAC87BE0E8BF90136383DC /* WidgetSnapshot.swift */; };
+		21B0D4DD521F752B088C1402 /* NotebookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8989F8E1F504BF1465D6F5D /* NotebookView.swift */; };
+		22994BA506C0DF083F5877B1 /* LaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABED421B67A1DBBC5BED9F7 /* LaunchTests.swift */; };
+		2764A2431BE0B2859F2739BA /* CloudKitAccountDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6765B68B454D3857E1BB48B6 /* CloudKitAccountDiscovery.swift */; };
+		29F4096AC2A2978D00E21FC8 /* MeetingBookCore in Frameworks */ = {isa = PBXBuildFile; productRef = 7E5278ED100F99DCAF410E50 /* MeetingBookCore */; };
+		2BA0F1C32110BB0FF8674324 /* WidgetSnapshotPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18969ED52BD058D9EBB9DCE7 /* WidgetSnapshotPublisher.swift */; };
+		2D9D51B99079203F9F43453D /* CustomizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176AF3C781092AA7A4A923D1 /* CustomizeView.swift */; };
+		2F58ED560223CC32B074B9DB /* HandwritingFontCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41081CF101738FD3EAF13650 /* HandwritingFontCatalog.swift */; };
+		335E4FD58EC08FE281D305C7 /* RevisionHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5FEFEE73B3A515BC7DF741 /* RevisionHistoryView.swift */; };
+		36F3E19A8F61279C2FE154B0 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 67E049ECAE67CE529CE2269B /* ZIPFoundation */; };
+		392E2EA223AD311834DDA296 /* PageClipboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD4DD759635E7CF84BA2B0A /* PageClipboard.swift */; };
+		3990B79F295BB6B761D89EBD /* StorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927B7D1E1B0848E7DD2FCDAB /* StorageTests.swift */; };
+		3E6368825F5FC9E6F1DDCBF8 /* FontStudioFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FDFE3949C8DB980E69A1E3 /* FontStudioFixture.swift */; };
+		3F55703BCF0ED27F07C75520 /* NoteTransactionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3052AFF692F99A8B63A8E385 /* NoteTransactionTests.swift */; };
+		40E6FB9E5A3D136C2096D556 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = CBE6549D86C2433FE1A3D3FC /* PrivacyInfo.xcprivacy */; };
+		461CE281AFF3FF3F206F00F4 /* TextBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3CFB71366E608AECB96D6D /* TextBlockView.swift */; };
+		4BF2E822DEAA480A4F1AFDBE /* Caveat-OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = B8DB6382B9D14D1814464E5A /* Caveat-OFL.txt */; };
+		511928A31CFF39FBDF5C28F6 /* AssetStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABDFCE12DB1C92BE097E9FF /* AssetStore.swift */; };
+		52CB8F838B55512D10987336 /* MeetingBookWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = F8CEF563E0B818137731CB32 /* MeetingBookWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		5628349E01D1DC537FDBDFC3 /* SyncTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8700B9E960801F324CAF1299 /* SyncTests.swift */; };
+		59EF003AAF9035628710837C /* SyncTransactionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73C68745E93B1CA06B2EADE2 /* SyncTransactionContext.swift */; };
+		5F17E51EBF9BEF3141A2C72E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 948C1C3085D920F7E87E1270 /* PrivacyInfo.xcprivacy */; };
+		5FC2C06047B667AC36B85D6B /* MixedPageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9CEA1776CF9A2C7879D68B /* MixedPageTests.swift */; };
+		6130DBA480C5802896F5545F /* MeetingBookAppIcon-v2.icon in Resources */ = {isa = PBXBuildFile; fileRef = 4BB0D033EB192662798D0200 /* MeetingBookAppIcon-v2.icon */; };
+		61787A19BC0C252D1AE7E577 /* ImageImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0257CBF552DA599BF4E105A /* ImageImportService.swift */; };
+		672C6BD204915FC830668F9E /* EditorSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CED1560A7E1DF5455247BA7 /* EditorSessionTests.swift */; };
+		68E1247CD0C6861DC897E0B6 /* FontStudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9E6576865BA847DAD8621B /* FontStudio.swift */; };
+		6B322449D0D9ECF813EF44B1 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 689A24C66F12EEC6664101E1 /* Localizable.xcstrings */; };
+		6BCE46503893A08F844377B1 /* ImageImportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51B20EB271E1357FD638EA2 /* ImageImportTests.swift */; };
+		6DFCD2E158223C9F3EBBE2DD /* TemplateChooser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99048297E1783B86570220EF /* TemplateChooser.swift */; };
+		6F58C7920033C15422566B19 /* EditorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494E5DD3E446025B505CFB55 /* EditorUITests.swift */; };
+		6FB7761935FE4BC9B0C79141 /* TemplateRendererTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462D6E7E6498F69879216853 /* TemplateRendererTests.swift */; };
+		7046C4AE4027082FF98CDB70 /* Caveat.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7D1B52466E3D3E421D6A048B /* Caveat.ttf */; };
+		70D17088CB4608F6E9912180 /* PageRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6683DAE0E10288574AB07B9 /* PageRenderer.swift */; };
+		768326369AE83AB4D335ACB4 /* MeetingBookRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = A41FEB7033E47D7522FEAEEE /* MeetingBookRoute.swift */; };
+		7A254C92271CBF7F07C7F91B /* SyncActivation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E35C5BE2F329D03702EB178 /* SyncActivation.swift */; };
+		7DC0B63123C67C0CCEC2A56F /* CloudKitRecordCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0426CADE2E16E7C36B5B21E /* CloudKitRecordCodec.swift */; };
+		853D47E9E8FE753243FD0948 /* EditorSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2BA8EF40A8528F75F13ECEC /* EditorSession.swift */; };
+		8AF33FDBFBE9AD11F5892DE5 /* WidgetSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDEAC87BE0E8BF90136383DC /* WidgetSnapshot.swift */; };
+		915F1B709C0BEE97E2ACC420 /* RevisionConflictResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CC97C7C1E2504177A50BD3 /* RevisionConflictResolver.swift */; };
+		95AAD6892F9D52050BDD4722 /* PageCanvasController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DEF040B9CD3078C274E298 /* PageCanvasController.swift */; };
+		96DDF0966BB1132B14DBB5BC /* NotebookFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5062E7676A16CBF02308FAB2 /* NotebookFeatureTests.swift */; };
+		995D7F0FCB95B388A3306868 /* SyncWire.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CC536D92145BD50600D818 /* SyncWire.swift */; };
+		9FDBC2CE4E43843BA0AD50D2 /* FontServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6BA0E3E71B642ABCB1DAE3 /* FontServiceTests.swift */; };
+		A1A76DACAFCBB9EACE35A205 /* TemplateRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E011CFFF2BF0FADB4B7DED /* TemplateRenderer.swift */; };
+		A9DF4C804DE5608E3BA01FFF /* RecoveryFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407711FED505E5DF05A91E23 /* RecoveryFlowTests.swift */; };
+		AD71F2643745A3C4F2B46105 /* NotebookStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7D2A21E2FE333457E1E6 /* NotebookStore.swift */; };
+		B13C1547B11E23DD94194E7A /* FrozenPageTurn.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9BFF28393BDD75A27FB0542 /* FrozenPageTurn.swift */; };
+		B56369E4CF8AC0362D5290CE /* NotebookPackage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB1B41B03AE63DA244558A2 /* NotebookPackage.swift */; };
+		B998E68BC7E6373B528E3A2E /* PageEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EBD90BA2E3FF731545E850F /* PageEditor.swift */; };
+		BAE10EEA35FDAC4922748DFF /* RetentionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1506ACAF27356A05EC6758DB /* RetentionTests.swift */; };
+		C227699D0F71903420A7E24D /* ClipboardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98990434833AABA3ADBD2840 /* ClipboardTests.swift */; };
+		C62588722072A3642BDB0CB7 /* WidgetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A92AC56503E2DD0A705362F /* WidgetTests.swift */; };
+		C7C1D491C44B68DCC5D83332 /* GochiHand-OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = 860419A8985B05DAE26C6475 /* GochiHand-OFL.txt */; };
+		C7E51D45F5973998652C789D /* RecoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 317202CF00AFAED35DEE9511 /* RecoveryView.swift */; };
+		CD78AD73D6FC6A36EF9DA72B /* WidgetRouteCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D517D91803A62DB72D1BAADF /* WidgetRouteCoordinator.swift */; };
+		CF8396E26E9B7D211E187F84 /* MeetingBookWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 671DDA22DB831E0609957354 /* MeetingBookWidget.swift */; };
+		CFA26D7518C1F123A05F484B /* GochiHand-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26213A99EFD88AEB3F4F045F /* GochiHand-Regular.ttf */; };
+		D669328AF61444C6F994F6F9 /* SyncScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C603886D30A5FFCB28292F /* SyncScope.swift */; };
+		D934783316E217245C102DD3 /* RestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA32D9651190888B75CE15E6 /* RestoreService.swift */; };
+		DA6B02127EF19D9F42AC2623 /* EditorLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7700CC569794E339A287D8EF /* EditorLayoutTests.swift */; };
+		DD7DF1DB24048163EB35C4EE /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 81ADFA5017CEA08B59948DFD /* Localizable.xcstrings */; };
+		E4320A5DDEB8F781AF12D5B9 /* SpreadWorkspace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30AA20D8C6270839E03741E4 /* SpreadWorkspace.swift */; };
+		E638B4CB66710420F898EE0D /* MeetingBookApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015CB80C11CA50264A6AE812 /* MeetingBookApp.swift */; };
+		ED285DCE51E4E1D47D0DCD91 /* MeetingBookRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = A41FEB7033E47D7522FEAEEE /* MeetingBookRoute.swift */; };
+		EE1EA4C8B6B6420DCA8E1CAA /* NotebookSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECE16C9A7733FB69EE3907EE /* NotebookSearch.swift */; };
+		EE60E413A605155637A27152 /* SyncOutbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5322ACEBACE871D1C534DE2 /* SyncOutbox.swift */; };
+		F112A23F1B85ABA0F595E34F /* NotebookFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB7B84A73E226DF5492C57C /* NotebookFlowTests.swift */; };
+		F39CDA2E59CA236CFC511AD7 /* ZIPFoundation-MIT.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2F205F2DE86C510B55B094A3 /* ZIPFoundation-MIT.txt */; };
+		FC533FB7F41DC68028BDB918 /* ImportValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8667EC230D29219F4A73215 /* ImportValidation.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1B2E5E300003E3048AA8CFB1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C7C378A71A29A8CEF3D54D7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 12BD52F7C39C2C10A3D9107A;
+			remoteInfo = MeetingBook;
+		};
+		1C6326C0DEB72C14C4EA4C08 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C7C378A71A29A8CEF3D54D7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 12BD52F7C39C2C10A3D9107A;
+			remoteInfo = MeetingBook;
+		};
+		DBE188E013329C177AF5407E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C7C378A71A29A8CEF3D54D7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2484D144A6C02C665D93711C;
+			remoteInfo = MeetingBookWidget;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8C5A3C5D5B247356859EA7AD /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				52CB8F838B55512D10987336 /* MeetingBookWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		015CB80C11CA50264A6AE812 /* MeetingBookApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingBookApp.swift; sourceTree = "<group>"; };
+		08E969B218BE554B698FFBF3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		08FB7D2A21E2FE333457E1E6 /* NotebookStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookStore.swift; sourceTree = "<group>"; };
+		0C3CFB71366E608AECB96D6D /* TextBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextBlockView.swift; sourceTree = "<group>"; };
+		1506ACAF27356A05EC6758DB /* RetentionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetentionTests.swift; sourceTree = "<group>"; };
+		176AF3C781092AA7A4A923D1 /* CustomizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizeView.swift; sourceTree = "<group>"; };
+		17DEF040B9CD3078C274E298 /* PageCanvasController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageCanvasController.swift; sourceTree = "<group>"; };
+		18969ED52BD058D9EBB9DCE7 /* WidgetSnapshotPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetSnapshotPublisher.swift; sourceTree = "<group>"; };
+		22D45ACC5D7785769FF66E0A /* StoreRetention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreRetention.swift; sourceTree = "<group>"; };
+		26213A99EFD88AEB3F4F045F /* GochiHand-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GochiHand-Regular.ttf"; sourceTree = "<group>"; };
+		2F205F2DE86C510B55B094A3 /* ZIPFoundation-MIT.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "ZIPFoundation-MIT.txt"; sourceTree = "<group>"; };
+		3052AFF692F99A8B63A8E385 /* NoteTransactionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteTransactionTests.swift; sourceTree = "<group>"; };
+		30AA20D8C6270839E03741E4 /* SpreadWorkspace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpreadWorkspace.swift; sourceTree = "<group>"; };
+		317202CF00AFAED35DEE9511 /* RecoveryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveryView.swift; sourceTree = "<group>"; };
+		3BB6C870752C3CFB87221A2B /* MeetingBookCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MeetingBookCore; path = Packages/MeetingBookCore; sourceTree = SOURCE_ROOT; };
+		3CED1560A7E1DF5455247BA7 /* EditorSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSessionTests.swift; sourceTree = "<group>"; };
+		407711FED505E5DF05A91E23 /* RecoveryFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveryFlowTests.swift; sourceTree = "<group>"; };
+		41081CF101738FD3EAF13650 /* HandwritingFontCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandwritingFontCatalog.swift; sourceTree = "<group>"; };
+		462D6E7E6498F69879216853 /* TemplateRendererTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateRendererTests.swift; sourceTree = "<group>"; };
+		494E5DD3E446025B505CFB55 /* EditorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorUITests.swift; sourceTree = "<group>"; };
+		4BB0D033EB192662798D0200 /* MeetingBookAppIcon-v2.icon */ = {isa = PBXFileReference; lastKnownFileType = wrapper.icon; path = "MeetingBookAppIcon-v2.icon"; sourceTree = "<group>"; };
+		5062E7676A16CBF02308FAB2 /* NotebookFeatureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookFeatureTests.swift; sourceTree = "<group>"; };
+		5E35C5BE2F329D03702EB178 /* SyncActivation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncActivation.swift; sourceTree = "<group>"; };
+		5E51A99F8F205807736099F4 /* MeetingBook.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MeetingBook.entitlements; sourceTree = "<group>"; };
+		60C603886D30A5FFCB28292F /* SyncScope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncScope.swift; sourceTree = "<group>"; };
+		65FDFE3949C8DB980E69A1E3 /* FontStudioFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontStudioFixture.swift; sourceTree = "<group>"; };
+		671C29C30AA5F24E3F7E6709 /* MeetingBookTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = MeetingBookTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		671DDA22DB831E0609957354 /* MeetingBookWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingBookWidget.swift; sourceTree = "<group>"; };
+		6765B68B454D3857E1BB48B6 /* CloudKitAccountDiscovery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitAccountDiscovery.swift; sourceTree = "<group>"; };
+		689A24C66F12EEC6664101E1 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		6B9CEA1776CF9A2C7879D68B /* MixedPageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixedPageTests.swift; sourceTree = "<group>"; };
+		71DDD9A2934EEE0B5B290785 /* MeetingBookWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MeetingBookWidget.entitlements; sourceTree = "<group>"; };
+		73C68745E93B1CA06B2EADE2 /* SyncTransactionContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncTransactionContext.swift; sourceTree = "<group>"; };
+		7700CC569794E339A287D8EF /* EditorLayoutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorLayoutTests.swift; sourceTree = "<group>"; };
+		7AB1B41B03AE63DA244558A2 /* NotebookPackage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookPackage.swift; sourceTree = "<group>"; };
+		7BD4DD759635E7CF84BA2B0A /* PageClipboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageClipboard.swift; sourceTree = "<group>"; };
+		7D1B52466E3D3E421D6A048B /* Caveat.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Caveat.ttf; sourceTree = "<group>"; };
+		7EBD90BA2E3FF731545E850F /* PageEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageEditor.swift; sourceTree = "<group>"; };
+		814BF617071C2A2B9982CF98 /* ExportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportTests.swift; sourceTree = "<group>"; };
+		81ADFA5017CEA08B59948DFD /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		860419A8985B05DAE26C6475 /* GochiHand-OFL.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "GochiHand-OFL.txt"; sourceTree = "<group>"; };
+		8700B9E960801F324CAF1299 /* SyncTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncTests.swift; sourceTree = "<group>"; };
+		89A86C12EAB2234D6C0CECBE /* MeetingBook.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MeetingBook.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A92AC56503E2DD0A705362F /* WidgetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetTests.swift; sourceTree = "<group>"; };
+		8B61B24FED25BDB99A4354B6 /* StorageProtection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageProtection.swift; sourceTree = "<group>"; };
+		8B6BA0E3E71B642ABCB1DAE3 /* FontServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontServiceTests.swift; sourceTree = "<group>"; };
+		91CEE6F09942D615684CCCFD /* PackageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackageTests.swift; sourceTree = "<group>"; };
+		927B7D1E1B0848E7DD2FCDAB /* StorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageTests.swift; sourceTree = "<group>"; };
+		948C1C3085D920F7E87E1270 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		98990434833AABA3ADBD2840 /* ClipboardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardTests.swift; sourceTree = "<group>"; };
+		99048297E1783B86570220EF /* TemplateChooser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateChooser.swift; sourceTree = "<group>"; };
+		A0257CBF552DA599BF4E105A /* ImageImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageImportService.swift; sourceTree = "<group>"; };
+		A41FEB7033E47D7522FEAEEE /* MeetingBookRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingBookRoute.swift; sourceTree = "<group>"; };
+		A5496B5B9208AF399C1B7E01 /* StoreCausality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreCausality.swift; sourceTree = "<group>"; };
+		A6683DAE0E10288574AB07B9 /* PageRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageRenderer.swift; sourceTree = "<group>"; };
+		AB9E6576865BA847DAD8621B /* FontStudio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontStudio.swift; sourceTree = "<group>"; };
+		B7E011CFFF2BF0FADB4B7DED /* TemplateRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateRenderer.swift; sourceTree = "<group>"; };
+		B8DB6382B9D14D1814464E5A /* Caveat-OFL.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Caveat-OFL.txt"; sourceTree = "<group>"; };
+		B8E987AFD80E1134B19A3671 /* CloudKitSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSyncService.swift; sourceTree = "<group>"; };
+		B903D3D6C75E358B37ED8BCE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		BB2DFA1D09A40D9EF4763BBF /* SyncConflict.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncConflict.swift; sourceTree = "<group>"; };
+		C51B20EB271E1357FD638EA2 /* ImageImportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageImportTests.swift; sourceTree = "<group>"; };
+		C5CC536D92145BD50600D818 /* SyncWire.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncWire.swift; sourceTree = "<group>"; };
+		C8989F8E1F504BF1465D6F5D /* NotebookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookView.swift; sourceTree = "<group>"; };
+		C9CC97C7C1E2504177A50BD3 /* RevisionConflictResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevisionConflictResolver.swift; sourceTree = "<group>"; };
+		CABED421B67A1DBBC5BED9F7 /* LaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchTests.swift; sourceTree = "<group>"; };
+		CBE6549D86C2433FE1A3D3FC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		CDEAC87BE0E8BF90136383DC /* WidgetSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetSnapshot.swift; sourceTree = "<group>"; };
+		D0426CADE2E16E7C36B5B21E /* CloudKitRecordCodec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitRecordCodec.swift; sourceTree = "<group>"; };
+		D28967092B405FA6BF73B630 /* PersonalFontService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalFontService.swift; sourceTree = "<group>"; };
+		D517D91803A62DB72D1BAADF /* WidgetRouteCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetRouteCoordinator.swift; sourceTree = "<group>"; };
+		D612F2C2786C4557DD96C7CC /* MeetingBookUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = MeetingBookUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D9BFF28393BDD75A27FB0542 /* FrozenPageTurn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrozenPageTurn.swift; sourceTree = "<group>"; };
+		DABDFCE12DB1C92BE097E9FF /* AssetStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetStore.swift; sourceTree = "<group>"; };
+		E2BA8EF40A8528F75F13ECEC /* EditorSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSession.swift; sourceTree = "<group>"; };
+		E5322ACEBACE871D1C534DE2 /* SyncOutbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncOutbox.swift; sourceTree = "<group>"; };
+		EA32D9651190888B75CE15E6 /* RestoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreService.swift; sourceTree = "<group>"; };
+		EB5FEFEE73B3A515BC7DF741 /* RevisionHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevisionHistoryView.swift; sourceTree = "<group>"; };
+		ECB7B84A73E226DF5492C57C /* NotebookFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookFlowTests.swift; sourceTree = "<group>"; };
+		ECE16C9A7733FB69EE3907EE /* NotebookSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookSearch.swift; sourceTree = "<group>"; };
+		F8667EC230D29219F4A73215 /* ImportValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportValidation.swift; sourceTree = "<group>"; };
+		F8CEF563E0B818137731CB32 /* MeetingBookWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = MeetingBookWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		FA27F981926D366DB1FAF1F1 /* ExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportService.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2E21E9600370396A68E41FD0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1583F95EAC0E7A7D0DD9EF93 /* MeetingBookCore in Frameworks */,
+				36F3E19A8F61279C2FE154B0 /* ZIPFoundation in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7863F51BCA56FF9FFB3F8B3D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				29F4096AC2A2978D00E21FC8 /* MeetingBookCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0995B895C0166F24FEA4BE50 /* Templates */ = {
+			isa = PBXGroup;
+			children = (
+				99048297E1783B86570220EF /* TemplateChooser.swift */,
+			);
+			path = Templates;
+			sourceTree = "<group>";
+		};
+		10157CA6794C6CB4465FF315 /* Sync */ = {
+			isa = PBXGroup;
+			children = (
+				6765B68B454D3857E1BB48B6 /* CloudKitAccountDiscovery.swift */,
+				D0426CADE2E16E7C36B5B21E /* CloudKitRecordCodec.swift */,
+				B8E987AFD80E1134B19A3671 /* CloudKitSyncService.swift */,
+				C9CC97C7C1E2504177A50BD3 /* RevisionConflictResolver.swift */,
+				A5496B5B9208AF399C1B7E01 /* StoreCausality.swift */,
+				5E35C5BE2F329D03702EB178 /* SyncActivation.swift */,
+				BB2DFA1D09A40D9EF4763BBF /* SyncConflict.swift */,
+				E5322ACEBACE871D1C534DE2 /* SyncOutbox.swift */,
+				60C603886D30A5FFCB28292F /* SyncScope.swift */,
+				73C68745E93B1CA06B2EADE2 /* SyncTransactionContext.swift */,
+				C5CC536D92145BD50600D818 /* SyncWire.swift */,
+			);
+			path = Sync;
+			sourceTree = "<group>";
+		};
+		16AA91372A819F2F0FC3B8B3 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				DABDFCE12DB1C92BE097E9FF /* AssetStore.swift */,
+				FA27F981926D366DB1FAF1F1 /* ExportService.swift */,
+				41081CF101738FD3EAF13650 /* HandwritingFontCatalog.swift */,
+				F8667EC230D29219F4A73215 /* ImportValidation.swift */,
+				7AB1B41B03AE63DA244558A2 /* NotebookPackage.swift */,
+				08FB7D2A21E2FE333457E1E6 /* NotebookStore.swift */,
+				D28967092B405FA6BF73B630 /* PersonalFontService.swift */,
+				EA32D9651190888B75CE15E6 /* RestoreService.swift */,
+				8B61B24FED25BDB99A4354B6 /* StorageProtection.swift */,
+				22D45ACC5D7785769FF66E0A /* StoreRetention.swift */,
+				B7E011CFFF2BF0FADB4B7DED /* TemplateRenderer.swift */,
+				10157CA6794C6CB4465FF315 /* Sync */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		26E6BEC31475BFD0D7D9B1C0 /* MeetingBookWidget */ = {
+			isa = PBXGroup;
+			children = (
+				08E969B218BE554B698FFBF3 /* Info.plist */,
+				689A24C66F12EEC6664101E1 /* Localizable.xcstrings */,
+				71DDD9A2934EEE0B5B290785 /* MeetingBookWidget.entitlements */,
+				671DDA22DB831E0609957354 /* MeetingBookWidget.swift */,
+				CBE6549D86C2433FE1A3D3FC /* PrivacyInfo.xcprivacy */,
+			);
+			path = MeetingBookWidget;
+			sourceTree = "<group>";
+		};
+		413DB527BFE1E564162D4CBA = {
+			isa = PBXGroup;
+			children = (
+				D7BE94E06E277E91FB5A3CEA /* MeetingBook */,
+				EC6B32AC8FD5771491788027 /* MeetingBookTests */,
+				AF81BDEE1C3C23336A0CEF24 /* MeetingBookUITests */,
+				26E6BEC31475BFD0D7D9B1C0 /* MeetingBookWidget */,
+				48DF492F39479AE355E8C18B /* Packages */,
+				67C51E7BEEF23E8FC631E632 /* Shared */,
+				F5ED63C58BADF49CD35D9840 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		48DF492F39479AE355E8C18B /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				3BB6C870752C3CFB87221A2B /* MeetingBookCore */,
+			);
+			path = Packages;
+			sourceTree = "<group>";
+		};
+		53178CD2A3AB722BC4398CAB /* App */ = {
+			isa = PBXGroup;
+			children = (
+				015CB80C11CA50264A6AE812 /* MeetingBookApp.swift */,
+				D517D91803A62DB72D1BAADF /* WidgetRouteCoordinator.swift */,
+				18969ED52BD058D9EBB9DCE7 /* WidgetSnapshotPublisher.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		5953B3D33D68B3BF3E65ED81 /* Customize */ = {
+			isa = PBXGroup;
+			children = (
+				176AF3C781092AA7A4A923D1 /* CustomizeView.swift */,
+			);
+			path = Customize;
+			sourceTree = "<group>";
+		};
+		5C6A0EDEA6ABCF01F5D04A34 /* FontStudio */ = {
+			isa = PBXGroup;
+			children = (
+				AB9E6576865BA847DAD8621B /* FontStudio.swift */,
+				65FDFE3949C8DB980E69A1E3 /* FontStudioFixture.swift */,
+			);
+			path = FontStudio;
+			sourceTree = "<group>";
+		};
+		67C51E7BEEF23E8FC631E632 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				A41FEB7033E47D7522FEAEEE /* MeetingBookRoute.swift */,
+				CDEAC87BE0E8BF90136383DC /* WidgetSnapshot.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		6AC82C3A00EE52FFA4BA5276 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				5953B3D33D68B3BF3E65ED81 /* Customize */,
+				5C6A0EDEA6ABCF01F5D04A34 /* FontStudio */,
+				7DB21F75E075D7C1FAF60884 /* Notebook */,
+				E811850BFC7057AC2BDEEAD0 /* Recovery */,
+				0995B895C0166F24FEA4BE50 /* Templates */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		75FD243C74435975D94CA91B /* Licenses */ = {
+			isa = PBXGroup;
+			children = (
+				B8DB6382B9D14D1814464E5A /* Caveat-OFL.txt */,
+				860419A8985B05DAE26C6475 /* GochiHand-OFL.txt */,
+				2F205F2DE86C510B55B094A3 /* ZIPFoundation-MIT.txt */,
+			);
+			path = Licenses;
+			sourceTree = "<group>";
+		};
+		7DB21F75E075D7C1FAF60884 /* Notebook */ = {
+			isa = PBXGroup;
+			children = (
+				D9BFF28393BDD75A27FB0542 /* FrozenPageTurn.swift */,
+				ECE16C9A7733FB69EE3907EE /* NotebookSearch.swift */,
+				C8989F8E1F504BF1465D6F5D /* NotebookView.swift */,
+				EB5FEFEE73B3A515BC7DF741 /* RevisionHistoryView.swift */,
+				30AA20D8C6270839E03741E4 /* SpreadWorkspace.swift */,
+			);
+			path = Notebook;
+			sourceTree = "<group>";
+		};
+		99438F9A51C953905923C943 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B903D3D6C75E358B37ED8BCE /* Info.plist */,
+				81ADFA5017CEA08B59948DFD /* Localizable.xcstrings */,
+				5E51A99F8F205807736099F4 /* MeetingBook.entitlements */,
+				4BB0D033EB192662798D0200 /* MeetingBookAppIcon-v2.icon */,
+				948C1C3085D920F7E87E1270 /* PrivacyInfo.xcprivacy */,
+				F4E8986B87833091D8C57E51 /* Fonts */,
+				75FD243C74435975D94CA91B /* Licenses */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A946D47BCDA60268027C79BD /* Editor */ = {
+			isa = PBXGroup;
+			children = (
+				E2BA8EF40A8528F75F13ECEC /* EditorSession.swift */,
+				A0257CBF552DA599BF4E105A /* ImageImportService.swift */,
+				17DEF040B9CD3078C274E298 /* PageCanvasController.swift */,
+				7BD4DD759635E7CF84BA2B0A /* PageClipboard.swift */,
+				7EBD90BA2E3FF731545E850F /* PageEditor.swift */,
+				A6683DAE0E10288574AB07B9 /* PageRenderer.swift */,
+				0C3CFB71366E608AECB96D6D /* TextBlockView.swift */,
+			);
+			path = Editor;
+			sourceTree = "<group>";
+		};
+		AF81BDEE1C3C23336A0CEF24 /* MeetingBookUITests */ = {
+			isa = PBXGroup;
+			children = (
+				494E5DD3E446025B505CFB55 /* EditorUITests.swift */,
+				CABED421B67A1DBBC5BED9F7 /* LaunchTests.swift */,
+				ECB7B84A73E226DF5492C57C /* NotebookFlowTests.swift */,
+				407711FED505E5DF05A91E23 /* RecoveryFlowTests.swift */,
+			);
+			path = MeetingBookUITests;
+			sourceTree = "<group>";
+		};
+		D7BE94E06E277E91FB5A3CEA /* MeetingBook */ = {
+			isa = PBXGroup;
+			children = (
+				53178CD2A3AB722BC4398CAB /* App */,
+				A946D47BCDA60268027C79BD /* Editor */,
+				6AC82C3A00EE52FFA4BA5276 /* Features */,
+				99438F9A51C953905923C943 /* Resources */,
+				16AA91372A819F2F0FC3B8B3 /* Services */,
+			);
+			path = MeetingBook;
+			sourceTree = "<group>";
+		};
+		E811850BFC7057AC2BDEEAD0 /* Recovery */ = {
+			isa = PBXGroup;
+			children = (
+				317202CF00AFAED35DEE9511 /* RecoveryView.swift */,
+			);
+			path = Recovery;
+			sourceTree = "<group>";
+		};
+		EC6B32AC8FD5771491788027 /* MeetingBookTests */ = {
+			isa = PBXGroup;
+			children = (
+				98990434833AABA3ADBD2840 /* ClipboardTests.swift */,
+				7700CC569794E339A287D8EF /* EditorLayoutTests.swift */,
+				3CED1560A7E1DF5455247BA7 /* EditorSessionTests.swift */,
+				814BF617071C2A2B9982CF98 /* ExportTests.swift */,
+				8B6BA0E3E71B642ABCB1DAE3 /* FontServiceTests.swift */,
+				C51B20EB271E1357FD638EA2 /* ImageImportTests.swift */,
+				6B9CEA1776CF9A2C7879D68B /* MixedPageTests.swift */,
+				5062E7676A16CBF02308FAB2 /* NotebookFeatureTests.swift */,
+				3052AFF692F99A8B63A8E385 /* NoteTransactionTests.swift */,
+				91CEE6F09942D615684CCCFD /* PackageTests.swift */,
+				1506ACAF27356A05EC6758DB /* RetentionTests.swift */,
+				927B7D1E1B0848E7DD2FCDAB /* StorageTests.swift */,
+				8700B9E960801F324CAF1299 /* SyncTests.swift */,
+				462D6E7E6498F69879216853 /* TemplateRendererTests.swift */,
+				8A92AC56503E2DD0A705362F /* WidgetTests.swift */,
+			);
+			path = MeetingBookTests;
+			sourceTree = "<group>";
+		};
+		F4E8986B87833091D8C57E51 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				7D1B52466E3D3E421D6A048B /* Caveat.ttf */,
+				26213A99EFD88AEB3F4F045F /* GochiHand-Regular.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		F5ED63C58BADF49CD35D9840 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				89A86C12EAB2234D6C0CECBE /* MeetingBook.app */,
+				671C29C30AA5F24E3F7E6709 /* MeetingBookTests.xctest */,
+				D612F2C2786C4557DD96C7CC /* MeetingBookUITests.xctest */,
+				F8CEF563E0B818137731CB32 /* MeetingBookWidget.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		06C75E19FC9F759EA29DAE96 /* MeetingBookUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A5E84F93EFC56AB3F1A8CFE5 /* Build configuration list for PBXNativeTarget "MeetingBookUITests" */;
+			buildPhases = (
+				1D81FEBAF218CFC4A971FD9F /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D95710CEF3D31F14B2DB9103 /* PBXTargetDependency */,
+			);
+			name = MeetingBookUITests;
+			packageProductDependencies = (
+			);
+			productName = MeetingBookUITests;
+			productReference = D612F2C2786C4557DD96C7CC /* MeetingBookUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		12BD52F7C39C2C10A3D9107A /* MeetingBook */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 94DBE0FAB533E820C4EF6527 /* Build configuration list for PBXNativeTarget "MeetingBook" */;
+			buildPhases = (
+				5128F3D0FD2A3D59F5D8BBA9 /* Sources */,
+				28A14401BF500EF13B72B7F6 /* Resources */,
+				2E21E9600370396A68E41FD0 /* Frameworks */,
+				8C5A3C5D5B247356859EA7AD /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				71D222EC2AA4A13B9A82FB47 /* PBXTargetDependency */,
+			);
+			name = MeetingBook;
+			packageProductDependencies = (
+				6A5AFB27769CAC421C2E9929 /* MeetingBookCore */,
+				67E049ECAE67CE529CE2269B /* ZIPFoundation */,
+			);
+			productName = MeetingBook;
+			productReference = 89A86C12EAB2234D6C0CECBE /* MeetingBook.app */;
+			productType = "com.apple.product-type.application";
+		};
+		2484D144A6C02C665D93711C /* MeetingBookWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2136823C1298EC678A7E1402 /* Build configuration list for PBXNativeTarget "MeetingBookWidget" */;
+			buildPhases = (
+				519E733361E6C78E43564055 /* Sources */,
+				026264A3236839E99CE19D0D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MeetingBookWidget;
+			packageProductDependencies = (
+			);
+			productName = MeetingBookWidget;
+			productReference = F8CEF563E0B818137731CB32 /* MeetingBookWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		CCF127AD29E296E6DE7CF70B /* MeetingBookTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AC5FB0633EC07D2BB5691E6B /* Build configuration list for PBXNativeTarget "MeetingBookTests" */;
+			buildPhases = (
+				C8E828F4FCA971AA250F3745 /* Sources */,
+				7863F51BCA56FF9FFB3F8B3D /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				68BC62A9057015CABBFA4680 /* PBXTargetDependency */,
+			);
+			name = MeetingBookTests;
+			packageProductDependencies = (
+				7E5278ED100F99DCAF410E50 /* MeetingBookCore */,
+			);
+			productName = MeetingBookTests;
+			productReference = 671C29C30AA5F24E3F7E6709 /* MeetingBookTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8C7C378A71A29A8CEF3D54D7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					06C75E19FC9F759EA29DAE96 = {
+						DevelopmentTeam = SP73Z8JWXM;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 12BD52F7C39C2C10A3D9107A;
+					};
+					12BD52F7C39C2C10A3D9107A = {
+						DevelopmentTeam = SP73Z8JWXM;
+					};
+					2484D144A6C02C665D93711C = {
+						DevelopmentTeam = SP73Z8JWXM;
+					};
+					CCF127AD29E296E6DE7CF70B = {
+						DevelopmentTeam = SP73Z8JWXM;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = A7D25D393BA60069AC1A48E1 /* Build configuration list for PBXProject "MeetingBook" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				de,
+				en,
+			);
+			mainGroup = 413DB527BFE1E564162D4CBA;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				E801E6147B72D81C0B067811 /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
+				2534EB059190602BA009C6D4 /* XCLocalSwiftPackageReference "Packages/MeetingBookCore" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = F5ED63C58BADF49CD35D9840 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				12BD52F7C39C2C10A3D9107A /* MeetingBook */,
+				CCF127AD29E296E6DE7CF70B /* MeetingBookTests */,
+				06C75E19FC9F759EA29DAE96 /* MeetingBookUITests */,
+				2484D144A6C02C665D93711C /* MeetingBookWidget */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		026264A3236839E99CE19D0D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6B322449D0D9ECF813EF44B1 /* Localizable.xcstrings in Resources */,
+				40E6FB9E5A3D136C2096D556 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28A14401BF500EF13B72B7F6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BF2E822DEAA480A4F1AFDBE /* Caveat-OFL.txt in Resources */,
+				7046C4AE4027082FF98CDB70 /* Caveat.ttf in Resources */,
+				C7C1D491C44B68DCC5D83332 /* GochiHand-OFL.txt in Resources */,
+				CFA26D7518C1F123A05F484B /* GochiHand-Regular.ttf in Resources */,
+				DD7DF1DB24048163EB35C4EE /* Localizable.xcstrings in Resources */,
+				6130DBA480C5802896F5545F /* MeetingBookAppIcon-v2.icon in Resources */,
+				5F17E51EBF9BEF3141A2C72E /* PrivacyInfo.xcprivacy in Resources */,
+				F39CDA2E59CA236CFC511AD7 /* ZIPFoundation-MIT.txt in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1D81FEBAF218CFC4A971FD9F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F58C7920033C15422566B19 /* EditorUITests.swift in Sources */,
+				22994BA506C0DF083F5877B1 /* LaunchTests.swift in Sources */,
+				F112A23F1B85ABA0F595E34F /* NotebookFlowTests.swift in Sources */,
+				A9DF4C804DE5608E3BA01FFF /* RecoveryFlowTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5128F3D0FD2A3D59F5D8BBA9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				511928A31CFF39FBDF5C28F6 /* AssetStore.swift in Sources */,
+				2764A2431BE0B2859F2739BA /* CloudKitAccountDiscovery.swift in Sources */,
+				7DC0B63123C67C0CCEC2A56F /* CloudKitRecordCodec.swift in Sources */,
+				0B487895D0B655BC208D0FE9 /* CloudKitSyncService.swift in Sources */,
+				2D9D51B99079203F9F43453D /* CustomizeView.swift in Sources */,
+				853D47E9E8FE753243FD0948 /* EditorSession.swift in Sources */,
+				17D740E416579DBBABF2AA11 /* ExportService.swift in Sources */,
+				68E1247CD0C6861DC897E0B6 /* FontStudio.swift in Sources */,
+				3E6368825F5FC9E6F1DDCBF8 /* FontStudioFixture.swift in Sources */,
+				B13C1547B11E23DD94194E7A /* FrozenPageTurn.swift in Sources */,
+				2F58ED560223CC32B074B9DB /* HandwritingFontCatalog.swift in Sources */,
+				61787A19BC0C252D1AE7E577 /* ImageImportService.swift in Sources */,
+				FC533FB7F41DC68028BDB918 /* ImportValidation.swift in Sources */,
+				E638B4CB66710420F898EE0D /* MeetingBookApp.swift in Sources */,
+				768326369AE83AB4D335ACB4 /* MeetingBookRoute.swift in Sources */,
+				B56369E4CF8AC0362D5290CE /* NotebookPackage.swift in Sources */,
+				EE1EA4C8B6B6420DCA8E1CAA /* NotebookSearch.swift in Sources */,
+				AD71F2643745A3C4F2B46105 /* NotebookStore.swift in Sources */,
+				21B0D4DD521F752B088C1402 /* NotebookView.swift in Sources */,
+				95AAD6892F9D52050BDD4722 /* PageCanvasController.swift in Sources */,
+				392E2EA223AD311834DDA296 /* PageClipboard.swift in Sources */,
+				B998E68BC7E6373B528E3A2E /* PageEditor.swift in Sources */,
+				70D17088CB4608F6E9912180 /* PageRenderer.swift in Sources */,
+				0B9EF146B997F0AADC714E99 /* PersonalFontService.swift in Sources */,
+				C7E51D45F5973998652C789D /* RecoveryView.swift in Sources */,
+				D934783316E217245C102DD3 /* RestoreService.swift in Sources */,
+				915F1B709C0BEE97E2ACC420 /* RevisionConflictResolver.swift in Sources */,
+				335E4FD58EC08FE281D305C7 /* RevisionHistoryView.swift in Sources */,
+				E4320A5DDEB8F781AF12D5B9 /* SpreadWorkspace.swift in Sources */,
+				00102A929F1C3A9451F0D749 /* StorageProtection.swift in Sources */,
+				109DDEB3210D015AF1303C6F /* StoreCausality.swift in Sources */,
+				07318250A7B97EB7F2CDA9AA /* StoreRetention.swift in Sources */,
+				7A254C92271CBF7F07C7F91B /* SyncActivation.swift in Sources */,
+				07E16C7CF830713E9DDE9E2F /* SyncConflict.swift in Sources */,
+				EE60E413A605155637A27152 /* SyncOutbox.swift in Sources */,
+				D669328AF61444C6F994F6F9 /* SyncScope.swift in Sources */,
+				59EF003AAF9035628710837C /* SyncTransactionContext.swift in Sources */,
+				995D7F0FCB95B388A3306868 /* SyncWire.swift in Sources */,
+				6DFCD2E158223C9F3EBBE2DD /* TemplateChooser.swift in Sources */,
+				A1A76DACAFCBB9EACE35A205 /* TemplateRenderer.swift in Sources */,
+				461CE281AFF3FF3F206F00F4 /* TextBlockView.swift in Sources */,
+				CD78AD73D6FC6A36EF9DA72B /* WidgetRouteCoordinator.swift in Sources */,
+				8AF33FDBFBE9AD11F5892DE5 /* WidgetSnapshot.swift in Sources */,
+				2BA0F1C32110BB0FF8674324 /* WidgetSnapshotPublisher.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		519E733361E6C78E43564055 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ED285DCE51E4E1D47D0DCD91 /* MeetingBookRoute.swift in Sources */,
+				CF8396E26E9B7D211E187F84 /* MeetingBookWidget.swift in Sources */,
+				18C3F45BBB73B8C8D9291ABB /* WidgetSnapshot.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C8E828F4FCA971AA250F3745 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C227699D0F71903420A7E24D /* ClipboardTests.swift in Sources */,
+				DA6B02127EF19D9F42AC2623 /* EditorLayoutTests.swift in Sources */,
+				672C6BD204915FC830668F9E /* EditorSessionTests.swift in Sources */,
+				08DD6602343B6A2F166F783C /* ExportTests.swift in Sources */,
+				9FDBC2CE4E43843BA0AD50D2 /* FontServiceTests.swift in Sources */,
+				6BCE46503893A08F844377B1 /* ImageImportTests.swift in Sources */,
+				5FC2C06047B667AC36B85D6B /* MixedPageTests.swift in Sources */,
+				3F55703BCF0ED27F07C75520 /* NoteTransactionTests.swift in Sources */,
+				96DDF0966BB1132B14DBB5BC /* NotebookFeatureTests.swift in Sources */,
+				1040615C43F86A04156C7D0D /* PackageTests.swift in Sources */,
+				BAE10EEA35FDAC4922748DFF /* RetentionTests.swift in Sources */,
+				3990B79F295BB6B761D89EBD /* StorageTests.swift in Sources */,
+				5628349E01D1DC537FDBDFC3 /* SyncTests.swift in Sources */,
+				6FB7761935FE4BC9B0C79141 /* TemplateRendererTests.swift in Sources */,
+				C62588722072A3642BDB0CB7 /* WidgetTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		68BC62A9057015CABBFA4680 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 12BD52F7C39C2C10A3D9107A /* MeetingBook */;
+			targetProxy = 1B2E5E300003E3048AA8CFB1 /* PBXContainerItemProxy */;
+		};
+		71D222EC2AA4A13B9A82FB47 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2484D144A6C02C665D93711C /* MeetingBookWidget */;
+			targetProxy = DBE188E013329C177AF5407E /* PBXContainerItemProxy */;
+		};
+		D95710CEF3D31F14B2DB9103 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 12BD52F7C39C2C10A3D9107A /* MeetingBook */;
+			targetProxy = 1C6326C0DEB72C14C4EA4C08 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		59DBD59B50597F4B52D18480 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = de.meetingbook.MeetingBookUITests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = MeetingBook;
+			};
+			name = Debug;
+		};
+		5B61EDB4B572FC65D4F1464B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = de.meetingbook.MeetingBookTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MeetingBook.app/MeetingBook";
+			};
+			name = Release;
+		};
+		629106A89D10AD63C79B5C61 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = SP73Z8JWXM;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		75084DA2C3D5352713433836 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = de.meetingbook.MeetingBookTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MeetingBook.app/MeetingBook";
+			};
+			name = Debug;
+		};
+		76B54AFD6FE01A1D6872F73B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = MeetingBookWidget/MeetingBookWidget.entitlements;
+				CODE_SIGN_IDENTITY = D4DFA190F421FBA93DC1D18399311D36C0878DF2;
+				CODE_SIGN_STYLE = Manual;
+				INFOPLIST_FILE = MeetingBookWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = de.meetingbook.app.widget;
+				PROVISIONING_PROFILE_SPECIFIER = "ad0edb85-4ba6-4c58-9583-513443bdb976";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		9A482C06DD46BC3E11D566AD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = de.meetingbook.MeetingBookUITests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = MeetingBook;
+			};
+			name = Release;
+		};
+		9FB185C8F5735515DE83A56E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "MeetingBookAppIcon-v2";
+				CODE_SIGN_ENTITLEMENTS = MeetingBook/Resources/MeetingBook.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = MeetingBook/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MEETINGBOOK_CLOUDKIT_CONTAINER = iCloud.de.meetingbook.app;
+				MEETINGBOOK_CLOUDKIT_ENTITLEMENT_ENVIRONMENT = Development;
+				MEETINGBOOK_CLOUDKIT_ENVIRONMENT = development;
+				PRODUCT_BUNDLE_IDENTIFIER = de.meetingbook.app;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F0684422C9FB0EEA5299F85E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = MeetingBookWidget/MeetingBookWidget.entitlements;
+				INFOPLIST_FILE = MeetingBookWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = de.meetingbook.app.widget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F48DD470297BB6813EA4AEC3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = SP73Z8JWXM;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		FDA3E5E24825F42020B63086 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "MeetingBookAppIcon-v2";
+				CODE_SIGN_ENTITLEMENTS = MeetingBook/Resources/MeetingBook.entitlements;
+				CODE_SIGN_IDENTITY = D4DFA190F421FBA93DC1D18399311D36C0878DF2;
+				CODE_SIGN_STYLE = Manual;
+				INFOPLIST_FILE = MeetingBook/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MEETINGBOOK_CLOUDKIT_CONTAINER = iCloud.de.meetingbook.app;
+				MEETINGBOOK_CLOUDKIT_ENTITLEMENT_ENVIRONMENT = Production;
+				MEETINGBOOK_CLOUDKIT_ENVIRONMENT = production;
+				PRODUCT_BUNDLE_IDENTIFIER = de.meetingbook.app;
+				PROVISIONING_PROFILE_SPECIFIER = "6d0b8bec-7a13-4cd0-b974-485aef5b2ef1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2136823C1298EC678A7E1402 /* Build configuration list for PBXNativeTarget "MeetingBookWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F0684422C9FB0EEA5299F85E /* Debug */,
+				76B54AFD6FE01A1D6872F73B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		94DBE0FAB533E820C4EF6527 /* Build configuration list for PBXNativeTarget "MeetingBook" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9FB185C8F5735515DE83A56E /* Debug */,
+				FDA3E5E24825F42020B63086 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A5E84F93EFC56AB3F1A8CFE5 /* Build configuration list for PBXNativeTarget "MeetingBookUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				59DBD59B50597F4B52D18480 /* Debug */,
+				9A482C06DD46BC3E11D566AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A7D25D393BA60069AC1A48E1 /* Build configuration list for PBXProject "MeetingBook" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				629106A89D10AD63C79B5C61 /* Debug */,
+				F48DD470297BB6813EA4AEC3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		AC5FB0633EC07D2BB5691E6B /* Build configuration list for PBXNativeTarget "MeetingBookTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75084DA2C3D5352713433836 /* Debug */,
+				5B61EDB4B572FC65D4F1464B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		2534EB059190602BA009C6D4 /* XCLocalSwiftPackageReference "Packages/MeetingBookCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/MeetingBookCore;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E801E6147B72D81C0B067811 /* XCRemoteSwiftPackageReference "ZIPFoundation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/weichsel/ZIPFoundation.git";
+			requirement = {
+				kind = revision;
+				revision = 22787ffb59de99e5dc1fbfe80b19c97a904ad48d;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		67E049ECAE67CE529CE2269B /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E801E6147B72D81C0B067811 /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
+		};
+		6A5AFB27769CAC421C2E9929 /* MeetingBookCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MeetingBookCore;
+		};
+		7E5278ED100F99DCAF410E50 /* MeetingBookCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MeetingBookCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 8C7C378A71A29A8CEF3D54D7 /* Project object */;
+}
