@@ -1,0 +1,2223 @@
+{
+  "method": "Static Python AST and JSON inspection; generator code not executed",
+  "modules": [
+    {
+      "id": "lined",
+      "labelKey": "lined",
+      "defaultCount": 40,
+      "note": "",
+      "function": "m_lined",
+      "line": 756
+    },
+    {
+      "id": "dotted",
+      "labelKey": "dotted",
+      "defaultCount": 20,
+      "note": "",
+      "function": "m_dotted",
+      "line": 761
+    },
+    {
+      "id": "grid",
+      "labelKey": "grid",
+      "defaultCount": 20,
+      "note": "",
+      "function": "m_grid",
+      "line": 766
+    },
+    {
+      "id": "brain_dump",
+      "labelKey": "brain_dump",
+      "defaultCount": 6,
+      "note": "",
+      "function": "m_brain_dump",
+      "line": 771
+    },
+    {
+      "id": "goals",
+      "labelKey": "goals",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_goals",
+      "line": 776
+    },
+    {
+      "id": "weekly_plan",
+      "labelKey": "weekly_plan",
+      "defaultCount": 12,
+      "note": "",
+      "function": "m_weekly_plan",
+      "line": 800
+    },
+    {
+      "id": "workout_log",
+      "labelKey": "workout_log",
+      "defaultCount": 60,
+      "note": "",
+      "function": "m_workout_log",
+      "line": 819
+    },
+    {
+      "id": "measurements",
+      "labelKey": "measurements",
+      "defaultCount": 2,
+      "note": "",
+      "function": "m_measurements",
+      "line": 847
+    },
+    {
+      "id": "checkins",
+      "labelKey": "checkins",
+      "defaultCount": 12,
+      "note": "",
+      "function": "m_checkins",
+      "line": 855
+    },
+    {
+      "id": "records",
+      "labelKey": "records",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_records",
+      "line": 874
+    },
+    {
+      "id": "foundation",
+      "labelKey": "foundation",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_foundation",
+      "line": 890
+    },
+    {
+      "id": "routines",
+      "labelKey": "routines",
+      "defaultCount": 2,
+      "note": "1 = Morgen, 2 = Abend",
+      "function": "m_routines",
+      "line": 905
+    },
+    {
+      "id": "selfcare_menu",
+      "labelKey": "selfcare_menu",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_selfcare_menu",
+      "line": 922
+    },
+    {
+      "id": "mood_year",
+      "labelKey": "mood_year",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_mood_year",
+      "line": 933
+    },
+    {
+      "id": "mood_month",
+      "labelKey": "mood_month",
+      "defaultCount": 3,
+      "note": "",
+      "function": "m_mood_month",
+      "line": 956
+    },
+    {
+      "id": "selfcare_day",
+      "labelKey": "selfcare_day",
+      "defaultCount": 60,
+      "note": "",
+      "function": "m_selfcare_day",
+      "line": 973
+    },
+    {
+      "id": "prompts",
+      "labelKey": "prompts",
+      "defaultCount": 20,
+      "note": "",
+      "function": "m_prompts",
+      "line": 992
+    },
+    {
+      "id": "weekly_reflection",
+      "labelKey": "weekly_reflection",
+      "defaultCount": 8,
+      "note": "",
+      "function": "m_weekly_reflection",
+      "line": 1003
+    },
+    {
+      "id": "gratitude_intro",
+      "labelKey": "gratitude_intro",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_gratitude_intro",
+      "line": 1015
+    },
+    {
+      "id": "gratitude_day",
+      "labelKey": "gratitude_day",
+      "defaultCount": 90,
+      "note": "Wochenrückblick nach je 7 Tagen",
+      "function": "m_gratitude_day",
+      "line": 1033
+    },
+    {
+      "id": "collection",
+      "labelKey": "collection",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_collection",
+      "line": 1111
+    },
+    {
+      "id": "trip_overview",
+      "labelKey": "trip_overview",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_trip_overview",
+      "line": 1128
+    },
+    {
+      "id": "packing",
+      "labelKey": "packing",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_packing",
+      "line": 1149
+    },
+    {
+      "id": "wishlist",
+      "labelKey": "wishlist",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_wishlist",
+      "line": 1165
+    },
+    {
+      "id": "travel_day",
+      "labelKey": "travel_day",
+      "defaultCount": 14,
+      "note": "je Tag Plan + Erinnerungen (2 Seiten)",
+      "function": "m_travel_day",
+      "line": 1184
+    },
+    {
+      "id": "expenses",
+      "labelKey": "expenses",
+      "defaultCount": 2,
+      "note": "",
+      "function": "m_expenses",
+      "line": 1238
+    },
+    {
+      "id": "souvenirs",
+      "labelKey": "souvenirs",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_souvenirs",
+      "line": 1249
+    },
+    {
+      "id": "trip_review",
+      "labelKey": "trip_review",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_trip_review",
+      "line": 1257
+    },
+    {
+      "id": "prayer_setup",
+      "labelKey": "prayer_setup",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_prayer_setup",
+      "line": 1272
+    },
+    {
+      "id": "prayer_day",
+      "labelKey": "prayer_day",
+      "defaultCount": 90,
+      "note": "",
+      "function": "m_prayer_day",
+      "line": 1284
+    },
+    {
+      "id": "prayer_list",
+      "labelKey": "prayer_list",
+      "defaultCount": 4,
+      "note": "",
+      "function": "m_prayer_list",
+      "line": 1300
+    },
+    {
+      "id": "answered",
+      "labelKey": "answered",
+      "defaultCount": 2,
+      "note": "",
+      "function": "m_answered",
+      "line": 1312
+    },
+    {
+      "id": "scripture",
+      "labelKey": "scripture",
+      "defaultCount": 20,
+      "note": "",
+      "function": "m_scripture",
+      "line": 1320
+    },
+    {
+      "id": "prayer_week",
+      "labelKey": "prayer_week",
+      "defaultCount": 12,
+      "note": "",
+      "function": "m_prayer_week",
+      "line": 1330
+    },
+    {
+      "id": "month_plan",
+      "labelKey": "month_plan",
+      "defaultCount": 3,
+      "note": "",
+      "function": "m_month_plan",
+      "line": 1341
+    },
+    {
+      "id": "week_plan",
+      "labelKey": "week_plan",
+      "defaultCount": 13,
+      "note": "",
+      "function": "m_week_plan",
+      "line": 1364
+    },
+    {
+      "id": "focus_day",
+      "labelKey": "focus_day",
+      "defaultCount": 60,
+      "note": "",
+      "function": "m_focus_day",
+      "line": 1390
+    },
+    {
+      "id": "timetable",
+      "labelKey": "timetable",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_timetable",
+      "line": 1429
+    },
+    {
+      "id": "contents",
+      "labelKey": "contents",
+      "defaultCount": 2,
+      "note": "",
+      "function": "m_contents",
+      "line": 1443
+    },
+    {
+      "id": "assignments",
+      "labelKey": "assignments",
+      "defaultCount": 4,
+      "note": "",
+      "function": "m_assignments",
+      "line": 1451
+    },
+    {
+      "id": "grades",
+      "labelKey": "grades",
+      "defaultCount": 2,
+      "note": "",
+      "function": "m_grades",
+      "line": 1463
+    },
+    {
+      "id": "habit_setup",
+      "labelKey": "habit_setup",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_habit_setup",
+      "line": 1475
+    },
+    {
+      "id": "habit_month",
+      "labelKey": "habit_month",
+      "defaultCount": 12,
+      "note": "",
+      "function": "m_habit_month",
+      "line": 1483
+    },
+    {
+      "id": "habit_review",
+      "labelKey": "habit_review",
+      "defaultCount": 12,
+      "note": "",
+      "function": "m_habit_review",
+      "line": 1514
+    },
+    {
+      "id": "wellness_setup",
+      "labelKey": "wellness_setup",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_wellness_setup",
+      "line": 1529
+    },
+    {
+      "id": "wellness_day",
+      "labelKey": "wellness_day",
+      "defaultCount": 90,
+      "note": "",
+      "function": "m_wellness_day",
+      "line": 1546
+    },
+    {
+      "id": "wellness_week",
+      "labelKey": "wellness_week",
+      "defaultCount": 13,
+      "note": "",
+      "function": "m_wellness_week",
+      "line": 1575
+    },
+    {
+      "id": "symptom_log",
+      "labelKey": "symptom_log",
+      "defaultCount": 4,
+      "note": "",
+      "function": "m_symptom_log",
+      "line": 1591
+    },
+    {
+      "id": "medication_log",
+      "labelKey": "medication_log",
+      "defaultCount": 4,
+      "note": "",
+      "function": "m_medication_log",
+      "line": 1599
+    },
+    {
+      "id": "reading_challenge",
+      "labelKey": "reading_challenge",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_reading_challenge",
+      "line": 1616
+    },
+    {
+      "id": "reading_list",
+      "labelKey": "reading_list",
+      "defaultCount": 4,
+      "note": "",
+      "function": "m_reading_list",
+      "line": 1639
+    },
+    {
+      "id": "book_entry",
+      "labelKey": "book_entry",
+      "defaultCount": 40,
+      "note": "",
+      "function": "m_book_entry",
+      "line": 1651
+    },
+    {
+      "id": "quotes",
+      "labelKey": "quotes",
+      "defaultCount": 6,
+      "note": "",
+      "function": "m_quotes",
+      "line": 1670
+    },
+    {
+      "id": "ai_setup",
+      "labelKey": "ai_setup",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_ai_setup",
+      "line": 1682
+    },
+    {
+      "id": "prompt_log",
+      "labelKey": "prompt_log",
+      "defaultCount": 60,
+      "note": "",
+      "function": "m_prompt_log",
+      "line": 1699
+    },
+    {
+      "id": "prompt_library",
+      "labelKey": "prompt_library",
+      "defaultCount": 6,
+      "note": "",
+      "function": "m_prompt_library",
+      "line": 1719
+    },
+    {
+      "id": "ai_learning",
+      "labelKey": "ai_learning",
+      "defaultCount": 20,
+      "note": "",
+      "function": "m_ai_learning",
+      "line": 1727
+    },
+    {
+      "id": "ai_usecases",
+      "labelKey": "ai_usecases",
+      "defaultCount": 4,
+      "note": "",
+      "function": "m_ai_usecases",
+      "line": 1735
+    },
+    {
+      "id": "ai_week",
+      "labelKey": "ai_week",
+      "defaultCount": 12,
+      "note": "",
+      "function": "m_ai_week",
+      "line": 1747
+    },
+    {
+      "id": "mindful_intro",
+      "labelKey": "mindful_intro",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_mindful_intro",
+      "line": 1759
+    },
+    {
+      "id": "reflection_start",
+      "labelKey": "reflection_start",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_reflection",
+      "line": 1770
+    },
+    {
+      "id": "reflection_end",
+      "labelKey": "reflection_end",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_reflection",
+      "line": 1770
+    },
+    {
+      "id": "life_wheel",
+      "labelKey": "life_wheel",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_life_wheel",
+      "line": 1796
+    },
+    {
+      "id": "life_check",
+      "labelKey": "life_check",
+      "defaultCount": 3,
+      "note": "",
+      "function": "m_life_check",
+      "line": 1810
+    },
+    {
+      "id": "morning_evening",
+      "labelKey": "morning_evening",
+      "defaultCount": 90,
+      "note": "",
+      "function": "m_morning_evening",
+      "line": 1824
+    },
+    {
+      "id": "mindful_day",
+      "labelKey": "mindful_day",
+      "defaultCount": 60,
+      "note": "",
+      "function": "m_mindful_day",
+      "line": 1855
+    },
+    {
+      "id": "letter",
+      "labelKey": "letter",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_letter",
+      "line": 1886
+    },
+    {
+      "id": "exercises",
+      "labelKey": "exercises",
+      "defaultCount": 3,
+      "note": "1 Atmung · 2 Sinne · 3 Body-Scan",
+      "function": "m_exercises",
+      "line": 1896
+    },
+    {
+      "id": "meeting_notes",
+      "labelKey": "meeting_notes",
+      "defaultCount": 60,
+      "note": "",
+      "function": "m_meeting_notes",
+      "line": 1931
+    },
+    {
+      "id": "action_log",
+      "labelKey": "action_log",
+      "defaultCount": 4,
+      "note": "",
+      "function": "m_action_log",
+      "line": 1964
+    },
+    {
+      "id": "cornell",
+      "labelKey": "cornell",
+      "defaultCount": 20,
+      "note": "",
+      "function": "m_cornell",
+      "line": 1976
+    },
+    {
+      "id": "todo",
+      "labelKey": "todo",
+      "defaultCount": 10,
+      "note": "",
+      "function": "m_todo",
+      "line": 2001
+    },
+    {
+      "id": "eisenhower",
+      "labelKey": "eisenhower",
+      "defaultCount": 4,
+      "note": "",
+      "function": "m_eisenhower",
+      "line": 2013
+    },
+    {
+      "id": "mindmap",
+      "labelKey": "mindmap",
+      "defaultCount": 6,
+      "note": "",
+      "function": "m_mindmap",
+      "line": 2033
+    },
+    {
+      "id": "health_profile",
+      "labelKey": "health_profile",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_health_profile",
+      "line": 2051
+    },
+    {
+      "id": "body_map",
+      "labelKey": "body_map",
+      "defaultCount": 2,
+      "note": "1 Vorderseite · 2 Rückseite",
+      "function": "m_body_map",
+      "line": 2066
+    },
+    {
+      "id": "pain_day",
+      "labelKey": "pain_day",
+      "defaultCount": 60,
+      "note": "",
+      "function": "m_pain_day",
+      "line": 2082
+    },
+    {
+      "id": "pain_year",
+      "labelKey": "pain_year",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_pain_year",
+      "line": 2111
+    },
+    {
+      "id": "mind_day",
+      "labelKey": "mind_day",
+      "defaultCount": 60,
+      "note": "",
+      "function": "m_mind_day",
+      "line": 2134
+    },
+    {
+      "id": "thought_record",
+      "labelKey": "thought_record",
+      "defaultCount": 20,
+      "note": "",
+      "function": "m_thought_record",
+      "line": 2159
+    },
+    {
+      "id": "sleep_log",
+      "labelKey": "sleep_log",
+      "defaultCount": 6,
+      "note": "",
+      "function": "m_sleep_log",
+      "line": 2172
+    },
+    {
+      "id": "vitals",
+      "labelKey": "vitals",
+      "defaultCount": 6,
+      "note": "",
+      "function": "m_vitals",
+      "line": 2189
+    },
+    {
+      "id": "medication_plan",
+      "labelKey": "medication_plan",
+      "defaultCount": 2,
+      "note": "",
+      "function": "m_medication_plan",
+      "line": 2197
+    },
+    {
+      "id": "doctor_visits",
+      "labelKey": "doctor_visits",
+      "defaultCount": 12,
+      "note": "",
+      "function": "m_doctor_visits",
+      "line": 2205
+    },
+    {
+      "id": "lab_values",
+      "labelKey": "lab_values",
+      "defaultCount": 3,
+      "note": "",
+      "function": "m_lab_values",
+      "line": 2219
+    },
+    {
+      "id": "health_week",
+      "labelKey": "health_week",
+      "defaultCount": 13,
+      "note": "",
+      "function": "m_health_week",
+      "line": 2227
+    },
+    {
+      "id": "crisis_plan",
+      "labelKey": "crisis_plan",
+      "defaultCount": 1,
+      "note": "",
+      "function": "m_crisis_plan",
+      "line": 2243
+    },
+    {
+      "id": "bp_log",
+      "labelKey": "bp_log",
+      "defaultCount": 8,
+      "note": "7 Tage je Seite, morgens/abends je 2 Messungen",
+      "function": "m_bp_log",
+      "line": 2262
+    },
+    {
+      "id": "fever_curve",
+      "labelKey": "fever_curve",
+      "defaultCount": 4,
+      "note": "7 Tage × morgens/mittags/abends",
+      "function": "m_fever_curve",
+      "line": 2297
+    },
+    {
+      "id": "glucose_log",
+      "labelKey": "glucose_log",
+      "defaultCount": 4,
+      "note": "7 Tage je Seite, 7-Punkte-Profil",
+      "function": "m_glucose_log",
+      "line": 2339
+    },
+    {
+      "id": "vitals_day",
+      "labelKey": "vitals_day",
+      "defaultCount": 14,
+      "note": "",
+      "function": "m_vitals_day",
+      "line": 2359
+    }
+  ],
+  "presets": {
+    "fitness": [
+      "fj_title",
+      [
+        [
+          "goals",
+          1
+        ],
+        [
+          "weekly_plan",
+          12
+        ],
+        [
+          "workout_log",
+          60
+        ],
+        [
+          "measurements",
+          2
+        ],
+        [
+          "checkins",
+          12
+        ],
+        [
+          "records",
+          1
+        ]
+      ]
+    ],
+    "selfcare": [
+      "sc_title",
+      [
+        [
+          "foundation",
+          1
+        ],
+        [
+          "routines",
+          2
+        ],
+        [
+          "selfcare_menu",
+          1
+        ],
+        [
+          "mood_year",
+          1
+        ],
+        [
+          "mood_month",
+          3
+        ],
+        [
+          "selfcare_day",
+          60
+        ],
+        [
+          "prompts",
+          20
+        ],
+        [
+          "weekly_reflection",
+          8
+        ]
+      ]
+    ],
+    "gratitude": [
+      "gj_title",
+      [
+        [
+          "gratitude_intro",
+          1
+        ],
+        [
+          "gratitude_day",
+          90
+        ],
+        [
+          "collection",
+          1
+        ]
+      ]
+    ],
+    "travel": [
+      "tj_title",
+      [
+        [
+          "trip_overview",
+          1
+        ],
+        [
+          "packing",
+          1
+        ],
+        [
+          "wishlist",
+          1
+        ],
+        [
+          "travel_day",
+          14
+        ],
+        [
+          "expenses",
+          2
+        ],
+        [
+          "souvenirs",
+          1
+        ],
+        [
+          "trip_review",
+          1
+        ],
+        [
+          "dotted",
+          4
+        ]
+      ]
+    ],
+    "prayer": [
+      "pj_title",
+      [
+        [
+          "prayer_setup",
+          1
+        ],
+        [
+          "prayer_day",
+          90
+        ],
+        [
+          "prayer_list",
+          4
+        ],
+        [
+          "answered",
+          2
+        ],
+        [
+          "scripture",
+          20
+        ],
+        [
+          "prayer_week",
+          12
+        ]
+      ]
+    ],
+    "productivity": [
+      "pd_title",
+      [
+        [
+          "goals",
+          1
+        ],
+        [
+          "month_plan",
+          3
+        ],
+        [
+          "week_plan",
+          13
+        ],
+        [
+          "focus_day",
+          60
+        ],
+        [
+          "brain_dump",
+          6
+        ]
+      ]
+    ],
+    "student": [
+      "st_title",
+      [
+        [
+          "timetable",
+          1
+        ],
+        [
+          "contents",
+          2
+        ],
+        [
+          "lined",
+          100
+        ],
+        [
+          "assignments",
+          4
+        ],
+        [
+          "grades",
+          2
+        ]
+      ]
+    ],
+    "habits": [
+      "hb_title",
+      [
+        [
+          "habit_setup",
+          1
+        ],
+        [
+          "habit_month",
+          12
+        ],
+        [
+          "habit_review",
+          12
+        ]
+      ]
+    ],
+    "wellness": [
+      "wl_title",
+      [
+        [
+          "wellness_setup",
+          1
+        ],
+        [
+          "wellness_day",
+          90
+        ],
+        [
+          "wellness_week",
+          13
+        ],
+        [
+          "symptom_log",
+          4
+        ],
+        [
+          "medication_log",
+          4
+        ],
+        [
+          "measurements",
+          2
+        ]
+      ]
+    ],
+    "reading": [
+      "rj_title",
+      [
+        [
+          "reading_challenge",
+          1
+        ],
+        [
+          "reading_list",
+          4
+        ],
+        [
+          "book_entry",
+          40
+        ],
+        [
+          "quotes",
+          6
+        ]
+      ]
+    ],
+    "ai": [
+      "ai_title",
+      [
+        [
+          "ai_setup",
+          1
+        ],
+        [
+          "prompt_log",
+          60
+        ],
+        [
+          "prompt_library",
+          6
+        ],
+        [
+          "ai_learning",
+          20
+        ],
+        [
+          "ai_usecases",
+          4
+        ],
+        [
+          "ai_week",
+          12
+        ]
+      ]
+    ],
+    "notebook": [
+      "st_title",
+      [
+        [
+          "contents",
+          2
+        ],
+        [
+          "lined",
+          120
+        ]
+      ]
+    ],
+    "meetings": [
+      "mt_title",
+      [
+        [
+          "contents",
+          2
+        ],
+        [
+          "meeting_notes",
+          60
+        ],
+        [
+          "action_log",
+          4
+        ],
+        [
+          "cornell",
+          10
+        ],
+        [
+          "todo",
+          6
+        ],
+        [
+          "eisenhower",
+          2
+        ],
+        [
+          "mindmap",
+          4
+        ],
+        [
+          "lined",
+          10
+        ],
+        [
+          "dotted",
+          6
+        ]
+      ]
+    ],
+    "health": [
+      "hj_title",
+      [
+        [
+          "health_profile",
+          1
+        ],
+        [
+          "crisis_plan",
+          1
+        ],
+        [
+          "body_map",
+          2
+        ],
+        [
+          "pain_day",
+          60
+        ],
+        [
+          "pain_year",
+          1
+        ],
+        [
+          "mind_day",
+          60
+        ],
+        [
+          "thought_record",
+          12
+        ],
+        [
+          "sleep_log",
+          6
+        ],
+        [
+          "vitals",
+          4
+        ],
+        [
+          "medication_plan",
+          2
+        ],
+        [
+          "medication_log",
+          4
+        ],
+        [
+          "symptom_log",
+          3
+        ],
+        [
+          "bp_log",
+          4
+        ],
+        [
+          "fever_curve",
+          2
+        ],
+        [
+          "glucose_log",
+          2
+        ],
+        [
+          "vitals_day",
+          6
+        ],
+        [
+          "doctor_visits",
+          12
+        ],
+        [
+          "lab_values",
+          3
+        ],
+        [
+          "health_week",
+          13
+        ],
+        [
+          "lined",
+          6
+        ]
+      ]
+    ],
+    "vitals": [
+      "vj_title",
+      [
+        [
+          "health_profile",
+          1
+        ],
+        [
+          "bp_log",
+          12
+        ],
+        [
+          "fever_curve",
+          4
+        ],
+        [
+          "glucose_log",
+          8
+        ],
+        [
+          "vitals_day",
+          20
+        ],
+        [
+          "vitals",
+          4
+        ],
+        [
+          "medication_plan",
+          2
+        ],
+        [
+          "doctor_visits",
+          6
+        ],
+        [
+          "lab_values",
+          3
+        ],
+        [
+          "lined",
+          4
+        ]
+      ]
+    ],
+    "pain": [
+      "pain_day",
+      [
+        [
+          "health_profile",
+          1
+        ],
+        [
+          "body_map",
+          2
+        ],
+        [
+          "pain_day",
+          90
+        ],
+        [
+          "pain_year",
+          1
+        ],
+        [
+          "medication_plan",
+          2
+        ],
+        [
+          "medication_log",
+          4
+        ],
+        [
+          "doctor_visits",
+          8
+        ],
+        [
+          "health_week",
+          13
+        ],
+        [
+          "lined",
+          4
+        ]
+      ]
+    ],
+    "mindful": [
+      "mj_title",
+      [
+        [
+          "mindful_intro",
+          1
+        ],
+        [
+          "reflection_start",
+          1
+        ],
+        [
+          "life_wheel",
+          1
+        ],
+        [
+          "morning_evening",
+          90
+        ],
+        [
+          "weekly_reflection",
+          13
+        ],
+        [
+          "life_check",
+          3
+        ],
+        [
+          "exercises",
+          3
+        ],
+        [
+          "letter",
+          1
+        ],
+        [
+          "reflection_end",
+          1
+        ],
+        [
+          "dotted",
+          4
+        ]
+      ]
+    ]
+  },
+  "singlePageExport": [
+    "lined",
+    "dotted",
+    "grid",
+    "brain_dump",
+    "goals",
+    "weekly_plan",
+    "workout_log",
+    "measurements",
+    "checkins",
+    "foundation",
+    "selfcare_menu",
+    "mood_year",
+    "mood_month",
+    "selfcare_day",
+    "weekly_reflection",
+    "gratitude_day",
+    "collection",
+    "packing",
+    "wishlist",
+    "expenses",
+    "prayer_day",
+    "prayer_list",
+    "scripture",
+    "month_plan",
+    "week_plan",
+    "focus_day",
+    "timetable",
+    "contents",
+    "assignments",
+    "grades",
+    "habit_setup",
+    "habit_month",
+    "habit_review",
+    "wellness_day",
+    "wellness_week",
+    "symptom_log",
+    "medication_log",
+    "reading_list",
+    "book_entry",
+    "quotes",
+    "prompt_log",
+    "prompt_library",
+    "ai_learning",
+    "ai_usecases",
+    "mindful_day",
+    "morning_evening",
+    "life_wheel",
+    "life_check",
+    "letter",
+    "meeting_notes",
+    "action_log",
+    "cornell",
+    "todo",
+    "eisenhower",
+    "mindmap"
+  ],
+  "sets": {
+    "basics": [
+      "lined",
+      "dotted",
+      "grid",
+      "cornell",
+      "todo",
+      "meeting_notes"
+    ],
+    "business": [
+      "meeting_notes",
+      "action_log",
+      "cornell",
+      "todo",
+      "eisenhower",
+      "mindmap",
+      "focus_day",
+      "week_plan",
+      "month_plan",
+      "goals"
+    ],
+    "life": [
+      "gratitude_day",
+      "mindful_day",
+      "morning_evening",
+      "habit_month",
+      "wellness_day",
+      "workout_log",
+      "weekly_reflection",
+      "life_wheel"
+    ],
+    "all": null
+  },
+  "plannerPageFunctions": [
+    "page_cover",
+    "page_home",
+    "page_guide",
+    "page_toc",
+    "page_index",
+    "page_year",
+    "page_month",
+    "page_week_1",
+    "page_week_2",
+    "page_week_3",
+    "page_week_4",
+    "page_day_1",
+    "page_day_2",
+    "page_projects_home",
+    "page_project_plan",
+    "page_project_kanban",
+    "page_project_budget",
+    "page_goals_year",
+    "page_goals_quarter",
+    "page_wellness_home",
+    "page_habits",
+    "page_meal",
+    "page_sleep",
+    "page_fitness",
+    "page_finance_home",
+    "page_budget",
+    "page_savings",
+    "page_notes_home",
+    "page_note",
+    "page_review"
+  ],
+  "tools": [
+    "jahreskalender",
+    "urlaubsplaner",
+    "zeiterfassung",
+    "reisekosten"
+  ],
+  "customBlockTypes": [
+    "fields",
+    "heading",
+    "text",
+    "prompt",
+    "table",
+    "scale",
+    "checks",
+    "checklist",
+    "lines",
+    "dots",
+    "weekdays",
+    "faces",
+    "battery",
+    "box",
+    "band",
+    "linescale",
+    "wheel",
+    "rating_list",
+    "paragraphs",
+    "breath",
+    "spacer"
+  ],
+  "specs": [
+    {
+      "id": "adr_journal",
+      "title": "Architektur-Entscheidungsjournal",
+      "fields": [
+        "Name",
+        "System / Produkt",
+        "Zeitraum"
+      ],
+      "modules": [
+        {
+          "name": "intro",
+          "label": "So nutzt du dieses Journal",
+          "n": 1,
+          "blocks": [
+            {
+              "type": "text",
+              "lines": [
+                "Eine Entscheidung = eine Seite, nach ADR-Muster: Kontext, Optionen, Entscheidung, Folgen.",
+                "Status: vorgeschlagen · akzeptiert · abgelehnt · ersetzt (durch ADR-Nr.).",
+                "Setze ein Review-Datum. Entscheidungen altern — prüfe, ob die Annahmen noch gelten.",
+                "Der Index vorne hält alle ADRs auffindbar; Prinzipien geben den Rahmen."
+              ]
+            },
+            {
+              "type": "prompt",
+              "label": "Architekturprinzipien, die für uns gelten",
+              "lines": "fill"
+            }
+          ]
+        },
+        {
+          "name": "adr_index",
+          "label": "ADR-Index",
+          "n": 3,
+          "blocks": [
+            {
+              "type": "table",
+              "cols": [
+                "Nr.",
+                "Titel",
+                "Datum",
+                "Status",
+                "Ersetzt durch"
+              ],
+              "weights": [
+                0.5,
+                3.2,
+                1,
+                1.2,
+                1
+              ],
+              "rh": 18,
+              "rows": "fit"
+            }
+          ]
+        },
+        {
+          "name": "decision",
+          "label": "Entscheidungen",
+          "title": "ADR",
+          "n": 50,
+          "blocks": [
+            {
+              "type": "fields",
+              "items": [
+                "ADR-Nr.",
+                "Datum",
+                "Status"
+              ]
+            },
+            {
+              "type": "fields",
+              "items": [
+                "Titel der Entscheidung"
+              ]
+            },
+            {
+              "type": "prompt",
+              "label": "Kontext — Problem, Treiber, Randbedingungen",
+              "lines": 4
+            },
+            {
+              "type": "table",
+              "cols": [
+                "Option",
+                "Vorteile",
+                "Nachteile",
+                "Risiko"
+              ],
+              "weights": [
+                1.4,
+                2,
+                2,
+                0.8
+              ],
+              "rh": 26,
+              "rows": 3
+            },
+            {
+              "type": "prompt",
+              "label": "Entscheidung — und warum",
+              "lines": 3
+            },
+            {
+              "type": "prompt",
+              "label": "Konsequenzen, Risiken, Folgearbeiten",
+              "lines": "fill"
+            },
+            {
+              "type": "fields",
+              "items": [
+                "Review-Datum",
+                "Beteiligte / Freigabe"
+              ]
+            },
+            {
+              "type": "checks",
+              "items": [
+                "Doku aktualisiert",
+                "Team informiert",
+                "Ticket angelegt"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "review",
+          "label": "Quartals-Reviews",
+          "title": "Quartal",
+          "n": 4,
+          "blocks": [
+            {
+              "type": "prompt",
+              "label": "Welche Entscheidungen haben sich bewährt?",
+              "lines": "fill"
+            },
+            {
+              "type": "prompt",
+              "label": "Welche Annahmen gelten nicht mehr?",
+              "lines": "fill"
+            },
+            {
+              "type": "prompt",
+              "label": "Technische Schulden, die daraus entstanden sind",
+              "lines": "fill"
+            },
+            {
+              "type": "prompt",
+              "label": "Was entscheiden wir als Nächstes?",
+              "lines": "fill"
+            }
+          ]
+        },
+        {
+          "use": "lined",
+          "n": 8
+        }
+      ]
+    },
+    {
+      "id": "ai_experiment_log",
+      "title": "AI Experiment Logbook",
+      "fields": [
+        "Name",
+        "Projekt / Team",
+        "Zeitraum"
+      ],
+      "modules": [
+        {
+          "name": "intro",
+          "label": "So nutzt du dieses Logbuch",
+          "n": 1,
+          "blocks": [
+            {
+              "type": "text",
+              "lines": [
+                "Ein Experiment = eine Seite. Ziel und Hypothese zuerst, dann Prompt, dann Beobachtung.",
+                "Bewerte ehrlich: Qualität, Nützlichkeit, Reproduzierbarkeit. Notiere das Fehlermuster.",
+                "Jede Woche 10 Minuten Review: Was hat funktioniert, was nicht, was probiere ich als Nächstes?",
+                "Was sich bewährt, wandert in die Prompt-Bibliothek. Fehlermuster in den Katalog.",
+                "Keine vertraulichen oder personenbezogenen Daten in Prompts — auch nicht hier im Buch."
+              ]
+            },
+            {
+              "type": "heading",
+              "text": "Meine Leitfragen für dieses Logbuch"
+            },
+            {
+              "type": "prompt",
+              "label": "Was will ich mit diesen Experimenten herausfinden?",
+              "lines": 4
+            },
+            {
+              "type": "prompt",
+              "label": "Woran erkenne ich, dass ein Experiment erfolgreich war?",
+              "lines": 4
+            },
+            {
+              "type": "prompt",
+              "label": "Notizen",
+              "lines": "fill"
+            }
+          ]
+        },
+        {
+          "use": "goals",
+          "n": 1
+        },
+        {
+          "name": "stack",
+          "label": "Modelle & Tools",
+          "n": 2,
+          "blocks": [
+            {
+              "type": "table",
+              "cols": [
+                "Modell / Version",
+                "Anbieter / Host",
+                "Stärken",
+                "Schwächen",
+                "Kosten"
+              ],
+              "weights": [
+                1.6,
+                1.2,
+                2,
+                2,
+                1
+              ],
+              "rh": 24,
+              "rows": "fit"
+            }
+          ]
+        },
+        {
+          "name": "experiment",
+          "label": "Experimente",
+          "title": "Experiment",
+          "n": 80,
+          "blocks": [
+            {
+              "type": "fields",
+              "items": [
+                "Datum",
+                "Nr. / Tag",
+                "Modell / Version"
+              ]
+            },
+            {
+              "type": "fields",
+              "items": [
+                "Tool / Toolchain",
+                "Kosten / Zeit"
+              ]
+            },
+            {
+              "type": "fields",
+              "items": [
+                "Ziel / Hypothese"
+              ]
+            },
+            {
+              "type": "prompt",
+              "label": "Prompt / Setup",
+              "lines": 6
+            },
+            {
+              "type": "prompt",
+              "label": "Kontextdaten / Eingaben",
+              "lines": 2
+            },
+            {
+              "type": "prompt",
+              "label": "Ausgabe / Beobachtung",
+              "lines": "fill"
+            },
+            {
+              "type": "scale",
+              "items": [
+                "Qualität",
+                "Nützlichkeit",
+                "Reproduzierbar"
+              ]
+            },
+            {
+              "type": "fields",
+              "items": [
+                "Fehlermuster"
+              ]
+            },
+            {
+              "type": "fields",
+              "items": [
+                "Nächster Test / Hypothese"
+              ]
+            },
+            {
+              "type": "checks",
+              "items": [
+                "Wiederverwendbar",
+                "In Bibliothek übernommen",
+                "Mit Team geteilt"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "patterns",
+          "label": "Fehlermuster-Katalog",
+          "n": 2,
+          "blocks": [
+            {
+              "type": "table",
+              "cols": [
+                "Muster",
+                "Symptom",
+                "Gegenmaßnahme",
+                "Häufigkeit"
+              ],
+              "weights": [
+                1.5,
+                2,
+                2.5,
+                0.8
+              ],
+              "rh": 26,
+              "rows": "fit"
+            }
+          ]
+        },
+        {
+          "use": "prompt_library",
+          "n": 4
+        },
+        {
+          "name": "review",
+          "label": "Wochenreviews",
+          "title": "Woche",
+          "n": 12,
+          "blocks": [
+            {
+              "type": "fields",
+              "items": [
+                "Woche vom",
+                "Experimente diese Woche"
+              ]
+            },
+            {
+              "type": "prompt",
+              "label": "Was hat funktioniert?",
+              "lines": "fill"
+            },
+            {
+              "type": "prompt",
+              "label": "Was nicht — und warum?",
+              "lines": "fill"
+            },
+            {
+              "type": "prompt",
+              "label": "Erkenntnis der Woche",
+              "lines": "fill"
+            },
+            {
+              "type": "prompt",
+              "label": "Nächste Experimente",
+              "lines": "fill"
+            }
+          ]
+        },
+        {
+          "use": "lined",
+          "n": 8
+        }
+      ]
+    },
+    {
+      "id": "garden_log",
+      "title": "Garten-Journal",
+      "fields": [
+        "Name",
+        "Garten / Fläche",
+        "Saison"
+      ],
+      "modules": [
+        {
+          "name": "beds",
+          "label": "Beete & Flächen",
+          "n": 2,
+          "blocks": [
+            {
+              "type": "table",
+              "cols": [
+                "Beet / Fläche",
+                "Kultur",
+                "Aussaat",
+                "Pflanzung",
+                "Ernte",
+                "Notiz"
+              ],
+              "weights": [
+                1.2,
+                1.4,
+                0.9,
+                0.9,
+                0.9,
+                1.4
+              ],
+              "rh": 22,
+              "rows": "fit"
+            }
+          ]
+        },
+        {
+          "name": "season",
+          "label": "Saisonplan",
+          "n": 1,
+          "blocks": [
+            {
+              "type": "table",
+              "cols": [
+                "Monat",
+                "Aussaat",
+                "Pflanzen",
+                "Pflege",
+                "Ernte"
+              ],
+              "weights": [
+                0.8,
+                1.6,
+                1.6,
+                1.6,
+                1.4
+              ],
+              "rh": 36,
+              "rows": 12
+            }
+          ]
+        },
+        {
+          "name": "plant",
+          "label": "Pflanzenseiten",
+          "title": "Pflanze",
+          "n": 40,
+          "blocks": [
+            {
+              "type": "fields",
+              "items": [
+                "Pflanze / Sorte",
+                "Standort / Beet"
+              ]
+            },
+            {
+              "type": "fields",
+              "items": [
+                "Aussaat",
+                "Keimung",
+                "Pflanzung",
+                "Ernte"
+              ]
+            },
+            {
+              "type": "scale",
+              "items": [
+                "Ertrag",
+                "Geschmack",
+                "Aufwand"
+              ]
+            },
+            {
+              "type": "prompt",
+              "label": "Pflege, Gießen, Düngung",
+              "lines": 3
+            },
+            {
+              "type": "prompt",
+              "label": "Schädlinge / Krankheiten",
+              "lines": 2
+            },
+            {
+              "type": "prompt",
+              "label": "Beobachtungen",
+              "lines": "fill"
+            },
+            {
+              "type": "checks",
+              "items": [
+                "Nächstes Jahr wieder",
+                "Samen gewonnen",
+                "Sorte empfehlen"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "weather",
+          "label": "Wetter & Gießen",
+          "n": 4,
+          "blocks": [
+            {
+              "type": "table",
+              "cols": [
+                "Datum",
+                "Wetter",
+                "°C",
+                "Regen",
+                "Gegossen",
+                "Notiz"
+              ],
+              "weights": [
+                1,
+                1.4,
+                0.6,
+                0.7,
+                0.8,
+                2
+              ],
+              "rh": 18,
+              "rows": "fit",
+              "checks": [
+                4
+              ]
+            }
+          ]
+        },
+        {
+          "name": "harvest",
+          "label": "Erntetagebuch",
+          "n": 3,
+          "blocks": [
+            {
+              "type": "table",
+              "cols": [
+                "Datum",
+                "Kultur",
+                "Menge",
+                "Verwendung / Notiz"
+              ],
+              "weights": [
+                1,
+                1.6,
+                1,
+                2.6
+              ],
+              "rh": 18,
+              "rows": "fit"
+            }
+          ]
+        },
+        {
+          "use": "expenses",
+          "n": 2
+        },
+        {
+          "use": "dotted",
+          "n": 6
+        }
+      ]
+    },
+    {
+      "id": "homelab_log",
+      "title": "Homelab & Security Logbuch",
+      "fields": [
+        "Name",
+        "Standort / Netz",
+        "Zeitraum"
+      ],
+      "modules": [
+        {
+          "name": "inventory",
+          "label": "Inventar",
+          "n": 2,
+          "blocks": [
+            {
+              "type": "table",
+              "cols": [
+                "Host / Gerät",
+                "IP / VLAN",
+                "Rolle / Dienste",
+                "OS / Version",
+                "Notiz"
+              ],
+              "weights": [
+                1.4,
+                1,
+                1.8,
+                1.2,
+                1.4
+              ],
+              "rh": 22,
+              "rows": "fit"
+            }
+          ]
+        },
+        {
+          "name": "change",
+          "label": "Änderungen",
+          "title": "Änderung",
+          "n": 40,
+          "blocks": [
+            {
+              "type": "fields",
+              "items": [
+                "Datum",
+                "Host / Dienst",
+                "Ticket / Ref."
+              ]
+            },
+            {
+              "type": "prompt",
+              "label": "Was wurde geändert?",
+              "lines": 4
+            },
+            {
+              "type": "prompt",
+              "label": "Grund / Ziel",
+              "lines": 2
+            },
+            {
+              "type": "prompt",
+              "label": "Rollback-Plan",
+              "lines": 2
+            },
+            {
+              "type": "checks",
+              "items": [
+                "Backup vorher",
+                "Getestet",
+                "Doku aktualisiert",
+                "Monitoring ok"
+              ]
+            },
+            {
+              "type": "prompt",
+              "label": "Ergebnis / Notizen",
+              "lines": "fill"
+            }
+          ]
+        },
+        {
+          "name": "backup",
+          "label": "Backup-Log",
+          "n": 3,
+          "blocks": [
+            {
+              "type": "table",
+              "cols": [
+                "Datum",
+                "Quelle",
+                "Ziel",
+                "Größe",
+                "OK",
+                "Restore getestet"
+              ],
+              "weights": [
+                1,
+                1.6,
+                1.6,
+                0.8,
+                0.5,
+                0.9
+              ],
+              "rh": 20,
+              "rows": "fit",
+              "checks": [
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "name": "incident",
+          "label": "Incidents",
+          "title": "Incident",
+          "n": 15,
+          "blocks": [
+            {
+              "type": "fields",
+              "items": [
+                "Datum / Zeit",
+                "Betroffen",
+                "Dauer"
+              ]
+            },
+            {
+              "type": "prompt",
+              "label": "Symptom — was ist aufgefallen?",
+              "lines": 3
+            },
+            {
+              "type": "prompt",
+              "label": "Ursache",
+              "lines": 3
+            },
+            {
+              "type": "prompt",
+              "label": "Behebung",
+              "lines": 3
+            },
+            {
+              "type": "prompt",
+              "label": "Lessons learned / Vorbeugung",
+              "lines": "fill"
+            }
+          ]
+        },
+        {
+          "name": "maintenance",
+          "label": "Wartungsplan",
+          "n": 2,
+          "blocks": [
+            {
+              "type": "table",
+              "cols": [
+                "Aufgabe",
+                "Intervall",
+                "Zuletzt",
+                "Nächstes",
+                "✓"
+              ],
+              "weights": [
+                2.6,
+                1,
+                1,
+                1,
+                0.4
+              ],
+              "rh": 20,
+              "rows": "fit",
+              "checks": [
+                4
+              ]
+            }
+          ]
+        },
+        {
+          "name": "hardening",
+          "label": "Härtungs-Checkliste",
+          "n": 2,
+          "blocks": [
+            {
+              "type": "text",
+              "lines": [
+                "Updates · Firewall-Regeln · SSH-Keys statt Passwörter · 2FA · Backups verschlüsselt ·",
+                "Logs zentral · Least Privilege · offene Ports geprüft · Zertifikate erneuert"
+              ]
+            },
+            {
+              "type": "checklist",
+              "label": "Maßnahmen",
+              "n": "fill"
+            }
+          ]
+        },
+        {
+          "use": "lined",
+          "n": 6
+        }
+      ]
+    }
+  ],
+  "counts": {
+    "modules": 91,
+    "presets": 17,
+    "singlePageExport": 55,
+    "plannerPageFunctions": 30,
+    "tools": 4,
+    "customBlockTypes": 21,
+    "exampleSpecs": 4,
+    "exampleCustomPageTypes": 20
+  }
+}

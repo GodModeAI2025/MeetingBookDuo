@@ -1,0 +1,16 @@
+.DS_Store
+.superpowers/
+.worktrees/
+build/
+DerivedData/
+.build/
+artifacts/
+*.xcuserstate
+xcuserdata/
+
+# Local native QA captures; the accompanying reports remain versioned.
+docs/qa/*-native-readback/
+docs/qa/*-native/
+docs/qa/task-8c-final-ui/
+docs/qa/task-8d-prototype/
+docs/qa/*-distribution-profile-created.png

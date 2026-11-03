@@ -1,0 +1,93 @@
+name: MeetingBook
+options:
+  bundleIdPrefix: de.meetingbook
+  deploymentTarget:
+    iOS: "26.0"
+packages:
+  ZIPFoundation:
+    url: https://github.com/weichsel/ZIPFoundation.git
+    revision: 22787ffb59de99e5dc1fbfe80b19c97a904ad48d
+  MeetingBookCore:
+    path: Packages/MeetingBookCore
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    TARGETED_DEVICE_FAMILY: "1,2"
+    CODE_SIGN_STYLE: Automatic
+    DEVELOPMENT_TEAM: SP73Z8JWXM
+    GENERATE_INFOPLIST_FILE: NO
+targets:
+  MeetingBook:
+    type: application
+    platform: iOS
+    sources:
+      - path: MeetingBook
+      - path: Shared
+      - path: MeetingBook/Resources/Localizable.xcstrings
+        buildPhase: resources
+    dependencies:
+      - target: MeetingBookWidget
+        embed: true
+      - package: MeetingBookCore
+      - package: ZIPFoundation
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: de.meetingbook.app
+        CODE_SIGN_ENTITLEMENTS: MeetingBook/Resources/MeetingBook.entitlements
+        ASSETCATALOG_COMPILER_APPICON_NAME: MeetingBookAppIcon-v2
+        MEETINGBOOK_CLOUDKIT_CONTAINER: iCloud.de.meetingbook.app
+        INFOPLIST_FILE: MeetingBook/Resources/Info.plist
+      configs:
+        Debug:
+          MEETINGBOOK_CLOUDKIT_ENVIRONMENT: development
+          MEETINGBOOK_CLOUDKIT_ENTITLEMENT_ENVIRONMENT: Development
+        Release:
+          CODE_SIGN_STYLE: Manual
+          CODE_SIGN_IDENTITY: D4DFA190F421FBA93DC1D18399311D36C0878DF2
+          PROVISIONING_PROFILE_SPECIFIER: 6d0b8bec-7a13-4cd0-b974-485aef5b2ef1
+          MEETINGBOOK_CLOUDKIT_ENVIRONMENT: production
+          MEETINGBOOK_CLOUDKIT_ENTITLEMENT_ENVIRONMENT: Production
+  MeetingBookWidget:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: Shared
+      - path: MeetingBookWidget
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: de.meetingbook.app.widget
+        INFOPLIST_FILE: MeetingBookWidget/Info.plist
+        CODE_SIGN_ENTITLEMENTS: MeetingBookWidget/MeetingBookWidget.entitlements
+        APPLICATION_EXTENSION_API_ONLY: YES
+        SKIP_INSTALL: YES
+      configs:
+        Release:
+          CODE_SIGN_STYLE: Manual
+          CODE_SIGN_IDENTITY: D4DFA190F421FBA93DC1D18399311D36C0878DF2
+          PROVISIONING_PROFILE_SPECIFIER: ad0edb85-4ba6-4c58-9583-513443bdb976
+  MeetingBookTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [MeetingBookTests]
+    dependencies:
+      - target: MeetingBook
+      - package: MeetingBookCore
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+  MeetingBookUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [MeetingBookUITests]
+    dependencies:
+      - target: MeetingBook
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+schemes:
+  MeetingBook:
+    build:
+      targets:
+        MeetingBook: all
+    test:
+      targets: [MeetingBookTests, MeetingBookUITests]
