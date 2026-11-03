@@ -22,6 +22,7 @@ struct PageEditor: View {
     @Environment(\.layoutDirection) private var layoutDirection
     @State private var viewportOffset=CGPoint.zero
     @State private var photo: PhotosPickerItem?
+    @State private var showingPhotoPicker=false
     @State private var error: String?
     @State private var altText=""
     @State private var editingAlt=false
@@ -58,7 +59,7 @@ struct PageEditor: View {
             ToolbarItemGroup(placement:.bottomBar) {
                 EditorModeMenu(session:session,error:$error).accessibilityIdentifier("editor.mode").disabled(navigationPending)
                 navigationButtons().disabled(navigationPending)
-                EditorPageMenu(session:session,photo:$photo,error:$error,altText:$altText,editingAlt:$editingAlt).accessibilityIdentifier("editor.pageMenu").disabled(navigationPending)
+                EditorPageMenu(session:session,showingPhotoPicker:$showingPhotoPicker,error:$error,altText:$altText,editingAlt:$editingAlt).accessibilityIdentifier("editor.pageMenu").disabled(navigationPending)
             }
 
         }
@@ -70,9 +71,14 @@ struct PageEditor: View {
         .navigationBarBackButtonHidden(session.strokeActive)
         .interactiveDismissDisabled(session.strokeActive)
         .task { await session.loadFonts();if let warning=session.errorMessage { error=warning } }
+        .photosPicker(isPresented:$showingPhotoPicker,selection:$photo,matching:.images)
         .onChange(of:photo) { _,item in
             guard let item else { return }
-            run { if let data=try await item.loadTransferable(type:Data.self) { try Task.checkCancellation();try await session.importImage(data) };photo=nil }
+            let token=session.beginAssetWrite(pageID:session.activePageID)
+            run {
+                defer { photo=nil }
+                try await session.importImage(completingAssetToken:token) { try await item.loadTransferable(type:Data.self) }
+            }
         }
         .alert("Editor error",isPresented:Binding(get:{error != nil},set:{ if !$0 { error=nil } })) { Button("OK",role:.cancel) {} } message: { Text(error ?? "") }
         .alert("Alternative text",isPresented:$editingAlt) {
@@ -95,7 +101,7 @@ struct PageEditor: View {
                 Label("Hide keyboard",systemImage:EditorCommandSymbol.dismiss.rawValue).fixedSize().frame(minWidth:44,minHeight:44).contentShape(Rectangle())
             }.accessibilityIdentifier("editor.keyboard.dismiss")
             EditorModeMenu(session:session,error:$error,minimumTarget:44).accessibilityIdentifier("editor.keyboard.mode")
-            EditorPageMenu(session:session,photo:$photo,error:$error,altText:$altText,editingAlt:$editingAlt,minimumTarget:44).accessibilityIdentifier("editor.keyboard.pageMenu")
+            EditorPageMenu(session:session,showingPhotoPicker:$showingPhotoPicker,error:$error,altText:$altText,editingAlt:$editingAlt,minimumTarget:44).accessibilityIdentifier("editor.keyboard.pageMenu")
         }
     }
     private var keyboardNavigationCommands: some View {
@@ -146,7 +152,7 @@ private struct EditorModeMenu: View {
 }
 private struct EditorPageMenu: View {
     @Bindable var session: EditorSession
-    @Binding var photo: PhotosPickerItem?
+    @Binding var showingPhotoPicker: Bool
     @Binding var error: String?
     @Binding var altText: String
     @Binding var editingAlt: Bool
@@ -155,7 +161,7 @@ private struct EditorPageMenu: View {
         Menu {
             Button("Redo",systemImage:"arrow.uturn.forward") { run { try await session.redo() } }.disabled(!session.canRedo)
             Button("Save locally",systemImage:"checkmark.circle") { run { try await session.leave() } }.disabled(session.busy)
-            PhotosPicker(selection:$photo,matching:.images,photoLibrary:.shared()) { Label("Import image",systemImage:"photo") }
+            Button("Import image",systemImage:"photo") { showingPhotoPicker=true }
             Button("Copy page") { run { try await PageClipboard.copy(content:session.activeContent,store:session.store) } }
             Button("Paste page or image") { run { try await PageClipboard.paste(into:session) } }
             Button("Duplicate page") { run { try await session.duplicate(pageID:session.activePageID) } }

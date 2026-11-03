@@ -174,3 +174,55 @@ extension NotebookFlowTests {
         XCTAssertTrue(app.staticTexts["Draw A"].waitForExistence(timeout:10))
     }
 }
+
+extension NotebookFlowTests {
+    @MainActor private func photoFresh(_ app:XCUIApplication) {
+        XCUIDevice.shared.orientation = .portrait
+        app.launchArguments=["-AppleLanguages","(en)","-AppleLocale","en_US","-startup","last"]
+        app.launchEnvironment=["MEETINGBOOK_TEST_LIBRARY":UUID().uuidString]
+        app.launch();showLibraryIfNeeded(app)
+    }
+    @MainActor private func photoEnterText(_ app:XCUIApplication,_ value:String) {
+        selectEditorMode("Type",in:app)
+        app.otherElements["Canonical page"].coordinate(withNormalizedOffset:CGVector(dx:0.3,dy:0.15)).tap()
+        XCTAssertTrue(app.textViews.firstMatch.waitForExistence(timeout:10));app.textViews.firstMatch.typeText(value)
+    }
+    @MainActor private func photoDismissKeyboard(_ app:XCUIApplication) {
+        let dismiss=app.buttons["editor.keyboard.dismiss"]
+        if dismiss.isHittable {dismiss.tap()}
+    }
+    @MainActor private func photoPickerCancel(hideKeyboard:Bool) {
+        let app=XCUIApplication();photoFresh(app);createNote(app,title:"Photo cancel "+UUID().uuidString);photoEnterText(app,"Picker cancellation Ω")
+        if hideKeyboard {photoDismissKeyboard(app)}
+        openEditorPageMenu(app);app.buttons["Import image"].tap()
+        let cancel=app.buttons["Cancel"].firstMatch;XCTAssertTrue(cancel.waitForExistence(timeout:15));capture(app,"Native picker before cancellation");cancel.tap()
+        XCTAssertEqual(app.textViews.firstMatch.value as? String,"Picker cancellation Ω")
+    }
+    @MainActor func testImagePickerWithoutKeyboardCancellation() {photoPickerCancel(hideKeyboard:true)}
+    @MainActor func testImagePickerWithKeyboardCancellation() {photoPickerCancel(hideKeyboard:false)}
+    @MainActor func testSeededPhotoImportAndReopen() throws {
+        guard ProcessInfo.processInfo.environment["MEETINGBOOK_SEEDED_PHOTO_FIXTURE"] == "1" else {throw XCTSkip("Requires synthetic app icon seeded in an isolated simulator Photos library")}
+        let app=XCUIApplication();photoFresh(app);let title="Photo import "+UUID().uuidString;createNote(app,title:title);photoEnterText(app,"Image selection Ω")
+        photoDismissKeyboard(app);openEditorPageMenu(app);app.buttons["Import image"].tap()
+        let ready=XCTNSPredicateExpectation(predicate:NSPredicate(format:"exists == false"),object:app.staticTexts["Loading…"])
+        XCTAssertEqual(XCTWaiter.wait(for:[ready],timeout:45),.completed);capture(app,"Seeded native photo grid")
+        app.buttons["Cancel"].tap();XCTAssertEqual(app.textViews.firstMatch.value as? String,"Image selection Ω")
+        let closed=XCTNSPredicateExpectation(predicate:NSPredicate(format:"exists == false"),object:app.navigationBars["Photos"])
+        XCTAssertEqual(XCTWaiter.wait(for:[closed],timeout:15),.completed)
+        if !app.buttons["editor.keyboard.pageMenu"].isHittable {app.textViews.firstMatch.tap()}
+        openEditorPageMenu(app);app.buttons["Import image"].tap()
+        let seeded=app.images.matching(identifier:"PXGGridLayout-Info").firstMatch
+        XCTAssertTrue(seeded.waitForExistence(timeout:45));seeded.tap()
+        let imported=app.images.matching(NSPredicate(format:"label == %@","Image")).firstMatch
+        XCTAssertTrue(imported.waitForExistence(timeout:30))
+        openEditorPageMenu(app);app.buttons["Save locally"].tap()
+        XCTAssertTrue(app.staticTexts["Saved locally"].waitForExistence(timeout:30))
+        app.terminate();app.launch();XCTAssertTrue(app.navigationBars[title].waitForExistence(timeout:20))
+        XCTAssertTrue(imported.waitForExistence(timeout:20));selectEditorMode("Type",in:app)
+        XCTAssertEqual(app.textViews.firstMatch.value as? String,"Image selection Ω");capture(app,"Image and exact text after relaunch")
+        selectEditorMode("Select",in:app)
+        let start=imported.coordinate(withNormalizedOffset:CGVector(dx:0.5,dy:0.3))
+        start.press(forDuration:0.5,thenDragTo:start.withOffset(CGVector(dx:0,dy:220)))
+        XCTAssertTrue(imported.frame.minY>300);capture(app,"Moved image exposes text")
+    }
+}

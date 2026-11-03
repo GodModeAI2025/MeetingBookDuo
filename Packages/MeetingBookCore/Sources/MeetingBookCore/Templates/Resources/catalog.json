@@ -1293,7 +1293,7 @@
                 "detail": ""
               },
               {
-                "type": "table",
+                "type": "fields",
                 "label": "",
                 "items": [
                   "KFA %",
@@ -1425,7 +1425,7 @@
                 "detail": ""
               },
               {
-                "type": "table",
+                "type": "fields",
                 "label": "",
                 "items": [
                   "Body fat %",

@@ -235,9 +235,15 @@ import MeetingBookCore
         for block in content.textBlocks { try TextBlockView(block:block,content:content,versions:versions+fonts).validateVisibleContent() }
         try await perform([.insert(id:UUID(),content:content,after:anchor)],importedFonts:fonts,completingAssetToken:completingAssetToken)
     }
-    func importImage(_ data: Data) async throws {
-        let pageID=activePageID,token=beginAssetWrite(pageID:activePageID)
+    func importImage(completingAssetToken token: UUID,load: () async throws -> Data?) async throws {
         defer { endAssetWrite(token) }
+        try Task.checkCancellation()
+        if let data=try await load() { try Task.checkCancellation();try await importImage(data,completingAssetToken:token) }
+    }
+    func importImage(_ data: Data,completingAssetToken: UUID? = nil) async throws {
+        let token=completingAssetToken ?? beginAssetWrite(pageID:activePageID)
+        defer { if completingAssetToken == nil { endAssetWrite(token) } }
+        guard let pageID=pendingAssetWrites[token],assetWriteEpochs[token] == assetEpochs[pageID,default:0] else { throw NotebookError.revisionConflict }
         let imported=try await ImageImportService(assets:store.assets).importData(data)
         guard assetWriteEpochs[token] == assetEpochs[pageID,default:0],var content=drafts[pageID]?.content else { throw NotebookError.revisionConflict }
         content.prepareForEditing()

@@ -198,6 +198,46 @@ extension EditorSessionTests {
         XCTAssertTrue(session.activeContent.images.isEmpty);session.endAssetWrite(token)
         try await session.importImage(data);XCTAssertEqual(session.activeContent.images.count,1);XCTAssertTrue(session.pendingAssetWrites.isEmpty)
     }
+    func testPhotoLeaseKeepsOriginalPageAndRejectsStaleToken() async throws {
+        let store=try await NotebookStore.open(root:FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString))
+        let note=try await store.createNote(title:"Delayed photo",contents:[PageContent(),PageContent()]),session=EditorSession(store:store,snapshot:note)
+        let data=UIGraphicsImageRenderer(size:CGSize(width:2,height:2)).image { _ in UIColor.blue.setFill();UIRectFill(CGRect(x:0,y:0,width:2,height:2)) }.pngData()!
+        let original=note.pages[0].id,other=note.pages[1].id,token=session.beginAssetWrite(pageID:original)
+        let started=AsyncStream<Void>.makeStream(),release=AsyncStream<Void>.makeStream()
+        let transfer=Task {try await session.importImage(completingAssetToken:token) {
+            started.continuation.yield();var iterator=release.stream.makeAsyncIterator();_ = await iterator.next();return data
+        }}
+        var iterator=started.stream.makeAsyncIterator();_ = await iterator.next()
+        session.select(pageID:other);release.continuation.yield();try await transfer.value
+        let saved=try await store.openPage(id:original);XCTAssertEqual(saved.content.images.count,1)
+        XCTAssertTrue(session.activeContent.images.isEmpty);XCTAssertFalse(session.hasCurrentAssetWrites);XCTAssertTrue(session.pendingAssetWrites.isEmpty)
+        let stale=session.beginAssetWrite(pageID:other);session.endAssetWrite(stale)
+        do {try await session.importImage(completingAssetToken:stale) {data};XCTFail("stale picker write published")}
+        catch {XCTAssertEqual(error as? NotebookError,.revisionConflict)}
+        XCTAssertTrue(session.pendingAssetWrites.isEmpty)
+        do {try await session.importImage(Data());XCTFail("invalid image accepted")}
+        catch {XCTAssertEqual(error as? NotebookError,.invalidAsset)}
+        XCTAssertTrue(session.pendingAssetWrites.isEmpty)
+    }
+    func testPhotoHandoffReleasesLeaseOnNilErrorAndCancellation() async throws {
+        let store=try await NotebookStore.open(root:FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString))
+        let note=try await store.createNote(title:"Photo cleanup",contents:[PageContent()]),session=EditorSession(store:store,snapshot:note)
+        let nilToken=session.beginAssetWrite(pageID:session.activePageID)
+        try await session.importImage(completingAssetToken:nilToken) {nil}
+        XCTAssertTrue(session.pendingAssetWrites.isEmpty)
+        let errorToken=session.beginAssetWrite(pageID:session.activePageID)
+        do {try await session.importImage(completingAssetToken:errorToken) {throw NotebookError.invalidAsset};XCTFail("transfer error ignored")}
+        catch {XCTAssertEqual(error as? NotebookError,.invalidAsset)}
+        XCTAssertTrue(session.pendingAssetWrites.isEmpty)
+        let cancelToken=session.beginAssetWrite(pageID:session.activePageID),started=AsyncStream<Void>.makeStream()
+        let transfer=Task {try await session.importImage(completingAssetToken:cancelToken) {
+            started.continuation.yield();try await Task.sleep(for:.seconds(30));return Data()
+        }}
+        var iterator=started.stream.makeAsyncIterator();_ = await iterator.next();transfer.cancel()
+        do {try await transfer.value;XCTFail("cancelled transfer continued")}
+        catch {XCTAssertTrue(error is CancellationError)}
+        XCTAssertTrue(session.pendingAssetWrites.isEmpty);XCTAssertFalse(session.hasCurrentAssetWrites)
+    }
 }
 
 
