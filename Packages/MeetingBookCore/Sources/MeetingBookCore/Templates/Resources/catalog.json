@@ -965,10 +965,10 @@
                 "detail": ""
               },
               {
-                "type": "prompt",
-                "label": "Notizen",
+                "type": "scale",
+                "label": "Anstrengung 1–10",
                 "items": [],
-                "rows": 14,
+                "rows": 10,
                 "weights": [],
                 "checks": [],
                 "rowLabels": [],
@@ -976,10 +976,10 @@
                 "detail": ""
               },
               {
-                "type": "scale",
-                "label": "Anstrengung 1–10",
+                "type": "prompt",
+                "label": "Notizen",
                 "items": [],
-                "rows": 10,
+                "rows": 14,
                 "weights": [],
                 "checks": [],
                 "rowLabels": [],
@@ -1135,10 +1135,10 @@
                 "detail": ""
               },
               {
-                "type": "prompt",
-                "label": "Notes",
+                "type": "scale",
+                "label": "Effort 1–10",
                 "items": [],
-                "rows": 14,
+                "rows": 10,
                 "weights": [],
                 "checks": [],
                 "rowLabels": [],
@@ -1146,10 +1146,10 @@
                 "detail": ""
               },
               {
-                "type": "scale",
-                "label": "Effort 1–10",
+                "type": "prompt",
+                "label": "Notes",
                 "items": [],
-                "rows": 10,
+                "rows": 14,
                 "weights": [],
                 "checks": [],
                 "rowLabels": [],
