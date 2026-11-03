@@ -175,7 +175,22 @@ struct TemplateLayout {
         }
     }
     mutating func render(_ blocks: [TemplateBlock]) throws {
-        for b in blocks {
+        for (index,b) in blocks.enumerated() {
+            let heading=b.type == .heading || b.type == .band || (b.type == .text && b.items.isEmpty && !b.label.isEmpty)
+            if heading {
+                let fields=blocks.dropFirst(index+1).prefix {$0.type == .fields}.flatMap(\.items)
+                let heights=fields.map { label in
+                    (label.isEmpty ? 0.0 : (label.count > 65 ? 52.0 : 28.0))+config.inkAscent+config.inkDescent+4+20
+                }
+                if let first=heights.first,let last=heights.last {
+                    let headingHeight=b.type == .text ? max(28,ceil(Double(b.label.count)/65)*24)+16 : 56
+                    let available=bottom-112-headingHeight
+                    let groupHeight=heights.dropLast().reduce(0,+)+max(100,last-20)
+                    // Oversized field groups retain their heading with at least the first field.
+                    let following=groupHeight<=available ? groupHeight:max(100,first-20)
+                    if following<=available {ensure(headingHeight+following)}
+                }
+            }
             switch b.type {
             case .prompt, .lines: prompt(b.label,lines:b.rows)
             case .fields: for item in b.items { prompt(item,lines:1) }
