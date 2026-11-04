@@ -4,7 +4,17 @@ import CloudKit
 
 @main struct MeetingBookApp: App {
     @State private var library=LibraryModel()
-    var body: some Scene { WindowGroup { NotebookView(library:library) } }
+    @State private var personalSymbols=PersonalSymbolStore()
+    @State private var bookCover=BookCoverStore()
+    var body: some Scene {
+        WindowGroup {
+            NotebookView(library:library)
+                .environment(\.personalSymbols,personalSymbols)
+                .environment(\.bookCover,bookCover)
+                .task {await personalSymbols.load()}
+                .task {await bookCover.load()}
+        }
+    }
 }
 
 @MainActor @Observable final class LibraryModel {

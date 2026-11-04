@@ -3,8 +3,11 @@ import PencilKit
 import MeetingBookCore
 
 struct FontStudio: View {
+    @Environment(\.paperAppearance) private var paperAppearance
+    @Environment(\.personalSymbols) private var personalSymbols
     let store: NotebookStore
     var didCommit: @MainActor () -> Void = {}
+    @State private var symbolStudio=false
     @Environment(\.dismiss) private var dismiss
     @State private var projects:[FontProject]=[]
     @State private var storageLease: StorageLease?
@@ -15,6 +18,10 @@ struct FontStudio: View {
     var body: some View {
         NavigationStack {
             List {
+                Group {
+                Section {
+                    Button { symbolStudio=true } label: { Label {Text("Own app symbols")} icon: {AppSymbol.appSymbols.image(in:personalSymbols)} }.accessibilityIdentifier("symbols.open")
+                }
                 Section {
                     Text("Your handwriting, made into a real font.").font(.title2)
                     Text("Draw each character locally. Published versions stay unchanged so older notes keep their appearance.")
@@ -27,15 +34,19 @@ struct FontStudio: View {
                     ForEach(projects) { project in NavigationLink(project.name) { FontProjectEditor(store:store,initial:project,didCommit:didCommit) }.accessibilityIdentifier("font.project."+project.id.uuidString) }
                 }
                 if let error { Text(error).foregroundStyle(.red) }
-            }.navigationTitle("Font Studio")
+                }.listRowBackground(paperAppearance.color)
+            }.paperSurface().navigationTitle("Font Studio")
             .toolbar { Button("Done") { dismiss() } }
             .task { storageLease=store.protection.retain(blocksCollection:true);projects=await store.fontProjects() }
             .onDisappear {storageLease=nil}
+                .fullScreenCover(isPresented:$symbolStudio) { SymbolStudio().bookCoverShield() }
         }
     }
 }
 
 struct FontProjectEditor: View {
+    @Environment(\.paperAppearance) private var paperAppearance
+    @Environment(\.personalSymbols) private var personalSymbols
     let store: NotebookStore
     @Environment(\.dismiss) private var dismiss
     @State private var exitPrompt=false
@@ -95,14 +106,14 @@ struct FontProjectEditor: View {
                 } }
                 Text("Draw \(String(UnicodeScalar(codePoint)!))").font(.title2)
                 Text("Baseline is the third guide. Capitals reach the first, lowercase the second. Descenders stay above the fourth.").font(.caption).foregroundStyle(.secondary)
-                GlyphBoard(drawing:$drawing,dirty:Binding(get:{edits.dirty},set:{if $0 {edits.changed()}}),active:$strokeActive,erasing:erasing).aspectRatio(1,contentMode:.fit).frame(maxWidth:520).background(.white).clipShape(RoundedRectangle(cornerRadius:12)).overlay(RoundedRectangle(cornerRadius:12).stroke(.quaternary)).disabled(saving)
+                GlyphBoard(drawing:$drawing,dirty:Binding(get:{edits.dirty},set:{if $0 {edits.changed()}}),active:$strokeActive,erasing:erasing).aspectRatio(1,contentMode:.fit).frame(maxWidth:520).background(paperAppearance.color).clipShape(RoundedRectangle(cornerRadius:12)).overlay(RoundedRectangle(cornerRadius:12).stroke(.quaternary)).disabled(saving)
                 HStack {
                     Toggle("Eraser",isOn:$erasing).toggleStyle(.button)
                     Button("Clear",role:.destructive) { drawing=PKDrawing();edits.changed() }.disabled(saving || strokeActive)
                     Spacer()
                     Button("Save character") { Task { await saveGlyph() } }.disabled(saving || !dirty || strokeActive)
                 }
-                Button("Export unsaved character",systemImage:"square.and.arrow.up") { emergencyExport() }.disabled(saving || strokeActive || exportingEmergency)
+                Button { emergencyExport() } label: { Label { Text("Export unsaved character") } icon: { AppSymbol.exportCharacter.image(in:personalSymbols) } }.disabled(saving || strokeActive || exportingEmergency)
                 DisclosureGroup("Character spacing") {
                     Slider(value:Binding(get:{advance},set:{advance=$0;edits.changed()}),in:200...1500,step:10) { Text("Advance width") }
                     Text("Advance: \(Int(advance))")
@@ -110,13 +121,13 @@ struct FontProjectEditor: View {
                     Text("Left bearing: \(Int(bearing))")
                 }.disabled(saving || strokeActive)
                 HStack {
-                    Button("Previous",systemImage:"chevron.left") { step(-1) }
+                    Button { step(-1) } label: { Label { Text("Previous") } icon: { AppSymbol.previous.image(in:personalSymbols) } }
                     Spacer()
-                    Button("Next",systemImage:"chevron.right") { step(1) }
+                    Button { step(1) } label: { Label { Text("Next") } icon: { AppSymbol.next.image(in:personalSymbols) } }
                 }.disabled(saving || strokeActive)
                 Divider()
                 if building { ProgressView("Building font locally");Button("Cancel build") { buildTask?.cancel();publication=nil;building=false }.disabled(saving) }
-                else { Button("Validate and publish version",systemImage:"checkmark.seal") { publish() }.buttonStyle(.borderedProminent).disabled(saving || strokeActive) }
+                else { Button { publish() } label: { Label { Text("Validate and publish version") } icon: { AppSymbol.publishFont.image(in:personalSymbols) } }.buttonStyle(.borderedProminent).disabled(saving || strokeActive) }
                 if !status.isEmpty { Text(status).foregroundStyle(.secondary) }
                 if let error { Text(error).foregroundStyle(.red).textSelection(.enabled) }
                 if !issues.isEmpty { Text("Missing or invalid characters: \(issues.count)").font(.headline) }
@@ -129,7 +140,7 @@ struct FontProjectEditor: View {
                     }
                 }
             }.padding()
-        }.navigationTitle("Draw characters").navigationBarTitleDisplayMode(.inline)
+        }.paperSurface().navigationTitle("Draw characters").navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(saving || dirty || building || exportingEmergency)
         .interactiveDismissDisabled(dirty || saving || building || exportingEmergency)
         .toolbar { Button("Close project") { if dirty { exitPrompt=true } else { buildTask?.cancel();dismiss() } }.disabled(saving || strokeActive || exportingEmergency) }
@@ -233,6 +244,8 @@ private struct GlyphBoard: UIViewRepresentable {
     func makeCoordinator() -> Coordinator { Coordinator(self) }
     func makeUIView(context: Context) -> GlyphBoardView { let view=GlyphBoardView();view.canvas.delegate=context.coordinator;return view }
     func updateUIView(_ view: GlyphBoardView,context: Context) {
+        view.backgroundColor=context.environment.paperAppearance.uiColor
+        view.overrideUserInterfaceStyle = .light
         context.coordinator.parent=self
         if view.canvas.drawing.dataRepresentation() != drawing.dataRepresentation() { context.coordinator.updating=true;view.canvas.drawing=drawing;context.coordinator.updating=false }
         view.canvas.tool=erasing ? PKEraserTool(.bitmap) : PKInkingTool(.pen,color:.black,width:6)
@@ -249,7 +262,7 @@ private final class GlyphBoardView: UIView {
     let canvas=PKCanvasView()
     private let guides=GlyphGuides()
     override init(frame:CGRect) {
-        super.init(frame:frame);guides.backgroundColor = .white;addSubview(guides);addSubview(canvas)
+        super.init(frame:frame);guides.backgroundColor = .clear;guides.isOpaque=false;addSubview(guides);addSubview(canvas)
         canvas.backgroundColor = .clear;canvas.isOpaque=false;canvas.drawingPolicy = .anyInput;canvas.isScrollEnabled=false
         canvas.accessibilityLabel=String(localized:"Character drawing area");canvas.accessibilityIdentifier="font.glyph.canvas"
     }

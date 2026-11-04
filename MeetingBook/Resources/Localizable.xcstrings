@@ -462,6 +462,22 @@
         }
       }
     },
+    "All symbols": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle Symbole"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All symbols"
+          }
+        }
+      }
+    },
     "All templates": {
       "localizations": {
         "de": {
@@ -524,6 +540,70 @@
           "stringUnit": {
             "state": "translated",
             "value": "Another editor has unsaved or pending work. Save or export it in that window before restoring. Your drafts are still here."
+          }
+        }
+      }
+    },
+    "Another window saved this symbol. Keep your draft, then choose Use symbol to replace the saved version. Loading the saved version discards your draft.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein anderes Fenster hat dieses Symbol gespeichert. Behalte deinen Entwurf und wähle danach „Symbol verwenden“, um die gespeicherte Version zu ersetzen. Wenn du die gespeicherte Version lädst, wird dein Entwurf verworfen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Another window saved this symbol. Keep your draft, then choose Use symbol to replace the saved version. Loading the saved version discards your draft."
+          }
+        }
+      }
+    },
+    "App appearance": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App-Darstellung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App appearance"
+          }
+        }
+      }
+    },
+    "App symbols": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App-Symbole"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App symbols"
+          }
+        }
+      }
+    },
+    "App symbols could not be read. Retry loading before making changes.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die App-Symbole konnten nicht gelesen werden. Lade sie erneut, bevor du Änderungen vornimmst."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App symbols could not be read. Retry loading before making changes."
           }
         }
       }
@@ -1015,6 +1095,22 @@
         }
       }
     },
+    "Choose a symbol": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle ein Symbol"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a symbol"
+          }
+        }
+      }
+    },
     "Choose template": {
       "extractionState": "stale",
       "localizations": {
@@ -1449,6 +1545,22 @@
         }
       }
     },
+    "Delete": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Löschen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete"
+          }
+        }
+      }
+    },
     "Description": {
       "extractionState": "stale",
       "localizations": {
@@ -1516,6 +1628,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Disabling keeps local and iCloud data. Already submitted transfers may finish."
+          }
+        }
+      }
+    },
+    "Discard changes": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Änderungen verwerfen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discard changes"
           }
         }
       }
@@ -1653,6 +1781,22 @@
         }
       }
     },
+    "Draw a visible symbol with valid pen strokes.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zeichne ein sichtbares Symbol mit gültigen Stiftstrichen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Draw a visible symbol with valid pen strokes."
+          }
+        }
+      }
+    },
     "Draw and save this character.": {
       "extractionState": "stale",
       "localizations": {
@@ -1703,6 +1847,22 @@
         }
       }
     },
+    "Draw one symbol or a whole set. Tools without a drawing keep their standard symbol.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zeichne ein Symbol oder ein ganzes Set. Werkzeuge ohne Zeichnung behalten ihr Standardsymbol."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Draw one symbol or a whole set. Tools without a drawing keep their standard symbol."
+          }
+        }
+      }
+    },
     "Draw with finger": {
       "extractionState": "stale",
       "localizations": {
@@ -1716,6 +1876,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Draw with finger"
+          }
+        }
+      }
+    },
+    "Draw your symbol here": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zeichne hier dein Symbol"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Draw your symbol here"
           }
         }
       }
@@ -2720,6 +2896,39 @@
         }
       }
     },
+    "Keep my draft": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meinen Entwurf behalten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep my draft"
+          }
+        }
+      }
+    },
+    "Keep the shape simple so it reads at a small size.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eine einfache Form bleibt auch in kleiner Größe gut erkennbar."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep the shape simple so it reads at a small size."
+          }
+        }
+      }
+    },
     "Keep the strokes within the guides and save again.": {
       "extractionState": "stale",
       "localizations": {
@@ -2985,6 +3194,22 @@
         }
       }
     },
+    "Library": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bibliothek"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Library"
+          }
+        }
+      }
+    },
     "License unavailable": {
       "extractionState": "stale",
       "localizations": {
@@ -3030,6 +3255,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lined"
+          }
+        }
+      }
+    },
+    "Load saved version": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gespeicherte Version laden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Load saved version"
           }
         }
       }
@@ -3113,6 +3354,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lower Saxony"
+          }
+        }
+      }
+    },
+    "Make familiar tools your own.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gib vertrauten Werkzeugen deine eigene Form."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Make familiar tools your own."
           }
         }
       }
@@ -3429,6 +3686,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Name, category or topic"
+          }
+        }
+      }
+    },
+    "Navigation": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Navigation"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Navigation"
           }
         }
       }
@@ -3848,6 +4121,38 @@
         }
       }
     },
+    "Own app symbols": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eigene App-Symbole"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Own app symbols"
+          }
+        }
+      }
+    },
+    "Own drawing": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eigene Zeichnung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Own drawing"
+          }
+        }
+      }
+    },
     "PDF": {
       "comment": "Intentional literal: font specimen, proper name, native language name or file-format abbreviation.",
       "shouldTranslate": false
@@ -4121,6 +4426,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Paste page or image"
+          }
+        }
+      }
+    },
+    "Pen": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stift"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pen"
           }
         }
       }
@@ -4729,6 +5050,38 @@
         }
       }
     },
+    "Reset this symbol?": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Symbol zurücksetzen?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset this symbol?"
+          }
+        }
+      }
+    },
+    "Reset to standard": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auf Standard zurücksetzen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset to standard"
+          }
+        }
+      }
+    },
     "Restore": {
       "extractionState": "stale",
       "localizations": {
@@ -5000,6 +5353,22 @@
         }
       }
     },
+    "Retry loading": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erneut laden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retry loading"
+          }
+        }
+      }
+    },
     "Retry transfer": {
       "extractionState": "stale",
       "localizations": {
@@ -5167,6 +5536,22 @@
         }
       }
     },
+    "Save and continue": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speichern und fortfahren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save and continue"
+          }
+        }
+      }
+    },
     "Save character": {
       "extractionState": "stale",
       "localizations": {
@@ -5214,6 +5599,38 @@
           "stringUnit": {
             "state": "translated",
             "value": "Save locally"
+          }
+        }
+      }
+    },
+    "Save your symbol?": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dein Symbol speichern?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save your symbol?"
+          }
+        }
+      }
+    },
+    "Saved drawing": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gespeicherte Zeichnung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved drawing"
           }
         }
       }
@@ -5344,6 +5761,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "School year"
+          }
+        }
+      }
+    },
+    "Search": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suchen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search"
           }
         }
       }
@@ -5583,6 +6016,38 @@
         }
       }
     },
+    "Standard": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standard"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standard"
+          }
+        }
+      }
+    },
+    "Standard symbol": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standardsymbol"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standard symbol"
+          }
+        }
+      }
+    },
     "Start with": {
       "extractionState": "stale",
       "localizations": {
@@ -5600,6 +6065,22 @@
         }
       }
     },
+    "Start with a tool you use every day.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beginne mit einem Werkzeug, das du täglich nutzt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start with a tool you use every day."
+          }
+        }
+      }
+    },
     "Storage error": {
       "extractionState": "stale",
       "localizations": {
@@ -5613,6 +6094,38 @@
           "stringUnit": {
             "state": "translated",
             "value": "Storage error"
+          }
+        }
+      }
+    },
+    "Symbol changed": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Symbol geändert"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Symbol changed"
+          }
+        }
+      }
+    },
+    "Symbol drawing area": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zeichenfläche für das Symbol"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Symbol drawing area"
           }
         }
       }
@@ -5716,6 +6229,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Text block"
+          }
+        }
+      }
+    },
+    "The app symbol file is invalid or too large.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die App-Symboldatei ist ungültig oder zu groß."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The app symbol file is invalid or too large."
           }
         }
       }
@@ -5869,6 +6398,22 @@
         }
       }
     },
+    "This app symbol file uses an unsupported version.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese App-Symboldatei verwendet eine nicht unterstützte Version."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This app symbol file uses an unsupported version."
+          }
+        }
+      }
+    },
     "This character changed in another window. Your unsaved drawing is still here. Keep this project open to preserve it, or explicitly discard it before reopening the saved character.": {
       "extractionState": "stale",
       "localizations": {
@@ -6004,6 +6549,54 @@
         }
       }
     },
+    "This removes your saved drawing and any changes in this editor.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine gespeicherte Zeichnung und alle Änderungen in diesem Editor werden entfernt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This removes your saved drawing and any changes in this editor."
+          }
+        }
+      }
+    },
+    "This symbol changed in another window. Your drawing has been kept.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Symbol wurde in einem anderen Fenster geändert. Deine Zeichnung wurde beibehalten."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This symbol changed in another window. Your drawing has been kept."
+          }
+        }
+      }
+    },
+    "This symbol is too complex. Use fewer strokes or points.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Symbol ist zu komplex. Verwende weniger Striche oder Punkte."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This symbol is too complex. Use fewer strokes or points."
+          }
+        }
+      }
+    },
     "Through": {
       "extractionState": "stale",
       "localizations": {
@@ -6067,6 +6660,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Titles and typed text"
+          }
+        }
+      }
+    },
+    "Toolbar preview": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vorschau in der Werkzeugleiste"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toolbar preview"
           }
         }
       }
@@ -6221,6 +6830,22 @@
         }
       }
     },
+    "Unsaved drawing": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ungespeicherte Zeichnung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unsaved drawing"
+          }
+        }
+      }
+    },
     "Untitled note": {
       "extractionState": "stale",
       "localizations": {
@@ -6300,6 +6925,38 @@
           "stringUnit": {
             "state": "translated",
             "value": "Use incoming complete change"
+          }
+        }
+      }
+    },
+    "Use own symbols": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eigene Symbole verwenden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use own symbols"
+          }
+        }
+      }
+    },
+    "Use symbol": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Symbol verwenden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use symbol"
           }
         }
       }
@@ -6525,6 +7182,22 @@
         }
       }
     },
+    "Writing": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schreiben"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Writing"
+          }
+        }
+      }
+    },
     "Year: %lld": {
       "extractionState": "stale",
       "localizations": {
@@ -6538,6 +7211,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Year: %lld"
+          }
+        }
+      }
+    },
+    "Your drawing has changes that are not saved yet.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Zeichnung enthält noch nicht gespeicherte Änderungen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your drawing has changes that are not saved yet."
           }
         }
       }
@@ -6605,6 +7294,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your projects"
+          }
+        }
+      }
+    },
+    "Your symbols stay in this app on this device. Notebook exports and notebook iCloud transfer do not include them. Your device backup may include them.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Symbole bleiben in dieser App auf diesem Gerät. Notizbuchexporte und die iCloud-Übertragung des Notizbuchs enthalten sie nicht. Das Gerätebackup kann sie enthalten."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your symbols stay in this app on this device. Notebook exports and notebook iCloud transfer do not include them. Your device backup may include them."
           }
         }
       }
@@ -7065,6 +7770,456 @@
           "stringUnit": {
             "state": "translated",
             "value": "ÄÖÜ äöü ß € · The quick brown fox"
+          }
+        }
+      }
+    },
+    "Forest green": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dunkelgrün"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forest green"
+          }
+        }
+      }
+    },
+    "Bordeaux": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bordeaux"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bordeaux"
+          }
+        }
+      }
+    },
+    "Linen": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leinen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Linen"
+          }
+        }
+      }
+    },
+    "The book cover could not be read. Retry loading before making changes.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Einband konnte nicht gelesen werden. Lade ihn vor Änderungen erneut."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The book cover could not be read. Retry loading before making changes."
+          }
+        }
+      }
+    },
+    "This book cover file uses an unsupported version.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese Einbanddatei verwendet eine nicht unterstützte Version."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This book cover file uses an unsupported version."
+          }
+        }
+      }
+    },
+    "The book cover file is invalid or too large.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Einbanddatei ist ungültig oder zu groß."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The book cover file is invalid or too large."
+          }
+        }
+      }
+    },
+    "Use a title of up to 120 characters and a valid image crop.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verwende einen Titel mit höchstens 120 Zeichen und einen gültigen Bildausschnitt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use a title of up to 120 characters and a valid image crop."
+          }
+        }
+      }
+    },
+    "Choose a still image up to 25 MB and 40 megapixels.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle ein Einzelbild mit höchstens 25 MB und 40 Megapixeln."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a still image up to 25 MB and 40 megapixels."
+          }
+        }
+      }
+    },
+    "The book cover changed in another window. Your draft has been kept.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Einband wurde in einem anderen Fenster geändert. Dein Entwurf bleibt erhalten."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The book cover changed in another window. Your draft has been kept."
+          }
+        }
+      }
+    },
+    "Open book": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buch öffnen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open book"
+          }
+        }
+      }
+    },
+    "Close book": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buch schließen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close book"
+          }
+        }
+      }
+    },
+    "Design cover": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einband gestalten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Design cover"
+          }
+        }
+      }
+    },
+    "Elastic band": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gummiband"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elastic band"
+          }
+        }
+      }
+    },
+    "Pull the band beyond the right edge to open the book.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ziehe das Band über den rechten Rand, um das Buch zu öffnen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pull the band beyond the right edge to open the book."
+          }
+        }
+      }
+    },
+    "Cover preview": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einbandvorschau"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cover preview"
+          }
+        }
+      }
+    },
+    "Cover title": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beschriftung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cover title"
+          }
+        }
+      }
+    },
+    "Cover color": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einbandfarbe"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cover color"
+          }
+        }
+      }
+    },
+    "Band color": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bandfarbe"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Band color"
+          }
+        }
+      }
+    },
+    "Choose cover photo": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einbandfoto auswählen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose cover photo"
+          }
+        }
+      }
+    },
+    "Remove cover photo": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einbandfoto entfernen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove cover photo"
+          }
+        }
+      }
+    },
+    "Drag the preview to position your photo.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verschiebe das Foto in der Vorschau für den gewünschten Ausschnitt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drag the preview to position your photo."
+          }
+        }
+      }
+    },
+    "Horizontal photo position": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waagerechte Bildposition"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Horizontal photo position"
+          }
+        }
+      }
+    },
+    "Vertical photo position": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Senkrechte Bildposition"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vertical photo position"
+          }
+        }
+      }
+    },
+    "Preparing photo": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foto wird vorbereitet"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preparing photo"
+          }
+        }
+      }
+    },
+    "This cover is saved on this device. It is not included in note exports or iCloud note transfer.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieser Einband wird auf diesem Gerät gespeichert. Er ist nicht in Notizexporten oder der iCloud-Übertragung enthalten."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This cover is saved on this device. It is not included in note exports or iCloud note transfer."
+          }
+        }
+      }
+    },
+    "Retry loading cover": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einband erneut laden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retry loading cover"
+          }
+        }
+      }
+    },
+    "Load saved cover": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gespeicherten Einband laden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Load saved cover"
           }
         }
       }

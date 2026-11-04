@@ -2,12 +2,13 @@ import SwiftUI
 import MeetingBookCore
 
 struct FrozenPageTurn: UIViewRepresentable {
+    @Environment(\.paperAppearance) private var paperAppearance
     let source: UIImage
     let destination: UIImage
     let reducedMotion: Bool
     let completion: () -> Void
     func makeUIView(context: Context) -> SnapshotTurnView { SnapshotTurnView(source:source,destination:destination,reducedMotion:reducedMotion,completion:completion) }
-    func updateUIView(_ view: SnapshotTurnView,context: Context) {}
+    func updateUIView(_ view: SnapshotTurnView,context: Context) {view.backgroundColor=paperAppearance.uiColor}
 }
 final class SnapshotTurnView: UIView {
     private let source=UIImageView(),destination=UIImageView()
@@ -16,7 +17,7 @@ final class SnapshotTurnView: UIView {
     private var started=false
     init(source: UIImage,destination: UIImage,reducedMotion: Bool,completion: @escaping () -> Void) {
         self.reducedMotion=reducedMotion;self.completion=completion
-        super.init(frame:.zero);backgroundColor = .systemBackground
+        super.init(frame:.zero);backgroundColor = .clear
         self.source.image=source;self.destination.image=destination
         for image in [self.source,self.destination] { image.contentMode = .scaleAspectFit;image.autoresizingMask=[.flexibleWidth,.flexibleHeight];addSubview(image) }
         self.destination.isHidden=true
@@ -54,8 +55,8 @@ final class SnapshotTurnView: UIView {
         }
         let format=UIGraphicsImageRendererFormat();format.scale=1;format.opaque=true
         return UIGraphicsImageRenderer(size:presentation.size,format:format).image { context in
-            UIColor.secondarySystemBackground.setFill();context.fill(CGRect(origin:.zero,size:presentation.size))
-            UIColor.label.withAlphaComponent(0.08).setFill();context.fill(presentation.binding(offset:offset,enlarged:enlarged))
+            PageRenderer.paperColor(paper).setFill();context.fill(CGRect(origin:.zero,size:presentation.size))
+            UIColor.black.withAlphaComponent(0.08).setFill();context.fill(presentation.binding(offset:offset,enlarged:enlarged))
             for (index,image) in images.enumerated() {
                 let frame=presentation.pages[index]
                 context.cgContext.saveGState();context.cgContext.clip(to:frame)
@@ -64,7 +65,7 @@ final class SnapshotTurnView: UIView {
                     let origin=BookPresentation.viewportOffset(offset,scale:scale,viewport:frame.size)
                     image.draw(in:CGRect(x:frame.minX-origin.x,y:frame.minY-origin.y,width:720*scale,height:1000*scale))
                 } else {
-                    let placeholder=ImageRenderer(content:BookPlaceholder(paper:paper,add:index == 1,enlarged:enlarged).environment(\.paperViewportOffset,offset).frame(width:frame.width,height:frame.height))
+                    let placeholder=ImageRenderer(content:BookPlaceholder(paper:paper,add:index == 1,enlarged:enlarged).environment(\.paperViewportOffset,offset).paperContext(PaperAppearance(defaultPaper:paper)).frame(width:frame.width,height:frame.height))
                     placeholder.uiImage?.draw(in:frame)
                 }
                 context.cgContext.restoreGState()

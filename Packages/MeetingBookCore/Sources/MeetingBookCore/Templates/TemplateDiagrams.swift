@@ -40,15 +40,19 @@ extension TemplateLayout {
             shape(.rectangle,left+240,y,240,42);shape(.rectangle,left+480,y+12,10,18)
             for i in 1..<5 { line(left+240+Double(i)*48,y,left+240+Double(i)*48,y+42) };y += 68
         case .wheel:
-            ensure(450);let cx=360.0,cy=y+200,r=150.0
+            ensure(450);let cx=360.0,cy=y+224,r=150.0
             for k in 1...10 { let rr=r*Double(k)/10;shape(.ellipse,cx-rr,cy-rr,rr*2,rr*2) }
             let n=max(3,b.items.count)
             for k in 0..<n {
                 let a=Double(k)*2*Double.pi/Double(n)-Double.pi/2
                 line(cx,cy,cx+cos(a)*r,cy+sin(a)*r)
                 let mid=a+Double.pi/Double(n)
-                if k < b.items.count { text(b.items[k],cx+cos(mid)*215-60,cy+sin(mid)*180-20,120,52,13) }
-            };y += 440
+                if k < b.items.count {
+                    let ux=cos(mid),uy=sin(mid)
+                    let distance=r+12+60*abs(ux)+26*abs(uy)
+                    text(b.items[k],cx+ux*distance-60,cy+uy*distance-26,120,52,13)
+                }
+            };y += 450
         case .breath:
             ensure(360);let x=228.0,t=y+56,s=264.0
             shape(.rectangle,x,t,s,s)

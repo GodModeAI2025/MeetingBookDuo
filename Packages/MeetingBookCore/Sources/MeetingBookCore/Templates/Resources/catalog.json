@@ -8116,10 +8116,10 @@
                 "detail": ""
               },
               {
-                "type": "text",
+                "type": "scale",
                 "label": "Wasser",
                 "items": [],
-                "rows": 3,
+                "rows": 8,
                 "weights": [],
                 "checks": [],
                 "rowLabels": [],
@@ -8258,17 +8258,6 @@
                 "rowLabels": [],
                 "height": 0,
                 "detail": ""
-              },
-              {
-                "type": "scale",
-                "label": "Wasser",
-                "items": [],
-                "rows": 8,
-                "weights": [],
-                "checks": [],
-                "rowLabels": [],
-                "height": 0,
-                "detail": ""
               }
             ]
           }
@@ -8316,10 +8305,10 @@
                 "detail": ""
               },
               {
-                "type": "text",
+                "type": "scale",
                 "label": "Water",
                 "items": [],
-                "rows": 3,
+                "rows": 8,
                 "weights": [],
                 "checks": [],
                 "rowLabels": [],
@@ -8453,17 +8442,6 @@
                   "Medication taken"
                 ],
                 "rows": 2,
-                "weights": [],
-                "checks": [],
-                "rowLabels": [],
-                "height": 0,
-                "detail": ""
-              },
-              {
-                "type": "scale",
-                "label": "Water",
-                "items": [],
-                "rows": 8,
                 "weights": [],
                 "checks": [],
                 "rowLabels": [],
@@ -15682,10 +15660,10 @@
                 "detail": ""
               },
               {
-                "type": "text",
+                "type": "scale",
                 "label": "Flüssigkeit (Gläser)",
                 "items": [],
-                "rows": 3,
+                "rows": 8,
                 "weights": [],
                 "checks": [],
                 "rowLabels": [],
@@ -15710,17 +15688,6 @@
                 "label": "Notizen",
                 "items": [],
                 "rows": 10,
-                "weights": [],
-                "checks": [],
-                "rowLabels": [],
-                "height": 0,
-                "detail": ""
-              },
-              {
-                "type": "scale",
-                "label": "Flüssigkeit (Gläser)",
-                "items": [],
-                "rows": 8,
                 "weights": [],
                 "checks": [],
                 "rowLabels": [],
@@ -15839,10 +15806,10 @@
                 "detail": ""
               },
               {
-                "type": "text",
+                "type": "scale",
                 "label": "Fluids (glasses)",
                 "items": [],
-                "rows": 3,
+                "rows": 8,
                 "weights": [],
                 "checks": [],
                 "rowLabels": [],
@@ -15867,17 +15834,6 @@
                 "label": "Notes",
                 "items": [],
                 "rows": 10,
-                "weights": [],
-                "checks": [],
-                "rowLabels": [],
-                "height": 0,
-                "detail": ""
-              },
-              {
-                "type": "scale",
-                "label": "Fluids (glasses)",
-                "items": [],
-                "rows": 8,
                 "weights": [],
                 "checks": [],
                 "rowLabels": [],

@@ -5,6 +5,7 @@ import MeetingBookCore
 extension UTType { static let notebookPackage=UTType(exportedAs:"de.meetingbook.notebookpkg",conformingTo:.zip) }
 
 struct RecoveryView: View {
+    @Environment(\.paperAppearance) private var paperAppearance
     @Bindable var library: LibraryModel
     let session: EditorSession?
     let sessions: [EditorSession]
@@ -31,6 +32,7 @@ struct RecoveryView: View {
     var body: some View {
         NavigationStack {
             Form {
+                Group {
                 Section("Export") {
                     Picker("Pages",selection:$scope) { Text("Current page").tag("page");Text("Current note").tag("note");Text("Saved notebook").tag("library") }
                     Picker("Format",selection:$format) { Text("PDF").tag("pdf");Text("PNG").tag("png");Text("TXT").tag("txt") }
@@ -78,7 +80,8 @@ struct RecoveryView: View {
                 if busy { Section { ProgressView(value:Double(completed),total:Double(max(total,1)));Button("Cancel") { task?.cancel() } } }
                 if let error { Section { Text(error).foregroundStyle(.red).textSelection(.enabled) } }
                 if !warnings.isEmpty { Section("Export notices") { ForEach(Array(warnings.enumerated()),id:\.offset) { Text($0.element) } } }
-            }.navigationTitle("Export and recovery")
+                }.listRowBackground(paperAppearance.color)
+            }.paperSurface().navigationTitle("Export and recovery")
             .toolbar { Button("Done") { dismiss() }.disabled(busy) }
         }
         .interactiveDismissDisabled(busy)
@@ -152,6 +155,7 @@ struct ShareFiles: UIViewControllerRepresentable {
 }
 
 struct ColdRecoveryView: View {
+    @Environment(\.paperAppearance) private var paperAppearance
     @Bindable var library: LibraryModel
     let baseRoot: URL
     var initialImportURL: URL? = nil
@@ -167,6 +171,7 @@ struct ColdRecoveryView: View {
     var body: some View {
         NavigationStack {
             Form {
+                Group {
                 Section {
                     Text("The original library could not be opened. It will remain untouched. Inspect a notebook package to recover into a separate local library.")
                     Toggle("Allow large MeetingBook backups",isOn:$largeImport)
@@ -183,7 +188,8 @@ struct ColdRecoveryView: View {
                 }
                 if busy { ProgressView();Button("Cancel") { task?.cancel() } }
                 if let error { Text(error).foregroundStyle(.red).textSelection(.enabled) }
-            }.navigationTitle("Recovery mode").toolbar { Button("Done") { dismiss() }.disabled(busy) }
+                }.listRowBackground(paperAppearance.color)
+            }.paperSurface().navigationTitle("Recovery mode").toolbar { Button("Done") { dismiss() }.disabled(busy) }
         }.interactiveDismissDisabled(busy)
         .task { let recovery=ColdRecoveryService(baseRoot:baseRoot);service=recovery;backups=(try? await recovery.safetyPackages()) ?? [];if let initialImportURL { run { preview=try await recovery.inspectImport(url:initialImportURL) } } }
         .fileImporter(isPresented:$choosing,allowedContentTypes:[.notebookPackage]) { result in run { if let preview {try await service?.discard(preview)};preview=try await service?.inspectImport(url:result.get(),sizePolicy:largeImport ? .large : .ordinary) } }

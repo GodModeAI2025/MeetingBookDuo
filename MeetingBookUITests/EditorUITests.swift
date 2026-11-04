@@ -5,7 +5,7 @@ final class EditorUITests: XCTestCase {
         let app=XCUIApplication()
         app.launchArguments=["-AppleLanguages","(en)","-AppleLocale","en_US","-startup","last"]
         app.launchEnvironment=["MEETINGBOOK_TEST_LIBRARY":UUID().uuidString,"MEETINGBOOK_TRACE_NAVIGATION":"1"]
-        app.launch()
+        app.launch();openBookIfNeeded(app)
         let sidebar=app.buttons["Show Sidebar"]
         if sidebar.waitForExistence(timeout:5) {sidebar.tap()}
         createNote(app,title:"Keyboard navigation "+UUID().uuidString)
@@ -55,14 +55,14 @@ final class EditorUITests: XCTestCase {
         text.tap()
         XCTAssertEqual(XCTWaiter.wait(for:[XCTNSPredicateExpectation(predicate:softwareKeyboard,object:nil)],timeout:10),.completed)
         capture("Returned exact Unicode and native caret")
-        app.terminate();app.launchArguments=["-AppleLanguages","(de)","-AppleLocale","de_DE","-startup","last"];app.launch()
+        app.terminate();app.launchArguments=["-AppleLanguages","(de)","-AppleLocale","de_DE","-startup","last"];app.launch();openBookIfNeeded(app)
         selectEditorMode("Schreiben",in:app)
         let dismiss=app.buttons["editor.keyboard.dismiss"]
         XCTAssertTrue(dismiss.waitForExistence(timeout:10));XCTAssertEqual(dismiss.label,"Tastatur ausblenden")
         capture("German keyboard dismissal accessibility label")
     }
     @MainActor func testNativeTypingResizeAndReopen() {
-        let app=XCUIApplication();app.launchArguments=["-AppleLanguages","(en)","-AppleLocale","en_US","-startup","last"];app.launchEnvironment=["MEETINGBOOK_TEST_LIBRARY":UUID().uuidString];app.launch()
+        let app=XCUIApplication();app.launchArguments=["-AppleLanguages","(en)","-AppleLocale","en_US","-startup","last"];app.launchEnvironment=["MEETINGBOOK_TEST_LIBRARY":UUID().uuidString];app.launch();openBookIfNeeded(app)
         let title="Native-"+UUID().uuidString
         createNote(app,title:title)
         selectEditorMode("Type",in:app)
@@ -89,7 +89,7 @@ final class EditorUITests: XCTestCase {
         XCTAssertFalse(app.keyboards.firstMatch.exists)
         let restored=XCTAttachment(screenshot:XCUIScreen.main.screenshot());restored.name="Landscape navigation restored after keyboard dismissal";restored.lifetime = .keepAlways;add(restored)
         XCUIDevice.shared.orientation = .portrait
-        app.terminate();app.launch()
+        app.terminate();app.launch();openBookIfNeeded(app)
         XCTAssertTrue(app.buttons["editor.mode"].waitForExistence(timeout:10))
         XCTAssertTrue(text.waitForExistence(timeout:10));XCTAssertEqual(text.value as? String,"Native Unicode Äß e\u{301} 👩🏽‍💻\nSecond line")
     }
