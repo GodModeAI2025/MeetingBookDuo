@@ -8,6 +8,7 @@ struct TemplateChoice: Identifiable {
 }
 
 struct TemplateChooser: View {
+    private var paperAppearance: PaperAppearance { PaperAppearance(defaultPaper:defaultPaper) }
     let store: NotebookStore
     let insert: @MainActor ([PageContent], TextDefaults) async throws -> Void
     @Environment(\.dismiss) private var dismiss
@@ -17,6 +18,7 @@ struct TemplateChooser: View {
     @State private var query=""
     @State private var selectedID: String?
     @State private var category="all"
+    @AppStorage("paper") private var defaultPaper="classic"
     @AppStorage("templateFavorites") private var favorites=""
     @AppStorage("templateRecents") private var recents=""
     var choices: [TemplateChoice] {
@@ -43,21 +45,23 @@ struct TemplateChooser: View {
                 }.padding()
                 if choices.isEmpty { ContentUnavailableView.search(text:query);Button("Reset search") { query="";category="all" } }
             }
+            .paperSurface()
             .navigationTitle("Choose template").navigationBarTitleDisplayMode(.inline)
             .searchable(text:$query,prompt:"Name, category or topic")
             .safeAreaInset(edge:.top) {
                 Picker("Category",selection:$category) {
                     Text("All templates").tag("all");Text("Favorites").tag("favorites");Text("Recent").tag("recent")
                     ForEach(Array(Set((catalog?.entries.map(\.category) ?? [])+["collections"])).sorted(),id:\.self) { Text(LocalizedStringKey($0)).tag($0) }
-                }.pickerStyle(.menu).padding(8).frame(maxWidth:.infinity).background(.bar)
+                }.pickerStyle(.menu).padding(8).frame(maxWidth:.infinity).background(paperAppearance.color)
             }
             .toolbar { ToolbarItem(placement:.cancellationAction) { Button("Cancel") { dismiss() } } }
             .task { do { catalog=try TemplateCatalog.builtIn() } catch { query=error.localizedDescription } }
-        }
+        }.paperContext(PaperAppearance(defaultPaper:defaultPaper))
     }
 }
 
 struct TemplateCard: View {
+    @Environment(\.paperAppearance) private var paperAppearance
     @Environment(\.dynamicTypeSize) private var typeSize
     let catalog: TemplateCatalog?
     let choice: TemplateChoice
@@ -68,7 +72,7 @@ struct TemplateCard: View {
     var body: some View {
         VStack(alignment:.leading,spacing:8) {
             ZStack {
-                Color(uiColor:.secondarySystemBackground)
+                paperAppearance.color
                 if let thumbnail { Image(uiImage:thumbnail).resizable().scaledToFit() }
                 else if error != nil { Image(systemName:"exclamationmark.triangle") }
                 else { ProgressView() }
@@ -76,8 +80,10 @@ struct TemplateCard: View {
             HStack { Text(choice.title).font(.headline);if selected { Image(systemName:"checkmark.circle.fill").foregroundStyle(.tint) } }.fixedSize(horizontal:false,vertical:true)
             Text(LocalizedStringKey(choice.category)).font(.caption).foregroundStyle(.secondary)
         }.accessibilityElement(children:.combine).accessibilityAddTraits(selected ? .isSelected : [])
-        .task(id:choice.id+language) {
-            guard thumbnail == nil,let catalog else { return }
+        .task(id:choice.id+language+paperAppearance.paper) {
+            thumbnail=nil;error=nil
+            guard let catalog else { return }
+            let selectedPaper=paperAppearance.paper
             do {
                 var c=TemplateConfiguration();c.locale=language
                 c=try TemplateRenderer.measuredConfiguration(c,font:HandwritingFontCatalog.font(catalogID:"bundled.caveat",size:30))
@@ -86,13 +92,15 @@ struct TemplateCard: View {
                 let config=c
                 let plan=try await Task.detached { try catalog.instantiate(id:id,configuration:config) }.value
                 try Task.checkCancellation()
-                if let first=plan.first { var content=PageContent();content.template=first;thumbnail=try PageRenderer.image(content,resources:.init(),scale:0.3) }
+                if let first=plan.first { var content=PageContent();content.template=first;content.style.paper=selectedPaper;thumbnail=try PageRenderer.image(content,resources:.init(),scale:0.3) }
             } catch is CancellationError {} catch { self.error=error.localizedDescription }
         }
     }
 }
 
 struct TemplateDetail: View {
+    private var paperAppearance: PaperAppearance { PaperAppearance(defaultPaper:paper) }
+    @Environment(\.personalSymbols) private var personalSymbols
     let store: NotebookStore
     let catalog: TemplateCatalog
     let choice: TemplateChoice
@@ -125,6 +133,7 @@ struct TemplateDetail: View {
     var fields: Set<String> { Set(entry?.configurationFields ?? composition?.items.flatMap { item in catalog.entries.first{$0.id==item.id}?.configurationFields ?? [] } ?? []) }
     var body: some View {
         Form {
+                Group {
             Section {
                 Text(choice.title).font(.title2).fixedSize(horizontal:false,vertical:true)
                 if let preview { Image(uiImage:preview).resizable().scaledToFit().frame(maxHeight:420).frame(maxWidth:.infinity).accessibilityLabel("Template preview") }
@@ -191,16 +200,18 @@ struct TemplateDetail: View {
                 }
             }
             Section { Button("Generate preview") { generate() }.disabled(busy || inserting || !fontsReady);Text("Up to 5,000 pages. Nothing is added until you use this template.").font(.caption) }
-        }
+            }.listRowBackground(paperAppearance.color)
+            }.paperSurface()
+        .paperContext(PaperAppearance(defaultPaper:paper))
         .navigationTitle("Template").navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement:.primaryAction) {
                 Button("Use template") { Task { inserting=true;defer { inserting=false };do { var selectedDefaults=defaults;selectedDefaults.fontSize=configuration.textSize;try await insert(plan.map(styled),selectedDefaults) } catch { self.error=error.localizedDescription } } }.disabled(plan.isEmpty || busy || inserting)
             }
             ToolbarItem(placement:.secondaryAction) {
-                Button("Favorite",systemImage:favorites.split(separator:"|").contains(Substring(choice.id)) ? "star.fill" : "star") {
+                Button {
                     var ids=favorites.split(separator:"|").map(String.init);if ids.contains(choice.id) { ids.removeAll{$0==choice.id} } else { ids.append(choice.id) };favorites=ids.joined(separator:"|")
-                }
+                } label: {Label {Text("Favorite")} icon: {AppSymbol.favorite.image(in:personalSymbols,selected:favorites.split(separator:"|").contains(Substring(choice.id)))}}
             }
         }
         .task {

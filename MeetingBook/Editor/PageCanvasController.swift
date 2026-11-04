@@ -36,6 +36,24 @@ import MeetingBookCore
     #endif
     let palette=PKToolPicker()
     private let paper=PaperView()
+    private(set) var coverPresented=false
+    private var coveredInputs: [UUID:(UIView?,UIView?)]=[:]
+    func setCoverPresented(_ covered:Bool) {
+        guard covered != coverPresented else {return}
+        coverPresented=covered
+        for (id,text) in textViews {
+            if covered {
+                coveredInputs[id]=(text.inputView,text.inputAccessoryView)
+                // Keep the native selection and marked text on the same responder.
+                text.inputView=UIView(frame:.zero);text.inputAccessoryView=nil
+            } else if let original=coveredInputs.removeValue(forKey:id) {
+                text.inputView=original.0;text.inputAccessoryView=original.1
+            }
+            if text.isFirstResponder {text.reloadInputViews()}
+        }
+        if covered {palette.setVisible(false,forFirstResponder:canvas)}
+        refresh()
+    }
     private var textViews: [UUID:TextBlockView]=[:]
     private var configuredBlocks: [UUID:TextBlock]=[:]
     private var imageViews: [UUID:UIImageView]=[:]
@@ -83,6 +101,13 @@ import MeetingBookCore
     }
     override func viewDidDisappear(_ animated: Bool) {super.viewDidDisappear(animated);softwareKeyboardDidHide()}
     required init?(coder: NSCoder) { nil }
+    func setPaperAppearance(_ appearance: PaperAppearance) {
+        loadViewIfNeeded()
+        overrideUserInterfaceStyle = .light
+        view.backgroundColor=appearance.uiColor
+        commandBar.backgroundColor=appearance.uiColor
+        keyboardCommands.view.backgroundColor=appearance.uiColor
+    }
     func setKeyboardCommands(_ content: AnyView,dynamicTypeSize: DynamicTypeSize) {
         keyboardCommands.traitOverrides.preferredContentSizeCategory=UIContentSizeCategory(dynamicTypeSize)
         keyboardCommands.rootView=content
@@ -107,10 +132,10 @@ import MeetingBookCore
         [UIKeyCommand(title:String(localized:"Undo"),action:#selector(undoAction),input:"z",modifierFlags:.command),
          UIKeyCommand(title:String(localized:"Redo"),action:#selector(redoAction),input:"z",modifierFlags:[.command,.shift])]
     }
-    @objc private func undoAction() { view.endEditing(true);Task { do { try await session.flush();try await session.undo();refresh() } catch { reportError?(error) } } }
-    @objc private func redoAction() { view.endEditing(true);Task { do { try await session.redo();refresh() } catch { reportError?(error) } } }
+    @objc private func undoAction() { guard !coverPresented else {return};view.endEditing(true);Task { do { try await session.flush();try await session.undo();refresh() } catch { reportError?(error) } } }
+    @objc private func redoAction() { guard !coverPresented else {return};view.endEditing(true);Task { do { try await session.redo();refresh() } catch { reportError?(error) } } }
     override func viewDidLoad() {
-        super.viewDidLoad();view.backgroundColor = .secondarySystemBackground
+        super.viewDidLoad();view.backgroundColor = PageRenderer.paperColor(session.activeContent.style.paper)
         keyboardCommands.view.backgroundColor = .clear
         commandBar.translatesAutoresizingMaskIntoConstraints=false;view.addSubview(commandBar)
         addChild(keyboardCommands)
@@ -155,7 +180,7 @@ import MeetingBookCore
     func refresh() {
         guard isViewLoaded else { return }
         let id=session.activePageID,content=session.activeContent
-        commandBar.isHidden=session.mode != .typing
+        commandBar.isHidden=coverPresented || session.mode != .typing
         keyboardHeightConstraint.constant=session.mode == .typing ? keyboardHeight : 0
         let keepsFocus=session.navigationLocked && session.retainsTypingFocusDuringTurn && session.mode == .typing
         if session.navigationLocked && !keepsFocus { view.endEditing(true) }
@@ -174,6 +199,7 @@ import MeetingBookCore
                 if previous != block {
                     let selection=text.selectedRange,focused=text.isFirstResponder
                     text.removeFromSuperview();let replacement=TextBlockView(block:block,content:content,versions:session.versions)
+                    if coverPresented {replacement.inputView=UIView(frame:.zero);replacement.inputAccessoryView=nil}
                     replacement.delegate=self;page.insertSubview(replacement,belowSubview:canvas);textViews[block.id]=replacement
                     let count=(block.text as NSString).length,location=min(selection.location,(block.text as NSString).length)
                     replacement.selectedRange=NSRange(location:location,length:min(selection.length,count-location))
@@ -187,17 +213,21 @@ import MeetingBookCore
                     let count=(block.text as NSString).length,location=min(selection.location,(block.text as NSString).length)
                     text.selectedRange=NSRange(location:location,length:min(selection.length,count-location))
                 }
-                text.isInputLocked={ [weak session] in session.map {$0.isUnavailable || $0.navigationLocked || $0.frozenPageIDs.contains(id)} ?? true }
+                text.isInputLocked={ [weak self,weak session] in self?.coverPresented != false || (session.map {$0.isUnavailable || $0.navigationLocked || $0.frozenPageIDs.contains(id)} ?? true) }
                 text.isEditable = !session.isUnavailable && session.mode == .typing && !session.frozenPageIDs.contains(id) && (!session.navigationLocked || keepsFocus);text.isSelectable=(session.mode == .typing || session.mode == .selecting) && (!session.navigationLocked || keepsFocus)
             } else {
                 let text=TextBlockView(block:block,content:content,versions:session.versions);text.delegate=self
-                text.isInputLocked={ [weak session] in session.map {$0.isUnavailable || $0.navigationLocked || $0.frozenPageIDs.contains(id)} ?? true }
+                text.isInputLocked={ [weak self,weak session] in self?.coverPresented != false || (session.map {$0.isUnavailable || $0.navigationLocked || $0.frozenPageIDs.contains(id)} ?? true) }
                 text.isEditable = !session.isUnavailable && session.mode == .typing && !session.frozenPageIDs.contains(id) && (!session.navigationLocked || keepsFocus);text.isSelectable=(session.mode == .typing || session.mode == .selecting) && (!session.navigationLocked || keepsFocus)
+                if coverPresented {
+                    coveredInputs[block.id]=(text.inputView,text.inputAccessoryView)
+                    text.inputView=UIView(frame:.zero);text.inputAccessoryView=nil
+                }
                 page.insertSubview(text,belowSubview:canvas);textViews[block.id]=text
             }
         }
         let intent=FocusIntent(page:id,mode:session.mode,selection:session.selectedElementID)
-        if !session.navigationLocked,intent != appliedFocusIntent {
+        if !coverPresented,!session.navigationLocked,intent != appliedFocusIntent {
             if session.mode == .typing,let selected=session.selectedElementID,let text=textViews[selected] {
                 let alreadyFocused=text.isFirstResponder
                 if alreadyFocused || text.becomeFirstResponder() {
@@ -213,8 +243,8 @@ import MeetingBookCore
         }
         canvas.isUserInteractionEnabled=session.mode == .drawing && !session.busy && !session.navigationLocked
         canvas.drawingPolicy=session.fingerDrawing ? .anyInput : .pencilOnly
-        palette.setVisible(session.mode == .drawing,forFirstResponder:canvas)
-        if session.mode == .drawing { canvas.becomeFirstResponder() }
+        palette.setVisible(!coverPresented && session.mode == .drawing,forFirstResponder:canvas)
+        if !coverPresented && session.mode == .drawing { canvas.becomeFirstResponder() }
         loadTask?.cancel()
         loadTask=Task { [weak self] in
             guard let self else { return }
@@ -262,7 +292,7 @@ import MeetingBookCore
     }
     func textViewDidBeginEditing(_ textView: UITextView) { session.selectedElementID=(textView as? TextBlockView)?.blockID }
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        !session.navigationLocked && session.mode == .typing && !session.frozenPageIDs.contains(session.activePageID)
+        !coverPresented && !session.navigationLocked && session.mode == .typing && !session.frozenPageIDs.contains(session.activePageID)
     }
     func textViewDidChange(_ textView: UITextView) {
         guard !session.navigationLocked,let text=textView as? TextBlockView,let id=shownPageID,var content=session.drafts[id]?.content,

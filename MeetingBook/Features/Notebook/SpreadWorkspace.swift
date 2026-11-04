@@ -26,6 +26,8 @@ struct SpreadWorkspace: View {
 
 }
 struct BookPlaceholder: View {
+    @Environment(\.paperAppearance) private var paperAppearance
+    @Environment(\.personalSymbols) private var personalSymbols
     let paper: String
     let add: Bool
     var enlarged=false
@@ -35,11 +37,11 @@ struct BookPlaceholder: View {
             let scale=geometry.size.width/720*(enlarged ? 2 : 1)
             let origin=BookPresentation.viewportOffset(offset,scale:scale,viewport:geometry.size)
             ZStack(alignment:.topLeading) {
-                Color(uiColor:.secondarySystemBackground)
+                paperAppearance.color
                 ZStack(alignment:.trailing) {
                     Color(uiColor:PageRenderer.paperColor(paper))
                     LinearGradient(colors:[.clear,.black.opacity(0.08)],startPoint:.leading,endPoint:.trailing).frame(width:24)
-                    if add {Label("Add page",systemImage:"doc.badge.plus").foregroundStyle(Color(uiColor:.darkGray)).frame(maxWidth:.infinity,maxHeight:.infinity)}
+                    if add {Label { Text("Add page") } icon: { AppSymbol.addPage.image(in:personalSymbols) }.foregroundStyle(Color(uiColor:.darkGray)).frame(maxWidth:.infinity,maxHeight:.infinity)}
                 }.frame(width:720*scale,height:1000*scale)
                  .position(x:360*scale-origin.x,y:500*scale-origin.y)
             }.clipped()
@@ -62,6 +64,7 @@ private struct FrozenPage: View {
             else if let error { Text(error).foregroundStyle(.red) }
             else { ProgressView().frame(maxWidth:.infinity,maxHeight:.infinity) }
         }
+        .paperSurface()
         .task(id:RenderKey(id:pageID,content:content)) {
             do {
                 let value: PageContent
@@ -75,12 +78,13 @@ private struct FrozenPage: View {
 
 
 private struct FrozenPaperHost: UIViewControllerRepresentable {
+    @Environment(\.paperAppearance) private var paperAppearance
     let image: UIImage
     let enlarged: Bool
     @Environment(\.paperViewportOffset) private var offset
     let onSelect: () -> Void
     func makeUIViewController(context: Context) -> FrozenPaperController { let view=FrozenPaperController();view.onSelect=onSelect;return view }
-    func updateUIViewController(_ controller: FrozenPaperController,context: Context) { controller.image.image=image;controller.enlarged=enlarged;controller.offset=offset;controller.onSelect=onSelect;controller.view.setNeedsLayout() }
+    func updateUIViewController(_ controller: FrozenPaperController,context: Context) { controller.overrideUserInterfaceStyle = .light;controller.view.backgroundColor=paperAppearance.uiColor;controller.image.image=image;controller.enlarged=enlarged;controller.offset=offset;controller.onSelect=onSelect;controller.view.setNeedsLayout() }
 }
 final class FrozenPaperController: UIViewController {
     let scroll=UIScrollView(),image=UIImageView()
@@ -88,7 +92,7 @@ final class FrozenPaperController: UIViewController {
     var offset=CGPoint.zero
     var onSelect: (() -> Void)?
     override func viewDidLoad() {
-        super.viewDidLoad();view.backgroundColor = .secondarySystemBackground
+        super.viewDidLoad();view.backgroundColor = PageRenderer.paperColor("classic")
         scroll.translatesAutoresizingMaskIntoConstraints=false;view.addSubview(scroll)
         NSLayoutConstraint.activate([scroll.leadingAnchor.constraint(equalTo:view.safeAreaLayoutGuide.leadingAnchor),scroll.trailingAnchor.constraint(equalTo:view.safeAreaLayoutGuide.trailingAnchor),scroll.topAnchor.constraint(equalTo:view.safeAreaLayoutGuide.topAnchor),scroll.bottomAnchor.constraint(equalTo:view.keyboardLayoutGuide.topAnchor)])
         scroll.isScrollEnabled=false;scroll.addSubview(image);image.contentMode = .scaleToFill;image.isUserInteractionEnabled=true

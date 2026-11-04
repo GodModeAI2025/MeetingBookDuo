@@ -2,6 +2,7 @@ import SwiftUI
 import MeetingBookCore
 
 struct RevisionHistoryView: View {
+    @Environment(\.paperAppearance) private var paperAppearance
     let session: EditorSession
     @Environment(\.dismiss) private var dismiss
     @State private var revisions:[PageRevision]=[]
@@ -13,6 +14,7 @@ struct RevisionHistoryView: View {
     var body: some View {
         NavigationStack {
             List {
+                Group {
                 Section { Text("Preview a saved revision before restoring it. Your current page is kept in history.");Text("Only retained content is offered. Pruned ancestry cannot be restored.").font(.caption) }
                 ForEach(revisions) { revision in
                     Button { Task {
@@ -28,7 +30,8 @@ struct RevisionHistoryView: View {
                 if let image { Image(uiImage:image).resizable().scaledToFit().accessibilityLabel("Revision preview") }
                 if let selected { Button("Restore this revision") { Task { busy=true;defer {busy=false};do {try await session.apply(selected);dismiss()} catch {self.error=error.localizedDescription} } } }
                 if let error { Text(error).foregroundStyle(.red) }
-            }.navigationTitle("Page history").disabled(busy)
+                }.listRowBackground(paperAppearance.color)
+            }.paperSurface().navigationTitle("Page history").disabled(busy)
                 .toolbar { Button("Done") { dismiss() } }
                 .onDisappear {historyLease=nil}
                 .task { historyLease=session.store.protection.retain(remotePages:[session.activePageID],blocksCollection:true);do { revisions=try await session.store.checkpoints(pageID:session.activePageID) } catch { self.error=error.localizedDescription } }

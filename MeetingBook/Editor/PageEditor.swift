@@ -7,6 +7,8 @@ enum EditorCommandSymbol: String, CaseIterable {
 }
 
 struct PageEditor: View {
+    @Environment(\.paperAppearance) private var paperAppearance
+    @Environment(\.personalSymbols) private var personalSymbols
     @Bindable var session: EditorSession
     var navigationPending=false
     var navigationIDs: [UUID]? = nil
@@ -34,8 +36,8 @@ struct PageEditor: View {
                 let passive=presentation.spread ? presentation.pages[leadingPaper != nil ? 0 : 1] : .zero
                 let binding=presentation.binding(offset:viewportOffset,enlarged:session.mode == .reading && session.largerReadingView)
                 ZStack(alignment:.topLeading) {
-                    Color(uiColor:.secondarySystemBackground)
-                    CanvasHost(session:session,error:$error,keyboardCommands:AnyView(keyboardCommands),onOffset:{ value in if viewportOffset != value {viewportOffset=value} },onSoftwareKeyboard:{softwareKeyboardVisible=$0},keyboardActions:keyboardActions)
+                    paperAppearance.color
+                    CanvasHost(session:session,error:$error,keyboardCommands:AnyView(keyboardCommands.environment(\.personalSymbols,personalSymbols).paperContext(paperAppearance)),onOffset:{ value in if viewportOffset != value {viewportOffset=value} },onSoftwareKeyboard:{softwareKeyboardVisible=$0},keyboardActions:keyboardActions)
                         .frame(width:active.width,height:active.height).position(x:active.midX,y:active.midY)
                     if presentation.spread {
                         (leadingPaper ?? trailingPaper)
@@ -54,6 +56,7 @@ struct PageEditor: View {
                 VStack(alignment:.leading) { Text("Page \((pageIDs.firstIndex(of:session.activePageID) ?? 0)+1)");status }
             }.font(.caption).padding(.horizontal,12).padding(.vertical,6)
         }
+        .paperSurface()
         .ignoresSafeArea(.keyboard,edges:.bottom)
         .toolbar {
             ToolbarItemGroup(placement:.bottomBar) {
@@ -93,12 +96,12 @@ struct PageEditor: View {
             VStack(spacing:4) {keyboardPrimaryCommands;keyboardNavigationCommands}
         }.labelStyle(.iconOnly).buttonStyle(.plain).foregroundStyle(.tint).font(.body)
          .frame(maxWidth:.infinity,minHeight:44).padding(.vertical,4)
-         .background(.bar).disabled(navigationPending || session.navigationLocked)
+         .background(paperAppearance.color).disabled(navigationPending || session.navigationLocked)
     }
     private var keyboardPrimaryCommands: some View {
         HStack(spacing:4) {
             Button {keyboardActions.controller?.view.endEditing(true)} label: {
-                Label("Hide keyboard",systemImage:EditorCommandSymbol.dismiss.rawValue).fixedSize().frame(minWidth:44,minHeight:44).contentShape(Rectangle())
+                Label { Text("Hide keyboard") } icon: { AppSymbol.hideKeyboard.image(in:personalSymbols) }.fixedSize().frame(minWidth:44,minHeight:44).contentShape(Rectangle())
             }.accessibilityIdentifier("editor.keyboard.dismiss")
             EditorModeMenu(session:session,error:$error,minimumTarget:44).accessibilityIdentifier("editor.keyboard.mode")
             EditorPageMenu(session:session,showingPhotoPicker:$showingPhotoPicker,error:$error,altText:$altText,editingAlt:$editingAlt,minimumTarget:44).accessibilityIdentifier("editor.keyboard.pageMenu")
@@ -108,13 +111,13 @@ struct PageEditor: View {
         HStack(spacing:4) {navigationButtons(minimumTarget:44)}
     }
     @ViewBuilder private func navigationButtons(minimumTarget: CGFloat=0) -> some View {
-        Button {navigate(-1)} label: {Label("Previous page",systemImage:EditorCommandSymbol.previous.rawValue).fixedSize(horizontal:minimumTarget>0,vertical:minimumTarget>0).frame(minWidth:minimumTarget,minHeight:minimumTarget).contentShape(Rectangle())}
+        Button {navigate(-1)} label: {Label { Text("Previous page") } icon: { AppSymbol.previous.image(in:personalSymbols) }.fixedSize(horizontal:minimumTarget>0,vertical:minimumTarget>0).frame(minWidth:minimumTarget,minHeight:minimumTarget).contentShape(Rectangle())}
             .accessibilityIdentifier(minimumTarget>0 ? "editor.keyboard.previous" : "editor.previous")
             .disabled(session.navigationLocked || session.strokeActive || pageIDs.first == session.activePageID)
-        Button {navigate(1)} label: {Label("Next page",systemImage:EditorCommandSymbol.next.rawValue).fixedSize(horizontal:minimumTarget>0,vertical:minimumTarget>0).frame(minWidth:minimumTarget,minHeight:minimumTarget).contentShape(Rectangle())}
+        Button {navigate(1)} label: {Label { Text("Next page") } icon: { AppSymbol.next.image(in:personalSymbols) }.fixedSize(horizontal:minimumTarget>0,vertical:minimumTarget>0).frame(minWidth:minimumTarget,minHeight:minimumTarget).contentShape(Rectangle())}
             .accessibilityIdentifier(minimumTarget>0 ? "editor.keyboard.next" : "editor.next")
             .disabled(session.navigationLocked || session.strokeActive || pageIDs.last == session.activePageID)
-        Button {run {try await session.flush();try await session.undo()}} label: {Label("Undo",systemImage:EditorCommandSymbol.undo.rawValue).fixedSize(horizontal:minimumTarget>0,vertical:minimumTarget>0).frame(minWidth:minimumTarget,minHeight:minimumTarget).contentShape(Rectangle())}
+        Button {run {try await session.flush();try await session.undo()}} label: {Label { Text("Undo") } icon: { AppSymbol.undo.image(in:personalSymbols) }.fixedSize(horizontal:minimumTarget>0,vertical:minimumTarget>0).frame(minWidth:minimumTarget,minHeight:minimumTarget).contentShape(Rectangle())}
             .accessibilityIdentifier(minimumTarget>0 ? "editor.keyboard.undo" : "editor.undo")
             .disabled(session.navigationLocked || (!session.canUndo && session.saveState == .saved))
     }
@@ -136,21 +139,23 @@ struct PageEditor: View {
     }
 }
 private struct EditorModeMenu: View {
+    @Environment(\.personalSymbols) private var personalSymbols
     let session: EditorSession
     @Binding var error: String?
     var minimumTarget: CGFloat=0
     var body: some View {
         Menu {
             Picker("Mode",selection:Binding(get:{session.mode},set:{ mode in Task { do { try await session.setMode(mode) } catch { self.error=error.localizedDescription } } })) {
-                Label("Read",systemImage:"book").tag(EditorSession.Mode.reading)
-                Label("Type",systemImage:"character.cursor.ibeam").tag(EditorSession.Mode.typing)
-                Label("Draw",systemImage:"pencil.tip").tag(EditorSession.Mode.drawing)
-                Label("Select",systemImage:"cursorarrow").tag(EditorSession.Mode.selecting)
+                Label { Text("Read") } icon: { AppSymbol.reading.image(in:personalSymbols) }.tag(EditorSession.Mode.reading)
+                Label { Text("Type") } icon: { AppSymbol.typing.image(in:personalSymbols) }.tag(EditorSession.Mode.typing)
+                Label { Text("Draw") } icon: { AppSymbol.drawing.image(in:personalSymbols) }.tag(EditorSession.Mode.drawing)
+                Label { Text("Select") } icon: { AppSymbol.selecting.image(in:personalSymbols) }.tag(EditorSession.Mode.selecting)
             }
-        } label: { Label("Mode",systemImage:EditorCommandSymbol.mode.rawValue).fixedSize(horizontal:minimumTarget>0,vertical:minimumTarget>0).frame(minWidth:minimumTarget,minHeight:minimumTarget).contentShape(Rectangle()) }.disabled(session.navigationLocked)
+        } label: { Label { Text("Mode") } icon: { AppSymbol.mode.image(in:personalSymbols) }.fixedSize(horizontal:minimumTarget>0,vertical:minimumTarget>0).frame(minWidth:minimumTarget,minHeight:minimumTarget).contentShape(Rectangle()) }.disabled(session.navigationLocked)
     }
 }
 private struct EditorPageMenu: View {
+    @Environment(\.personalSymbols) private var personalSymbols
     @Bindable var session: EditorSession
     @Binding var showingPhotoPicker: Bool
     @Binding var error: String?
@@ -159,9 +164,9 @@ private struct EditorPageMenu: View {
     var minimumTarget: CGFloat=0
     var body: some View {
         Menu {
-            Button("Redo",systemImage:"arrow.uturn.forward") { run { try await session.redo() } }.disabled(!session.canRedo)
-            Button("Save locally",systemImage:"checkmark.circle") { run { try await session.leave() } }.disabled(session.busy)
-            Button("Import image",systemImage:"photo") { showingPhotoPicker=true }
+            Button { run { try await session.redo() } } label: { Label { Text("Redo") } icon: { AppSymbol.redo.image(in:personalSymbols) } }.disabled(!session.canRedo)
+            Button { run { try await session.leave() } } label: { Label { Text("Save locally") } icon: { AppSymbol.save.image(in:personalSymbols) } }.disabled(session.busy)
+            Button { showingPhotoPicker=true } label: { Label { Text("Import image") } icon: { AppSymbol.importImage.image(in:personalSymbols) } }
             Button("Copy page") { run { try await PageClipboard.copy(content:session.activeContent,store:session.store) } }
             Button("Paste page or image") { run { try await PageClipboard.paste(into:session) } }
             Button("Duplicate page") { run { try await session.duplicate(pageID:session.activePageID) } }
@@ -173,7 +178,7 @@ private struct EditorPageMenu: View {
             if let id=session.selectedElementID,let image=session.activeContent.images.first(where: { $0.id == id }) {
                 Button("Edit alternative text") { altText=image.altText;editingAlt=true }
             }
-        } label: {Label("Page",systemImage:EditorCommandSymbol.page.rawValue).fixedSize(horizontal:minimumTarget>0,vertical:minimumTarget>0).frame(minWidth:minimumTarget,minHeight:minimumTarget).contentShape(Rectangle())}
+        } label: {Label { Text("Page") } icon: { AppSymbol.page.image(in:personalSymbols) }.fixedSize(horizontal:minimumTarget>0,vertical:minimumTarget>0).frame(minWidth:minimumTarget,minHeight:minimumTarget).contentShape(Rectangle())}
         .disabled(session.navigationLocked || session.strokeActive || session.busy || session.hasCurrentAssetWrites)
     }
     private func run(_ operation: @escaping @MainActor () async throws -> Void) { Task { do { try await operation() } catch { self.error=error.localizedDescription } } }
@@ -192,6 +197,7 @@ private struct CanvasHost: UIViewControllerRepresentable {
         #if DEBUG
         controller.traceKeyboardEnvironment(context.environment.dynamicTypeSize)
         #endif
+        controller.setPaperAppearance(context.environment.paperAppearance)
         controller.setKeyboardCommands(keyboardCommands,dynamicTypeSize:context.environment.dynamicTypeSize);return controller
     }
     func updateUIViewController(_ controller: PageCanvasController,context: Context) {
@@ -199,8 +205,9 @@ private struct CanvasHost: UIViewControllerRepresentable {
         #if DEBUG
         controller.traceKeyboardEnvironment(context.environment.dynamicTypeSize)
         #endif
+        controller.setPaperAppearance(context.environment.paperAppearance)
         controller.setKeyboardCommands(keyboardCommands,dynamicTypeSize:context.environment.dynamicTypeSize)
-        configureCallbacks(controller);controller.refresh()
+        configureCallbacks(controller);controller.setCoverPresented(context.environment.notebookCovered);controller.refresh()
     }
     private func configureCallbacks(_ controller: PageCanvasController) {
         keyboardActions.controller=controller

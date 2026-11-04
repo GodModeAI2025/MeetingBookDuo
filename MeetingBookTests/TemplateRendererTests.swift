@@ -154,3 +154,55 @@ final class TemplateRendererTests: XCTestCase {
         }
     }
 }
+
+@MainActor extension TemplateRendererTests {
+    func testWheelLabelClearanceNativePreviews() throws {
+        let catalog = try TemplateCatalog.builtIn()
+        for (profile, viewport, fontID) in [
+            ("phone402x874-caveat24", CGSize(width: 402, height: 874), "bundled.caveat"),
+            ("ipad1032x1376-gochi24", CGSize(width: 1032, height: 1376), "bundled.gochi-hand")
+        ] {
+            let font = HandwritingFontCatalog.font(catalogID: fontID, size: 24)
+            for locale in ["de", "en"] {
+                var config = TemplateConfiguration(); config.locale = locale
+                config = try TemplateRenderer.measuredConfiguration(config, font: font)
+                let pages = try catalog.instantiate(id: "journal.life_wheel", configuration: config)
+                let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]
+                let inputs = try encoder.encode(pages)
+                let inputAttachment = XCTAttachment(data: inputs, uniformTypeIdentifier: "public.json")
+                inputAttachment.name = "wheel-\(profile)-\(locale)-resolved-inputs"
+                inputAttachment.lifetime = .keepAlways; add(inputAttachment)
+                print("NATIVE_WHEEL_PLAN \(profile) \(locale) pages=\(pages.count) ascent=\(config.inkAscent) descent=\(config.inkDescent)")
+                for (index, page) in pages.enumerated() {
+                    var content = PageContent(); content.version = 2; content.template = page
+                    content.style.fontSize = 24
+                    let lowerRegion = try XCTUnwrap(page.writingRegions.last)
+                    var sample = TextBlock(text: locale == "de" ? "Mein nächster Schritt" : "My next step", frame: lowerRegion.frame)
+                    sample.fontCatalogID = fontID; sample.fontSize = 24
+                    sample.writingRegionID = lowerRegion.id; sample.baselineIndex = 0
+                    content.textBlocks = [sample]
+                    let format = UIGraphicsImageRendererFormat(); format.scale = 1; format.opaque = true
+                    var failure: (any Error)?
+                    let image = UIGraphicsImageRenderer(size: viewport, format: format).image { renderer in
+                        let context = renderer.cgContext
+                        context.setFillColor(UIColor.white.cgColor); context.fill(CGRect(origin: .zero, size: viewport))
+                        let scale = min(viewport.width / 720, viewport.height / 1000)
+                        context.translateBy(x: (viewport.width - 720 * scale) / 2, y: (viewport.height - 1000 * scale) / 2)
+                        context.scaleBy(x: scale, y: scale)
+                        do { try PageRenderer.draw(content, resources: .init(), in: context) }
+                        catch { failure = error }
+                    }
+                    if let failure { throw failure }
+                    XCTAssertEqual(image.size, viewport)
+                    let name = "wheel-\(profile)-\(locale)-page-\(index + 1)"
+                    let attachment = XCTAttachment(image: image)
+                    attachment.name = name
+                    attachment.lifetime = .keepAlways; add(attachment)
+                    let contentAttachment = XCTAttachment(data: try encoder.encode(content), uniformTypeIdentifier: "public.json")
+                    contentAttachment.name = name + "-content"
+                    contentAttachment.lifetime = .keepAlways; add(contentAttachment)
+                }
+            }
+        }
+    }
+}

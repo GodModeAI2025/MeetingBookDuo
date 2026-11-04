@@ -302,3 +302,60 @@ struct TravelOverviewBoundaryTests {
         }}
     }
 }
+
+struct WheelLabelClearanceTests {
+    @Test(arguments: ["de", "en"], [24.0, 30, 36])
+    func shippedWheelKeepsCompleteLabelsOutsideRing(locale: String, size: Double) throws {
+        let catalog = try TemplateCatalog.builtIn()
+        let entry = try #require(catalog.entries.first { $0.id == "journal.life_wheel" })
+        let variant = try #require(entry.variants[locale]?.first)
+        let labels = try #require(variant.blocks.first { $0.type == .wheel }).items
+        #expect(labels.count == 8)
+        var config = TemplateConfiguration()
+        config.locale = locale; config.textSize = size
+        config.inkAscent = size * 0.85; config.inkDescent = size * 0.25
+        let pages = try catalog.instantiate(id: entry.id, configuration: config)
+        for page in pages { try TemplateValidation.validate(page) }
+        try checkLabels(on: #require(pages.first), labels: labels)
+        for label in variant.blocks.filter({ $0.type == .text || $0.type == .prompt }).map(\.label) {
+            #expect(pages.flatMap(\.primitives).contains { $0.text == label })
+        }
+        let summary = pages.map { page in
+            "text=" + page.primitives.filter { $0.kind == .text && !labels.contains($0.text) }.map { "\($0.text)@\($0.frame.y)" }.joined(separator: "|")
+                + ";regions=" + page.writingRegions.map { "\($0.label ?? "")@\($0.frame.y):\($0.baselines.count)" }.joined(separator: "|")
+        }.joined(separator: " / ")
+        print("WHEEL_PLAN \(locale) \(size) pages=\(pages.count) \(summary)")
+    }
+
+    @Test(arguments: [3, 60])
+    func customWheelKeepsCompleteLabelsWithinItsBlock(count: Int) throws {
+        let labels = (1...count).map { "Label \($0)" }
+        var layout = TemplateLayout(id: "test.wheel", title: "Wheel", variant: "default", config: .init())
+        let pages = try layout.resolve([.init(.wheel, items: labels), .init(.text, "Following content")])
+        #expect(pages.count == 1)
+        for page in pages { try TemplateValidation.validate(page) }
+        try checkLabels(on: #require(pages.first), labels: labels)
+    }
+
+    private func checkLabels(on page: TemplateInstance, labels: [String]) throws {
+        let ring = try #require(page.primitives.first { $0.kind == .ellipse && $0.frame.width == 300 })
+        let cx = ring.frame.x + ring.frame.width / 2, cy = ring.frame.y + ring.frame.height / 2
+        let text = page.primitives.filter { $0.kind == .text && labels.contains($0.text) }
+        #expect(text.map(\.text) == labels)
+        for label in text {
+            let frame = label.frame
+            let closestX = max(frame.x, min(cx, frame.x + frame.width))
+            let closestY = max(frame.y, min(cy, frame.y + frame.height))
+            #expect(hypot(closestX - cx, closestY - cy) >= ring.frame.width / 2 + 12 - 0.000001,
+                    "Full label frame must clear the ring: \(label.text)")
+            #expect(frame.width == 120 && frame.height == 52 && label.fontSize == 13)
+            #expect(frame.x >= 56 && frame.x + frame.width <= 664)
+            #expect(frame.y >= 112 && frame.y + frame.height <= 112 + 450)
+        }
+        let lastLabel = try #require(page.primitives.lastIndex { $0.kind == .text && labels.contains($0.text) })
+        for following in page.primitives.suffix(from: lastLabel + 1) where following.kind == .text {
+            #expect(following.frame.y >= 112 + 450)
+            #expect(text.allSatisfy { $0.frame.y + $0.frame.height <= following.frame.y })
+        }
+    }
+}

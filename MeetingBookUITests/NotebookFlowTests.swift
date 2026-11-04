@@ -1,6 +1,11 @@
 import XCTest
 extension XCTestCase {
+    @MainActor func openBookIfNeeded(_ app: XCUIApplication) {
+        let open=app.buttons["cover.open"]
+        if open.waitForExistence(timeout:3),open.isHittable {open.tap()}
+    }
     @MainActor func showLibraryIfNeeded(_ app: XCUIApplication) {
+        openBookIfNeeded(app)
         if app.launchArguments.contains("new") { return }
         if app.textFields["Title"].isHittable || app.textFields["Titel"].isHittable {return}
         let sidebar=app.buttons.matching(NSPredicate(format:"label CONTAINS[c] 'sidebar' OR label CONTAINS[c] 'Seitenleiste'")).firstMatch

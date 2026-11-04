@@ -9,6 +9,9 @@ struct SearchHit: Identifiable, Sendable {
 }
 
 struct NotebookView: View {
+    @Environment(\.personalSymbols) private var personalSymbols
+    @State private var cover=BookCoverPresentation()
+    @State private var defaultCoverFont: Font?
     @Bindable var library: LibraryModel
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -40,12 +43,15 @@ struct NotebookView: View {
     @State private var importURL: URL?
     @State private var fontStudioToken=UUID()
     @State private var didStart=false
+    @AppStorage("paper") private var defaultPaper="classic"
     @AppStorage("startup") private var startup="last"
     @AppStorage("haptics") private var haptics=false
+    private var paperAppearance: PaperAppearance { PaperAppearance(activePaper:session?.activeContent.style.paper,defaultPaper:defaultPaper) }
     private var routeSheetPresented:Bool {studio || settings || syncSettings || recovery || coldRecovery || route.chooserPresented}
     private var notebook: some View {
         NavigationSplitView(columnVisibility:$columnVisibility,preferredCompactColumn:$compactColumn) {
             List(selection:$selection) {
+                Group {
                 Section {
                     VStack(alignment:.leading,spacing:8) {
                         Image(systemName:"book.closed").font(library.notes.isEmpty ? .largeTitle : .title3).foregroundStyle(.tint)
@@ -53,7 +59,7 @@ struct NotebookView: View {
                         Text(library.syncScope?.enabled == true && library.syncScope?.accountFingerprint != nil ? LocalizedStringKey("Private notebook · optional iCloud transfer enabled") : LocalizedStringKey("Private. On your device.")).font(.subheadline).foregroundStyle(.secondary)
                     }.padding(.vertical,library.notes.isEmpty ? 16 : 4)
                     TextField("Title",text:$newTitle)
-                    Button("New note",systemImage:"square.and.pencil") { addingPage=false;route.presentChooser(.user) }.keyboardShortcut("n")
+                    Button { addingPage=false;route.presentChooser(.user) } label: { Label { Text("New note") } icon: { AppSymbol.newNote.image(in:personalSymbols) } }.keyboardShortcut("n")
                 }
                 Section {
                     Picker("Show",selection:$scope) {
@@ -85,14 +91,16 @@ struct NotebookView: View {
                         }
                     }
                 }
-            }.navigationTitle("MeetingBook").disabled(navigating)
+                }.listRowBackground(paperAppearance.color)
+            }.paperSurface().navigationTitle("MeetingBook").disabled(navigating)
             .searchable(text:$query,prompt:"Titles and typed text")
             .toolbar {
                 ToolbarItemGroup(placement:.bottomBar) {
-                    Button("Font Studio",systemImage:"character.cursor.ibeam") { studio=true }
-                    Button("Export and recovery",systemImage:"square.and.arrow.up") { if library.store == nil { coldRecovery=true } else { recovery=true } }
-                    Button("iCloud and recovery",systemImage:"icloud") { syncSettings=true }.accessibilityIdentifier("sync.settings")
-                    Button("Settings",systemImage:"gearshape") { settings=true }
+                    Button {cover.close()} label: {Label {Text("Close book")} icon: {AppSymbol.closeBook.image(in:personalSymbols)}}.accessibilityIdentifier("cover.close")
+                    Button { studio=true } label: { Label { Text("Font Studio") } icon: { AppSymbol.fontStudio.image(in:personalSymbols) } }
+                    Button { if library.store == nil { coldRecovery=true } else { recovery=true } } label: { Label { Text("Export and recovery") } icon: { AppSymbol.exportRecovery.image(in:personalSymbols) } }
+                    Button { syncSettings=true } label: { Label { Text("iCloud and recovery") } icon: { AppSymbol.cloudRecovery.image(in:personalSymbols) } }.accessibilityIdentifier("sync.settings")
+                    Button { settings=true } label: { Label { Text("Settings") } icon: { AppSymbol.settings.image(in:personalSymbols) } }
                 }
             }
         } detail: {
@@ -105,7 +113,7 @@ struct NotebookView: View {
             } else {
                 ContentUnavailableView("Your notebook",systemImage:"book.closed",description:Text("Choose a note from the index or create one."))
             }
-            }.overlay(alignment:.topLeading) {
+            }.paperSurface().overlay(alignment:.topLeading) {
                 ZStack(alignment:.topLeading) {
                     if let turn { FrozenPageTurn(source:turn.source,destination:turn.destination,reducedMotion:reducedMotion) { finishTurn() }.frame(width:turn.source.size.width,height:turn.source.size.height).frame(maxWidth:.infinity,maxHeight:.infinity,alignment:.topLeading) }
                     if navigating { VStack { HStack { Spacer();Button("Cancel page turn") { cancelTurn() }.buttonStyle(.borderedProminent) };Spacer();if turn == nil { ProgressView("Preparing page") };Spacer() }.padding() }
@@ -133,9 +141,9 @@ struct NotebookView: View {
         .onOpenURL { url in
             if url.scheme?.lowercased()=="meetingbook" {
                 guard let parsed=MeetingBookRoute.parse(url.absoluteString) else {library.error=String(localized:"This notebook link is invalid.");return}
-                route.receive(parsed);cancelTurn();Task {await receiveRoute()}
+                cover.open();route.receive(parsed);cancelTurn();Task {await receiveRoute()}
             } else if url.isFileURL && url.pathExtension.lowercased()=="notebookpkg" {
-                importURL=url;if library.store == nil { coldRecovery=true } else { recovery=true }
+                cover.open();importURL=url;if library.store == nil { coldRecovery=true } else { recovery=true }
             }
         }
         .onChange(of:library.storeReady) {_,ready in if ready {Task {await receiveRoute();await start()}}}
@@ -145,10 +153,18 @@ struct NotebookView: View {
     }
     var body: some View {
         routedNotebook
-        .sheet(isPresented:$coldRecovery,onDismiss:{importURL=nil}) { if let base=library.baseRoot { ColdRecoveryView(library:library,baseRoot:base,initialImportURL:importURL) } }
-        .sheet(isPresented:$recovery,onDismiss:{importURL=nil}) { RecoveryView(library:library,session:session,sessions:Array(sessions.values),initialImportURL:importURL,archivedSessions:archivedSessions) }
+        .bookCoverShield()
+        .background {NotebookHingeObserver(presentation:cover).frame(width:1,height:1)}
+        .sheet(isPresented:$coldRecovery,onDismiss:{importURL=nil}) { if let base=library.baseRoot { ColdRecoveryView(library:library,baseRoot:base,initialImportURL:importURL).bookCoverShield(allowInitiallyClosed:true) } }
+        .sheet(isPresented:$recovery,onDismiss:{importURL=nil}) { RecoveryView(library:library,session:session,sessions:Array(sessions.values),initialImportURL:importURL,archivedSessions:archivedSessions).bookCoverShield(allowInitiallyClosed:true) }
         .sensoryFeedback(.selection,trigger:selection) { _,_ in haptics }
+        .onChange(of:cover.isOpen) {_,opened in
+            if opened {Task {await start()}}
+            else {Task {do {try await session?.flush()} catch {library.error=error.localizedDescription}}}
+        }
         .task { await library.open();await search();await receiveRoute();await start() }
+        .task(id:library.store?.identity) {await loadCoverFont()}
+        .onChange(of:settings) {_,shown in if !shown {Task {await loadCoverFont()}}}
         .task(id:query+scope+String(library.bookmarkGeneration)) { await search() }
         .onChange(of:routeSheetPresented) {_,shown in if !shown {Task {await receiveRoute()}}}
         .onChange(of:navigating) {_,busy in if !busy {Task {await receiveRoute()}}}
@@ -165,16 +181,39 @@ struct NotebookView: View {
                 }
                 do { try await library.reload();await search() } catch { library.error=error.localizedDescription }
                 if let created { open(created) }
-            } }
+            }.bookCoverShield() }
         }
-        .sheet(isPresented:$studio) { if let store=library.store { FontStudio(store:store,didCommit:{library.syncForeground()}).onAppear { library.openFontStudios.insert(fontStudioToken) }.onDisappear { library.openFontStudios.remove(fontStudioToken) } } }
-        .sheet(isPresented:$syncSettings) { SyncSettingsView(library:library) }
-        .sheet(isPresented:$settings) { if let store=library.store { CustomizeView(store:store,session:session,library:library) } }
+        .sheet(isPresented:$studio) { if let store=library.store { FontStudio(store:store,didCommit:{library.syncForeground()}).bookCoverShield().onAppear { library.openFontStudios.insert(fontStudioToken) }.onDisappear { library.openFontStudios.remove(fontStudioToken) } } }
+        .sheet(isPresented:$syncSettings) { SyncSettingsView(library:library).bookCoverShield() }
+        .sheet(isPresented:$settings) { if let store=library.store { CustomizeView(store:store,session:session,library:library).bookCoverShield() } }
         .alert("Notebook error",isPresented:showingError) {
             Button("OK",role:.cancel) {}
             if route.pending != nil {Button("Retry link") {Task {await receiveRoute()}}}
             if library.store == nil { Button("Retry") { Task { await library.retry() } };Button("Recovery mode") { coldRecovery=true } }
         } message: { Text(library.error ?? "") }
+        .environment(\.coverPresentation,cover)
+        .environment(\.coverTitleFont,coverFont)
+        .paperContext(paperAppearance)
+    }
+    private var coverFont: Font {
+        if session == nil,let defaultCoverFont {return defaultCoverFont}
+        let defaults=session?.textDefaults ?? TextDefaults()
+        let font=HandwritingFontCatalog.font(catalogID:defaults.fontCatalogID ?? "bundled.caveat",personalVersion:session?.versions.first{$0.id==defaults.fontVersionID},size:38)
+        return .custom(font.fontName,size:38,relativeTo:.largeTitle)
+    }
+    private func loadCoverFont() async {
+        guard let store=library.store else {return}
+        let defaults=await store.preferences().textDefaults ?? TextDefaults()
+        var version:FontVersion?
+        if let id=defaults.fontVersionID {
+            do {
+                version=try await store.fontVersions().first{$0.id==id}
+                if let version {try await PersonalFontService(assets:store.assets).register(version:version)}
+            } catch {version=nil}
+        }
+        guard library.store?.identity==store.identity else {return}
+        let font=HandwritingFontCatalog.font(catalogID:defaults.fontCatalogID ?? "bundled.caveat",personalVersion:version,size:38)
+        defaultCoverFont = .custom(font.fontName,size:38,relativeTo:.largeTitle)
     }
     private var showingError: Binding<Bool> {Binding(get:{library.error != nil},set:{if !$0 {library.error=nil}})}
     private func reconcileUnavailableSession() {
@@ -301,7 +340,9 @@ struct NotebookView: View {
         } catch {if current() {library.error=error.localizedDescription}}
     }
     private func start() async {
-        guard !didStart,!route.hasReceivedRoute,library.storeReady,let store=library.store else { return };didStart=true
+        guard !didStart,!route.hasReceivedRoute,library.storeReady,let store=library.store else { return }
+        if startup == "new",!cover.isOpen {return}
+        didStart=true
         if startup == "new" { route.presentChooser(.startup);return }
         let id: UUID?
         if startup == "bookmark" { do { id=try await store.latestBookmarkedPageID() } catch { library.error=error.localizedDescription;return } }
@@ -320,6 +361,9 @@ struct NotebookView: View {
 }
 
 struct NoteWorkspace: View {
+    @Environment(\.coverPresentation) private var cover
+    @Environment(\.paperAppearance) private var paperAppearance
+    @Environment(\.personalSymbols) private var personalSymbols
     @Bindable var session: EditorSession
     let notes: [Note]
     var navigationPending=false
@@ -336,25 +380,26 @@ struct NoteWorkspace: View {
             .toolbar {
                 ToolbarItemGroup(placement:.primaryAction) {
                   Group {
-                    Button("Choose template",systemImage:"doc.badge.plus",action:onAdd).disabled(session.busy || session.hasCurrentAssetWrites)
-                    Button("Bookmark",systemImage:session.snapshot.pages.first(where:{$0.id==session.activePageID})?.bookmark == true ? "bookmark.fill" : "bookmark") {
+                    Button(action:onAdd) {Label {Text("Choose template")} icon: {AppSymbol.addPage.image(in:personalSymbols)}}.disabled(session.busy || session.hasCurrentAssetWrites)
+                    Button {
                         Task { do { let id=session.activePageID;let value=session.snapshot.pages.first(where:{$0.id==id})?.bookmark != true;try await session.setBookmark(pageID:id,value:value);onBookmark(id) } catch { self.error=error.localizedDescription } }
-                    }
-                    Menu("Reading and appearance",systemImage:"textformat") {
-                        Button("Readable text",systemImage:"text.alignleft") { readable=true }
-                        Button("Customize",systemImage:"slider.horizontal.3") { customizing=true }
-                        Button("Page history",systemImage:"clock.arrow.circlepath") { history=true }.disabled(session.busy || session.hasCurrentAssetWrites)
+                    } label: { Label { Text("Bookmark") } icon: { AppSymbol.bookmark.image(in:personalSymbols,selected:session.snapshot.pages.first(where:{$0.id==session.activePageID})?.bookmark == true) } }
+                    Menu {
+                        Button {cover?.close()} label: {Label {Text("Close book")} icon: {AppSymbol.closeBook.image(in:personalSymbols)}}.accessibilityIdentifier("cover.close")
+                        Button { readable=true } label: { Label { Text("Readable text") } icon: { AppSymbol.readableText.image(in:personalSymbols) } }
+                        Button { customizing=true } label: { Label { Text("Customize") } icon: { AppSymbol.customize.image(in:personalSymbols) } }
+                        Button { history=true } label: { Label { Text("Page history") } icon: { AppSymbol.history.image(in:personalSymbols) } }.disabled(session.busy || session.hasCurrentAssetWrites)
                         ForEach(destinations) { page in Button("Page \(notes.flatMap(\.pageIDs).firstIndex(of:page.id).map{$0+1} ?? 0)") { onSelect(page.id) } }
-                    }
+                    } label: { Label { Text("Reading and appearance") } icon: { AppSymbol.appearance.image(in:personalSymbols) } }
                   }.disabled(navigationPending || session.navigationLocked)
                 }
             }
-            .sheet(isPresented:$readable) { NavigationStack { ScrollView { VStack(alignment:.leading,spacing:16) { ForEach(session.activeContent.textBlocks) { Text($0.text).frame(maxWidth:.infinity,alignment:.leading) };ForEach(session.activeContent.images) { Label($0.altText,systemImage:"photo") } }.padding().textSelection(.enabled) }.navigationTitle("Readable text").toolbar { Button("Done") { readable=false } } } }
+            .sheet(isPresented:$readable) { NavigationStack { ScrollView { VStack(alignment:.leading,spacing:16) { ForEach(session.activeContent.textBlocks) { Text($0.text).frame(maxWidth:.infinity,alignment:.leading) };ForEach(session.activeContent.images) { Label($0.altText,systemImage:"photo") } }.padding().textSelection(.enabled) }.paperSurface().navigationTitle("Readable text").toolbar { Button("Done") { readable=false } } }.bookCoverShield() }
             .task(id:session.activePageID) {
                 do { let catalog=try TemplateCatalog.builtIn();let ids=catalog.entries.first{$0.id==session.activeContent.template.definitionID}?.navigationDestinationIDs ?? [];destinations=session.snapshot.pages.filter{ids.contains($0.content.template.definitionID)} } catch { self.error=error.localizedDescription }
             }
-            .sheet(isPresented:$history) { RevisionHistoryView(session:session) }
-            .sheet(isPresented:$customizing) { CustomizeView(store:session.store,session:session) }
+            .sheet(isPresented:$history) { RevisionHistoryView(session:session).bookCoverShield() }
+            .sheet(isPresented:$customizing) { CustomizeView(store:session.store,session:session).bookCoverShield() }
             .alert("Notebook error",isPresented:Binding(get:{error != nil},set:{if !$0 { error=nil }})) { Button("OK",role:.cancel) {} } message: { Text(error ?? "") }
     }
 }

@@ -3,9 +3,14 @@ import CoreHaptics
 import MeetingBookCore
 
 struct CustomizeView: View {
+    private var paperAppearance: PaperAppearance { PaperAppearance(defaultPaper:paper) }
+    @Environment(\.personalSymbols) private var personalSymbols
     let store: NotebookStore
     let session: EditorSession?
     var library:LibraryModel? = nil
+    @Environment(\.bookCover) private var coverStore
+    @State private var coverSettings=false
+    @State private var symbolStudio=false
     @Environment(\.dismiss) private var dismiss
     @State private var defaults=TextDefaults()
     @State private var versions:[FontVersion]=[]
@@ -22,6 +27,7 @@ struct CustomizeView: View {
     var body: some View {
         NavigationStack {
             Form {
+                Group {
                 Section("New writing") {
                     Picker("Font",selection:Binding(get:{defaults.fontVersionID?.uuidString ?? defaults.fontCatalogID ?? "system"},set:{value in if let id=UUID(uuidString:value) {defaults.fontVersionID=id} else {defaults.fontVersionID=nil;defaults.fontCatalogID=value} })) {
                         Text("Caveat").tag("bundled.caveat");Text("Gochi Hand").tag("bundled.gochi-hand");Text("System · readable").tag("system")
@@ -53,8 +59,12 @@ struct CustomizeView: View {
                         }.disabled(session.busy || session.hasCurrentAssetWrites || !fontsReady)
                         if let previewImage { Image(uiImage:previewImage).resizable().scaledToFit().frame(maxHeight:400) }
                         if let preview { Button("Apply to note") { run { try await session.apply(preview);self.preview=nil;previewImage=nil } }.disabled(session.busy || session.hasCurrentAssetWrites || !fontsReady) }
-                        Button("Undo",systemImage:"arrow.uturn.backward") { run { try await session.undo() } }.disabled(!session.canUndo || session.hasCurrentAssetWrites)
+                        Button { run { try await session.undo() } } label: { Label { Text("Undo") } icon: { AppSymbol.undo.image(in:personalSymbols) } }.disabled(!session.canUndo || session.hasCurrentAssetWrites)
                     }
+                }
+                Section("App appearance") {
+                    if coverStore != nil {Button {coverSettings=true} label: {Label {Text("Design cover")} icon: {AppSymbol.designCover.image(in:personalSymbols)}}.accessibilityIdentifier("cover.customize")}
+                    Button { symbolStudio=true } label: { Label {Text("Own app symbols")} icon: {AppSymbol.appSymbols.image(in:personalSymbols)} }.accessibilityIdentifier("symbols.open")
                 }
                 Section("Opening the notebook") {
                     Picker("Start with",selection:$startup) { Text("Last page").tag("last");Text("New note").tag("new");Text("Latest bookmark").tag("bookmark") }
@@ -78,21 +88,24 @@ struct CustomizeView: View {
                     Text("If saving fails, keep this window open and use Export and recovery to capture its unsaved drafts. Other windows and open Font Studio drawings must be exported from their own window.")
                 }
                 Section("Licenses") {
-                    ForEach(HandwritingFontCatalog.entries,id:\.id) { entry in NavigationLink(entry.name) { ScrollView { Text((try? HandwritingFontCatalog.licenseText(for:entry)) ?? String(localized:"License unavailable")).padding().textSelection(.enabled) } } }
+                    ForEach(HandwritingFontCatalog.entries,id:\.id) { entry in NavigationLink(entry.name) { ScrollView { Text((try? HandwritingFontCatalog.licenseText(for:entry)) ?? String(localized:"License unavailable")).padding().textSelection(.enabled) }.paperSurface() } }
                 }
                 Section("Software") {
                     NavigationLink("ZIPFoundation · MIT license") {
-                        ScrollView { Text((Bundle.main.url(forResource:"ZIPFoundation-MIT",withExtension:"txt").flatMap {try? String(contentsOf:$0,encoding:.utf8)}) ?? String(localized:"License unavailable")).padding().textSelection(.enabled) }
+                        ScrollView { Text((Bundle.main.url(forResource:"ZIPFoundation-MIT",withExtension:"txt").flatMap {try? String(contentsOf:$0,encoding:.utf8)}) ?? String(localized:"License unavailable")).padding().textSelection(.enabled) }.paperSurface()
                     }
                 }
                 if let error { Text(error).foregroundStyle(.red).textSelection(.enabled) }
-            }.navigationTitle("Customize").disabled(busy)
+                }.listRowBackground(paperAppearance.color)
+            }.paperSurface().navigationTitle("Customize").disabled(busy)
                 .toolbar { Button("Done") { dismiss() } }
                 .task { defaults=await store.preferences().textDefaults ?? TextDefaults();fontProjects=await store.fontProjects();versions=fontProjects.flatMap(\.versions);for v in versions { do { try await PersonalFontService(assets:store.assets).register(version:v) } catch { self.error=error.localizedDescription;return } };fontsReady=true }
                 .onChange(of:defaults) { _,_ in preview=nil;previewImage=nil }
                 .onChange(of:paper) { _,_ in preview=nil;previewImage=nil }
                 .onChange(of:ruling) { _,_ in preview=nil;previewImage=nil }
-        }
+                .sheet(isPresented:$coverSettings) {if let coverStore {CoverSettingsView(store:coverStore).bookCoverShield(allowInitiallyClosed:true)}}
+                .fullScreenCover(isPresented:$symbolStudio) { SymbolStudio().bookCoverShield() }
+        }.paperContext(PaperAppearance(defaultPaper:paper))
     }
     private func run(_ action:@escaping @MainActor () async throws -> Void) { Task { busy=true;defer {busy=false};do {try await action()} catch {self.error=error.localizedDescription} } }
 }
@@ -122,6 +135,7 @@ struct ContrastChoice: View {
 }
 
 struct SyncSettingsView:View {
+    @Environment(\.paperAppearance) private var paperAppearance
     @Bindable var library:LibraryModel
     @Environment(\.dismiss) private var dismiss
     @State private var consent=false
@@ -129,6 +143,7 @@ struct SyncSettingsView:View {
     var body:some View {
         NavigationStack {
             Form {
+                Group {
                 Section("iCloud transfer") {
                     Text(status).accessibilityIdentifier("sync.status")
                     Text("Local saves work independently of iCloud. Sync is not a separate backup.").font(.caption)
@@ -210,7 +225,8 @@ struct SyncSettingsView:View {
                         }
                     }
                 }
-            }.disabled(library.syncBusy)
+                }.listRowBackground(paperAppearance.color)
+            }.paperSurface().disabled(library.syncBusy)
             .overlay {if library.syncBusy {ProgressView("Preparing transfer")}}
             .navigationTitle("iCloud").navigationBarTitleDisplayMode(.inline)
             .toolbar {Button("Done") {dismiss()}.disabled(library.syncBusy)}
@@ -259,6 +275,7 @@ struct SyncSettingsView:View {
 }
 
 private struct SyncPageConflictView:View {
+    @Environment(\.paperAppearance) private var paperAppearance
     @Bindable var library:LibraryModel
     let conflict:SyncConflict
     @Environment(\.dismiss) private var dismiss
@@ -267,6 +284,7 @@ private struct SyncPageConflictView:View {
     @State private var previewError:String?
     var body:some View {
         Form {
+                Group {
             Section("Affected content") {
                 Text(syncEntityDescription(library.conflictSubjects[conflict.id] ?? conflict.entity,library:library)).textSelection(.enabled)
                 if conflict.deletionOperationID != nil {
@@ -285,7 +303,8 @@ private struct SyncPageConflictView:View {
                 }.disabled(library.syncBusy || library.inspection != nil)
             }
             if let message=library.syncMessage {Text(message)}
-        }.navigationTitle("Review conflict")
+            }.listRowBackground(paperAppearance.color)
+            }.paperSurface().navigationTitle("Review conflict")
         .onChange(of:library.pageConflicts.map(\.id)) {_,ids in if !ids.contains(conflict.id) {dismiss()}}
         .task {
             guard let store=library.store else {return}

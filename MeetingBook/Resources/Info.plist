@@ -47,7 +47,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>2</string>
+	<string>3</string>
 	<key>MeetingBookCloudKitContainer</key>
 	<string>$(MEETINGBOOK_CLOUDKIT_CONTAINER)</string>
 	<key>MeetingBookCloudKitEnvironment</key>

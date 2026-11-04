@@ -900,3 +900,31 @@ extension NotebookFeatureTests {
         XCTAssertEqual(text.selectedRange,selected);XCTAssertEqual(session.activeContent,content)
     }
 }
+
+extension NotebookFeatureTests {
+    func testPaperContextFollowsActiveDraftAndKeepsWindowsIndependent() async throws {
+        let store=try await NotebookStore.open(root:FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString))
+        var ivory=PageContent();ivory.style.paper="ivory";ivory.textBlocks=[TextBlock(text:"Keep e\u{301} 👩🏽‍💻")]
+        var rose=PageContent();rose.style.paper="rose"
+        let note=try await store.createNote(title:"Paper",contents:[ivory,rose])
+        let first=EditorSession(store:store,snapshot:note),second=EditorSession(store:store,snapshot:note)
+        func appearance(_ session: EditorSession?) -> PaperAppearance {PaperAppearance(activePaper:session?.activeContent.style.paper,defaultPaper:"cream")}
+        XCTAssertEqual(appearance(nil).paper,"cream")
+        XCTAssertEqual(appearance(first).paper,"ivory")
+        first.select(pageID:note.pages[1].id)
+        XCTAssertEqual(appearance(first).paper,"rose");XCTAssertEqual(appearance(second).paper,"ivory")
+        var changed=first.activeContent;changed.style.paper="classic";first.setDraft(changed,pageID:first.activePageID)
+        XCTAssertEqual(appearance(first).paper,"classic");XCTAssertEqual(second.activeContent,ivory)
+        for paper in ["classic","cream","rose","ivory","unknown"] {
+            XCTAssertEqual(PaperAppearance(defaultPaper:paper).uiColor,PageRenderer.paperColor(paper))
+        }
+        let controller=PageCanvasController(session:second);controller.loadViewIfNeeded()
+        let text=try XCTUnwrap(controller.page.subviews.compactMap{$0 as? UITextView}.first)
+        text.selectedRange=NSRange(location:2,length:3)
+        controller.setPaperAppearance(PaperAppearance(defaultPaper:"rose"))
+        controller.refresh()
+        XCTAssertTrue(controller.page.subviews.contains{$0 === text})
+        XCTAssertEqual(text.selectedRange,NSRange(location:2,length:3))
+        XCTAssertEqual(second.activeContent,ivory)
+    }
+}
