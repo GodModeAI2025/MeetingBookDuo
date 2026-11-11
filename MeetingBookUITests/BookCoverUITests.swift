@@ -10,20 +10,36 @@ final class BookCoverUITests: XCTestCase {
         app.launch();XCTAssertTrue(app.buttons["cover.open"].waitForExistence(timeout:15));print(app.debugDescription);return app
     }
     @MainActor private func capture(_ app:XCUIApplication,_ name:String) {
+        // Let scene rotation settle before recording original-size screenshots.
+        Thread.sleep(forTimeInterval:1)
         let attachment=XCTAttachment(screenshot:app.screenshot());attachment.name=name;attachment.lifetime = .keepAlways;add(attachment)
         let tree=XCTAttachment(string:app.debugDescription);tree.name=name+" hierarchy";tree.lifetime = .keepAlways;add(tree)
     }
     @MainActor func testRealBandShortPullReturnsAndCrossingOpens() {
-        let app=launch();capture(app,"Cover resting")
+        checkBandPulls(launch())
+    }
+    @MainActor func testLandscapeBandShortPullReturnsAndCrossingOpens() {
+        let app=launch()
+        XCUIDevice.shared.orientation = .landscapeLeft
+        XCTAssertEqual(XCTWaiter.wait(for:[XCTNSPredicateExpectation(predicate:NSPredicate {_,_ in app.frame.width>app.frame.height},object:nil)],timeout:5),.completed)
+        checkBandPulls(app)
+    }
+    @MainActor private func checkBandPulls(_ app:XCUIApplication) {
+        capture(app,"Cover resting")
         let band=app.otherElements["cover.band"].exists ? app.otherElements["cover.band"] : app.buttons["cover.band"]
         XCTAssertTrue(band.exists)
+        XCTAssertEqual(band.frame.height,app.frame.height,accuracy:1)
         let start=band.coordinate(withNormalizedOffset:CGVector(dx:0.5,dy:0.5))
-        start.press(forDuration:0.1,thenDragTo:start.withOffset(CGVector(dx:15,dy:90)),withVelocity:.slow,thenHoldForDuration:0.2)
+        start.press(forDuration:0.1,thenDragTo:start.withOffset(CGVector(dx:15,dy:90)),withVelocity:.slow,thenHoldForDuration:0.6)
         XCTAssertTrue(app.buttons["cover.open"].exists);capture(app,"Diagonal short pull returned")
-        start.press(forDuration:0.1,thenDragTo:start.withOffset(CGVector(dx:85,dy:0)),withVelocity:.slow,thenHoldForDuration:0.2)
-        XCTAssertTrue(app.textFields["Title"].waitForExistence(timeout:10));XCTAssertFalse(app.buttons["cover.open"].exists)
+        start.press(forDuration:0.1,thenDragTo:start.withOffset(CGVector(dx:-35,dy:0)),withVelocity:.slow,thenHoldForDuration:0.6)
+        XCTAssertTrue(app.buttons["cover.open"].exists);capture(app,"Cancelled leftward pull returned")
+        let edge=app.coordinate(withNormalizedOffset:CGVector(dx:0,dy:0.5)).withOffset(CGVector(dx:app.frame.width-8,dy:45))
+        start.press(forDuration:0.1,thenDragTo:edge,withVelocity:.slow,thenHoldForDuration:0.8)
+        XCTAssertFalse(app.buttons["cover.open"].waitForExistence(timeout:2));capture(app,"Full inside-edge pull opened")
+        openNotebookActions(app)
         app.buttons["cover.close"].tap();XCTAssertTrue(app.buttons["cover.open"].waitForExistence(timeout:5))
-        app.buttons.matching(identifier:"cover.open").allElementsBoundByIndex.first(where:{$0.isHittable})!.tap();XCTAssertTrue(app.textFields["Title"].waitForExistence(timeout:5))
+        app.buttons.matching(identifier:"cover.open").allElementsBoundByIndex.first(where:{$0.isHittable})!.tap();XCTAssertFalse(app.buttons["cover.open"].waitForExistence(timeout:2))
     }
     @MainActor func testCoverSettingsSaveCancelAndRelaunch() {
         let app=launch();app.buttons["cover.customize"].tap()
@@ -47,11 +63,11 @@ final class BookCoverUITests: XCTestCase {
         app.otherElements["Canonical page"].coordinate(withNormalizedOffset:CGVector(dx:0.3,dy:0.15)).tap()
         let text=app.textViews.firstMatch;text.typeText("Größe Äß Ω 👋")
         app.buttons["editor.keyboard.dismiss"].tap()
-        app.buttons["Reading and appearance"].tap();app.buttons["cover.close"].tap()
+        app.buttons["editor.more"].tap();app.buttons["cover.close"].tap()
         XCTAssertTrue(app.buttons["cover.open"].waitForExistence(timeout:5));capture(app,"Closed over retained editor")
         app.buttons.matching(identifier:"cover.open").allElementsBoundByIndex.first(where:{$0.isHittable})!.tap()
         XCTAssertEqual(text.value as? String,"Größe Äß Ω 👋")
-        XCTAssertTrue(app.buttons["Undo"].isEnabled);app.buttons["Undo"].tap()
+        XCTAssertTrue(app.buttons["editor.undo"].isEnabled);app.buttons["editor.undo"].tap()
         XCTAssertNotEqual(text.value as? String,"Größe Äß Ω 👋")
     }
     @MainActor func testExplicitNewLinkOpensThroughCover() {
@@ -65,7 +81,7 @@ final class BookCoverUITests: XCTestCase {
         let app=XCUIApplication()
         app.launchArguments=["-AppleLanguages","(en)","-AppleLocale","en_US","-startup","last"]
         app.launchEnvironment=["MEETINGBOOK_TEST_LIBRARY":UUID().uuidString,"MEETINGBOOK_SYNTHETIC_HINGE":"1"]
-        app.launch();openBookIfNeeded(app)
+        app.launch();openBookIfNeeded(app);openNotebookActions(app)
         app.buttons["cover.close"].tap();app.buttons["cover.customize"].tap()
         let title=app.textFields["cover.settings.title"];XCTAssertTrue(title.waitForExistence(timeout:5));title.tap();title.typeText("Unfinished draft")
         app.buttons.matching(identifier:"cover.syntheticHinge").allElementsBoundByIndex.last(where:{$0.isHittable})!.tap()
@@ -82,7 +98,7 @@ final class BookCoverUITests: XCTestCase {
         let app=XCUIApplication()
         app.launchArguments=["-AppleLanguages","(en)","-AppleLocale","en_US","-startup","last"]
         app.launchEnvironment=["MEETINGBOOK_TEST_LIBRARY":UUID().uuidString,"MEETINGBOOK_SYNTHETIC_HINGE":"1"]
-        app.launch();openBookIfNeeded(app);showLibraryIfNeeded(app)
+        app.launch();openBookIfNeeded(app);openNotebookActions(app)
         app.buttons["Font Studio"].tap();app.buttons["symbols.open"].tap()
         let pen=app.buttons["symbols.item.pen"]
         XCTAssertTrue(app.collectionViews["symbols.gallery"].waitForExistence(timeout:10))
@@ -133,8 +149,9 @@ final class BookCoverUITests: XCTestCase {
         capture(app,"German largest text cover commands")
         XCUIDevice.shared.orientation = .landscapeLeft
         XCTAssertTrue(open.isHittable);XCTAssertTrue(design.isHittable);capture(app,"German largest text landscape cover")
-        open.tap();XCTAssertTrue(app.buttons["cover.close"].waitForExistence(timeout:10))
+        open.tap();XCTAssertFalse(open.waitForExistence(timeout:2))
         XCUIDevice.shared.orientation = .portrait
     }
+
 
 }

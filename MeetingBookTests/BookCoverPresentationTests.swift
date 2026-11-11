@@ -22,22 +22,37 @@ import MeetingBookCore
     func testUnknownAndLayoutDoNotOpenNotebook() {
         let model=BookCoverPresentation()
         model.updateHinge(nil);model.updateHinge(.unknown);XCTAssertFalse(model.isOpen)
-        for width:CGFloat in [0,320,800,1400] {_ = CoverBandGeometry(size:CGSize(width:width,height:500),translation:100,contactY:200)}
+        for width:CGFloat in [0,320,800,1400] {_ = CoverBandGeometry(size:CGSize(width:width,height:500),translation:100,contact:CGPoint(x:width*0.86+100,y:200))}
         XCTAssertFalse(model.isOpen)
     }
     func testBandBoundsAndReleaseThreshold() {
-        let rest=CoverBandGeometry(size:CGSize(width:300,height:500),translation:0,contactY:250)
-        let short=CoverBandGeometry(size:CGSize(width:300,height:500),translation:10,contactY:250)
-        let full=CoverBandGeometry(size:CGSize(width:300,height:500),translation:120,contactY:250)
+        let rest=CoverBandGeometry(size:CGSize(width:300,height:500),translation:0,contact:CGPoint(x:258,y:250))
+        let short=CoverBandGeometry(size:CGSize(width:300,height:500),translation:10,contact:CGPoint(x:268,y:250))
+        let full=CoverBandGeometry(size:CGSize(width:300,height:500),translation:120,contact:CGPoint(x:378,y:250))
         XCTAssertEqual(rest.pull,0);XCTAssertFalse(short.opens);XCTAssertTrue(full.opens)
-        XCTAssertGreaterThan(full.contactX,300);XCTAssertLessThan(full.bandWidth,rest.bandWidth)
+        XCTAssertGreaterThan(full.contactX,rest.contactX);XCTAssertLessThan(full.bandWidth,rest.bandWidth)
         for dimension:CGFloat in [0,-100,.infinity,.nan,1e8] {
-            let value=CoverBandGeometry(size:CGSize(width:dimension,height:dimension),translation:.infinity,contactY:.nan)
+            let value=CoverBandGeometry(size:CGSize(width:dimension,height:dimension),translation:.infinity,contact:CGPoint(x:CGFloat.infinity,y:CGFloat.nan))
             XCTAssertTrue(value.pull.isFinite);XCTAssertTrue(value.contactX.isFinite);XCTAssertTrue(value.contactY.isFinite)
             XCTAssertFalse(value.opens)
         }
-        let left=CoverBandGeometry(size:CGSize(width:300,height:500),translation:-900,contactY:-900)
+        let left=CoverBandGeometry(size:CGSize(width:300,height:500),translation:-900,contact:CGPoint(x:-642,y:-900))
         XCTAssertFalse(left.opens);XCTAssertGreaterThanOrEqual(left.contactY,0)
+    }
+    func testFullViewportBandReleasesAtReachableInsideEdge() {
+        for size in [CGSize(width:402,height:874),CGSize(width:1194,height:834)] {
+            let edge=size.width-8
+            let release=CoverBandGeometry(size:size,translation:edge-size.width*0.86,contact:CGPoint(x:edge,y:size.height*0.7))
+            XCTAssertTrue(release.opens,"A finger eight points inside the viewport must release the band")
+            let short=CoverBandGeometry(size:size,translation:10,contact:CGPoint(x:size.width*0.86+10,y:size.height*0.7))
+            XCTAssertFalse(short.opens)
+            let cancelled=CoverBandGeometry(size:size,translation:0,contact:CGPoint(x:size.width*0.86,y:size.height*0.7))
+            XCTAssertFalse(cancelled.opens)
+            let cancelledAtEdge=CoverBandGeometry(size:size,translation:0,contact:CGPoint(x:edge,y:size.height*0.7))
+            XCTAssertFalse(cancelledAtEdge.opens)
+            let shortAtEdge=CoverBandGeometry(size:size,translation:10,contact:CGPoint(x:edge,y:size.height*0.7))
+            XCTAssertFalse(shortAtEdge.opens)
+        }
     }
     func testNativeCoveredInputRetainsSelectionMarkedTextAndUndo() async throws {
         let store=try await NotebookStore.open(root:FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString))
@@ -100,9 +115,9 @@ import MeetingBookCore
 
     func testDiagonalBandTracksCurrentContactAndReturnsToRest() {
         let size=CGSize(width:300,height:500)
-        let pulled=CoverBandGeometry(size:size,translation:20,contactY:340)
+        let pulled=CoverBandGeometry(size:size,translation:20,contact:CGPoint(x:278,y:340))
         XCTAssertEqual(pulled.contactY,340);XCTAssertFalse(pulled.opens)
-        let resting=CoverBandGeometry(size:size,translation:0,contactY:250)
+        let resting=CoverBandGeometry(size:size,translation:0,contact:CGPoint(x:258,y:250))
         XCTAssertEqual(resting.pull,0);XCTAssertEqual(resting.contactY,250)
     }
     func testInterruptedCropRestartsFromAccumulatedDraft() {

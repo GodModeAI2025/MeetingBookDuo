@@ -4,6 +4,7 @@ final class RecoveryFlowTests: XCTestCase {
     @MainActor func testSavedBackupShareCancellationReturnsToRecovery() {
         let app=XCUIApplication();app.launchArguments=["-AppleLanguages","(en)","-AppleLocale","en_US","-startup","last"]
         app.launchEnvironment=["MEETINGBOOK_TEST_LIBRARY":UUID().uuidString];app.launch();showLibraryIfNeeded(app)
+        openNotebookActions(app)
         let recovery=app.buttons["Export and recovery"]
         XCTAssertTrue(recovery.waitForExistence(timeout:15));recovery.tap()
         let backup=app.buttons["Back up saved library"]
@@ -22,7 +23,7 @@ extension RecoveryFlowTests {
     @MainActor func testDeterministicConflictPreviewAndBothChoice() {
         let app=XCUIApplication();app.launchEnvironment=["MEETINGBOOK_TEST_LIBRARY":UUID().uuidString,"MEETINGBOOK_SYNC_FIXTURE":"conflict"]
         app.launchArguments=["-AppleLanguages","(en)","-AppleLocale","en_US","-startup","last"];app.launch();showLibraryIfNeeded(app)
-        XCTAssertTrue(app.buttons["sync.settings"].waitForExistence(timeout:10));app.buttons["sync.settings"].tap()
+        openNotebookActions(app);XCTAssertTrue(app.buttons["sync.settings"].waitForExistence(timeout:10));app.buttons["sync.settings"].tap()
         let conflict=app.buttons.matching(NSPredicate(format:"identifier BEGINSWITH %@","sync.conflict.")).firstMatch
         if !conflict.isHittable {app.swipeUp()}
         XCTAssertTrue(conflict.waitForExistence(timeout:10));conflict.tap()
@@ -37,7 +38,7 @@ extension RecoveryFlowTests {
     @MainActor func testGermanQuotaAtAccessibilitySize() {
         let app=XCUIApplication();app.launchEnvironment=["MEETINGBOOK_TEST_LIBRARY":UUID().uuidString,"MEETINGBOOK_SYNC_FIXTURE":"quota"]
         app.launchArguments=["-AppleLanguages","(de)","-AppleLocale","de_DE","-UIPreferredContentSizeCategoryName","UICTContentSizeCategoryAccessibilityXXXL"];app.launch();showLibraryIfNeeded(app)
-        XCTAssertTrue(app.buttons["sync.settings"].waitForExistence(timeout:10));app.buttons["sync.settings"].tap()
+        openNotebookActions(app);XCTAssertTrue(app.buttons["sync.settings"].waitForExistence(timeout:10));app.buttons["sync.settings"].tap()
         XCTAssertTrue(app.staticTexts["iCloud-Speicher voll; lokales Arbeiten ist möglich"].waitForExistence(timeout:10))
         let image=XCTAttachment(screenshot:app.screenshot());image.name="German quota state at accessibility size";image.lifetime = .keepAlways;add(image)
     }
@@ -47,7 +48,7 @@ extension RecoveryFlowTests {
     @MainActor func testGermanConflictActions() {
         let app=XCUIApplication();app.launchEnvironment=["MEETINGBOOK_TEST_LIBRARY":UUID().uuidString,"MEETINGBOOK_SYNC_FIXTURE":"conflict"]
         app.launchArguments=["-AppleLanguages","(de)","-AppleLocale","de_DE","-startup","last"];app.launch();showLibraryIfNeeded(app)
-        XCTAssertTrue(app.buttons["sync.settings"].waitForExistence(timeout:10));app.buttons["sync.settings"].tap()
+        openNotebookActions(app);XCTAssertTrue(app.buttons["sync.settings"].waitForExistence(timeout:10));app.buttons["sync.settings"].tap()
         let conflict=app.buttons.matching(NSPredicate(format:"identifier BEGINSWITH %@","sync.conflict.")).firstMatch
         if !conflict.isHittable {app.swipeUp()}
         XCTAssertTrue(conflict.waitForExistence(timeout:10));conflict.tap()
@@ -66,7 +67,7 @@ extension RecoveryFlowTests {
         XCUIDevice.shared.orientation = .portrait
         let app=XCUIApplication();app.launchEnvironment=["MEETINGBOOK_TEST_LIBRARY":UUID().uuidString]
         app.launchArguments=["-AppleLanguages","(en)","-AppleLocale","en_US","-startup","last"]
-        app.launch();showLibraryIfNeeded(app);XCTAssertTrue(app.buttons["sync.settings"].waitForExistence(timeout:10));app.buttons["sync.settings"].tap()
+        app.launch();showLibraryIfNeeded(app);openNotebookActions(app);XCTAssertTrue(app.buttons["sync.settings"].waitForExistence(timeout:10));app.buttons["sync.settings"].tap()
         XCTAssertTrue(app.staticTexts["On this device"].waitForExistence(timeout:10))
         XCTAssertFalse(app.buttons["Merge all local content"].exists)
         app.buttons["Inspect iCloud library"].tap()

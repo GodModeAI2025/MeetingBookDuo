@@ -7986,19 +7986,19 @@
         }
       }
     },
-    "Pull the band beyond the right edge to open the book.": {
+    "Pull the band to the right edge to open the book.": {
       "extractionState": "manual",
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ziehe das Band über den rechten Rand, um das Buch zu öffnen."
+            "value": "Ziehe das Band zum rechten Rand, um das Buch zu öffnen."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pull the band beyond the right edge to open the book."
+            "value": "Pull the band to the right edge to open the book."
           }
         }
       }
@@ -8220,6 +8220,70 @@
           "stringUnit": {
             "state": "translated",
             "value": "Load saved cover"
+          }
+        }
+      }
+    },
+    "Close index": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inhaltsverzeichnis schließen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close index"
+          }
+        }
+      }
+    },
+    "Notebook actions": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notizbuchaktionen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notebook actions"
+          }
+        }
+      }
+    },
+    "Clear search": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suche löschen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear search"
+          }
+        }
+      }
+    },
+    "More": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weitere Aktionen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "More"
           }
         }
       }

@@ -8,12 +8,12 @@ final class PaperAppearanceUITests: XCTestCase {
     }
     @MainActor func testPaperSurfacesInDarkSystemAppearance() {
         XCUIDevice.shared.orientation = .portrait
-        for paper in ["classic","cream","rose"] {
+        for paper in ["classic","cream","rose","ivory"] {
             let app=XCUIApplication()
             app.launchArguments=["-AppleLanguages","(en)","-AppleLocale","en_US","-startup","last","-paper",paper,"-ruling","lined","-AppleInterfaceStyle","Dark"]
             app.launchEnvironment=["MEETINGBOOK_TEST_LIBRARY":UUID().uuidString,"MEETINGBOOK_FONT_PROJECT_COUNT":"1"]
             app.launch();showLibraryIfNeeded(app)
-            XCTAssertTrue(app.buttons["Font Studio"].waitForExistence(timeout:15));capture(app,paper+" library dark system")
+            openNotebookActions(app);XCTAssertTrue(app.buttons["Font Studio"].waitForExistence(timeout:15));capture(app,paper+" library dark system")
             app.buttons["Font Studio"].tap()
             XCTAssertTrue(app.buttons["symbols.open"].waitForExistence(timeout:10));capture(app,paper+" font studio")
             app.buttons["QA project 1"].tap()
@@ -22,8 +22,7 @@ final class PaperAppearanceUITests: XCTestCase {
             XCTAssertTrue(app.buttons["symbols.item.pen"].waitForExistence(timeout:10));app.buttons["symbols.item.pen"].tap()
             XCTAssertTrue(app.descendants(matching:.any)["symbols.canvas"].waitForExistence(timeout:10));capture(app,paper+" symbol drawing board")
             app.buttons["symbols.done"].tap();app.buttons["Done"].tap()
-            let field=app.textFields["Title"];XCTAssertTrue(field.waitForExistence(timeout:10));field.tap();field.typeText(paper+" paper note")
-            app.buttons["New note"].tap()
+            beginNamedNote(app,title:paper+" paper note")
             let search=app.searchFields["Name, category or topic"]
             if !search.waitForExistence(timeout:2),app.buttons["Search"].firstMatch.isHittable {app.buttons["Search"].firstMatch.tap()}
             XCTAssertTrue(search.waitForExistence(timeout:10));capture(app,paper+" template chooser")
@@ -39,7 +38,7 @@ final class PaperAppearanceUITests: XCTestCase {
             let text=app.textViews.firstMatch;XCTAssertTrue(text.waitForExistence(timeout:10));text.typeText("Paper e\u{301} 👩🏽‍💻")
             XCTAssertEqual(text.value as? String,"Paper e\u{301} 👩🏽‍💻");capture(app,paper+" keyboard")
             app.buttons["editor.keyboard.dismiss"].tap();showLibraryIfNeeded(app)
-            app.buttons["Settings"].tap();XCTAssertTrue(app.staticTexts["New writing"].waitForExistence(timeout:10));capture(app,paper+" settings")
+            openNotebookActions(app);app.buttons["Settings"].tap();XCTAssertTrue(app.staticTexts["New writing"].waitForExistence(timeout:10));capture(app,paper+" settings")
             app.terminate()
         }
     }

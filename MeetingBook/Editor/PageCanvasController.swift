@@ -94,10 +94,15 @@ import MeetingBookCore
         guard let window=viewIfLoaded?.window,let frame=(notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {return}
         let overlap=window.bounds.intersection(window.convert(frame,from:window.screen.coordinateSpace)).height
         let visible=overlap>1 && textViews.values.contains(where: \.isFirstResponder)
-        if visible != softwareKeyboardVisible {softwareKeyboardVisible=visible;reportSoftwareKeyboard?(visible)}
+        if visible != softwareKeyboardVisible {softwareKeyboardVisible=visible;updateKeyboardVisibility();reportSoftwareKeyboard?(visible)}
     }
     @objc private func softwareKeyboardDidHide() {
-        if softwareKeyboardVisible {softwareKeyboardVisible=false;reportSoftwareKeyboard?(false)}
+        if softwareKeyboardVisible {softwareKeyboardVisible=false;updateKeyboardVisibility();reportSoftwareKeyboard?(false)}
+    }
+    private func updateKeyboardVisibility() {
+        let visible=softwareKeyboardVisible && session.mode == .typing && !coverPresented
+        commandBar.isHidden = !visible
+        keyboardHeightConstraint.constant=visible ? keyboardHeight : 0
     }
     override func viewDidDisappear(_ animated: Bool) {super.viewDidDisappear(animated);softwareKeyboardDidHide()}
     required init?(coder: NSCoder) { nil }
@@ -125,7 +130,7 @@ import MeetingBookCore
         debugKeyboardFloor=height;traceKeyboard("measure")
         #endif
         guard height.isFinite,height != keyboardHeight else {return}
-        keyboardHeight=height;keyboardHeightConstraint.constant=session.mode == .typing ? height : 0
+        keyboardHeight=height;updateKeyboardVisibility()
         commandBar.setNeedsLayout()
     }
     override var keyCommands: [UIKeyCommand]? {
@@ -180,8 +185,7 @@ import MeetingBookCore
     func refresh() {
         guard isViewLoaded else { return }
         let id=session.activePageID,content=session.activeContent
-        commandBar.isHidden=coverPresented || session.mode != .typing
-        keyboardHeightConstraint.constant=session.mode == .typing ? keyboardHeight : 0
+        updateKeyboardVisibility()
         let keepsFocus=session.navigationLocked && session.retainsTypingFocusDuringTurn && session.mode == .typing
         if session.navigationLocked && !keepsFocus { view.endEditing(true) }
         scroll.isUserInteractionEnabled = !session.navigationLocked || keepsFocus

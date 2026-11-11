@@ -11,6 +11,7 @@ final class PersonalSymbolUITests: XCTestCase {
         return app
     }
     @MainActor private func openStudio(_ app: XCUIApplication,settings: Bool=false) {
+        openNotebookActions(app)
         let entry=app.buttons[settings ? "Settings" : "Font Studio"]
         XCTAssertTrue(entry.waitForExistence(timeout:15));entry.tap()
         let open=app.buttons["symbols.open"]

@@ -110,7 +110,7 @@ extension NotebookFeatureTests {
         XCTAssertTrue(book.spread)
         XCTAssertEqual(book.pages.map(\.width),[450,720])
         XCTAssertEqual(book.gutter,cut.frame)
-        XCTAssertEqual(book.binding(offset:.zero,enlarged:false).height,625,accuracy:0.5)
+        XCTAssertEqual(book.binding(offset:.zero,enlarged:false).height,800,accuracy:0.5)
         var inactive=cut;inactive.active=false
         XCTAssertNotEqual(book,BookPresentation(size:size,regular:true,accessibility:false,regions:[inactive]))
         let occlusion=BookPresentation.Exclusion(frame:CGRect(x:0,y:0,width:90,height:90),division:false)
@@ -186,7 +186,9 @@ extension NotebookFeatureTests {
         window.rootViewController=root;window.makeKeyAndVisible();root.view.layoutIfNeeded();defer {window.isHidden=true}
         func mount(_ session: EditorSession) -> PageCanvasController {
             let controller=PageCanvasController(session:session)
+            print("LEAF_NATIVE initialized")
             root.addChild(controller);root.view.addSubview(controller.view);controller.didMove(toParent:root)
+            print("LEAF_NATIVE mounted")
             controller.view.frame=CGRect(x:100,y:200,width:360,height:500);controller.view.setNeedsLayout();controller.view.layoutIfNeeded()
             return controller
         }
@@ -230,10 +232,10 @@ extension NotebookFeatureTests {
         defer { window.isHidden=true }
         let image=try await NotebookFrozenRenderer.image(activeID:source,notes:[note.note],sessions:[note.note.id:editor],store:store,presentation:BookPresentation(size:CGSize(width:1440,height:1000),regular:true,accessibility:false))
         XCTAssertEqual(image.size.width,1440);XCTAssertEqual(image.size.height,1000)
-        let cancelled=SnapshotTurnView(source:image,destination:image,reducedMotion:true) { editor.select(pageID:target) }
+        let cancelled=SnapshotTurnView(source:image,destination:image) { editor.select(pageID:target) }
         cancelled.frame=root.view.bounds;root.view.addSubview(cancelled);cancelled.removeFromSuperview()
         try await Task.sleep(for:.milliseconds(400));XCTAssertEqual(editor.activePageID,source)
-        let completed=SnapshotTurnView(source:image,destination:image,reducedMotion:true) { editor.select(pageID:target) }
+        let completed=SnapshotTurnView(source:image,destination:image) { editor.select(pageID:target) }
         completed.frame=root.view.bounds;root.view.addSubview(completed)
         try await Task.sleep(for:.milliseconds(500));XCTAssertEqual(editor.activePageID,target)
     }
@@ -247,7 +249,7 @@ extension NotebookFeatureTests {
         let session=EditorSession(store:store,snapshot:note);await session.loadFonts();session.select(pageID:note.pages[1].id);session.selectedElementID=content.textBlocks[0].id
         try await session.setMode(.typing)
         let scene=try XCTUnwrap(UIApplication.shared.connectedScenes.compactMap{$0 as? UIWindowScene}.first)
-        let window=UIWindow(windowScene:scene),host=UIHostingController(rootView:SpreadWorkspace(session:session,notes:[note.note],onSelect:{_ in},onAdd:{}))
+        let window=UIWindow(windowScene:scene),host=UIHostingController(rootView:SpreadWorkspace(session:session,notes:[note.note],onSelect:{_ in},onAdd:{}).environment(\.horizontalSizeClass,.regular))
         window.rootViewController=host;window.makeKeyAndVisible();defer {window.isHidden=true}
         func controllers(_ controller:UIViewController) -> [PageCanvasController] { (controller as? PageCanvasController).map{[$0]} ?? controller.children.flatMap(controllers) }
         var original: PageCanvasController?
@@ -291,7 +293,8 @@ extension NotebookFeatureTests {
         session.setDraft(edited,pageID:session.activePageID);try await session.flush();XCTAssertTrue(session.canUndo)
         session.selectedElementID=content.textBlocks[0].id;try await session.setMode(.typing)
         let scene=try XCTUnwrap(UIApplication.shared.connectedScenes.compactMap{$0 as? UIWindowScene}.first)
-        let window=UIWindow(windowScene:scene),host=UIHostingController(rootView:SpreadWorkspace(session:session,notes:[note.note],onSelect:{_ in},onAdd:{}))
+        let state=IndexContinuityState()
+        let window=UIWindow(windowScene:scene),host=UIHostingController(rootView:IndexContinuityFixture(session:session,notes:[note.note],state:state))
         window.rootViewController=host;window.makeKeyAndVisible();defer {window.isHidden=true}
         host.view.frame=CGRect(x:0,y:0,width:1200,height:900);host.view.layoutIfNeeded()
         try await Task.sleep(for:.milliseconds(150))
@@ -303,9 +306,14 @@ extension NotebookFeatureTests {
         XCTAssertNotNil(text.markedTextRange)
         let bytes=Array(text.text.utf8),selection=text.selectedRange
         let draft=session.activeContent,generation=session.drafts[session.activePageID]?.generation,revision=session.snapshot.pages[0].currentRevisionID
-        for size in [CGSize(width:540,height:800),CGSize(width:1300,height:900),CGSize(width:1200,height:350),CGSize(width:900,height:800)] {
+        for (index,size) in [CGSize(width:540,height:800),CGSize(width:1300,height:900),CGSize(width:1200,height:350),CGSize(width:900,height:800),CGSize(width:540,height:800)].enumerated() {
+            state.presented=index%2 == 0
             host.view.frame=CGRect(origin:.zero,size:size);host.view.setNeedsLayout();host.view.layoutIfNeeded()
             try await Task.sleep(for:.milliseconds(100))
+            func editors(_ controller:UIViewController) -> [PageCanvasController] { (controller as? PageCanvasController).map{[$0]} ?? controller.children.flatMap(editors) }
+            XCTAssertEqual(editors(host).count,1);XCTAssertTrue(editors(host).first === controller)
+            if controller.coverPresented {XCTAssertFalse(controller.textView(text,shouldChangeTextIn:selection,replacementText:"blocked"))}
+            XCTAssertEqual(session.activePageID,note.pages[0].id)
             XCTAssertTrue(host.view.findFirstResponder() === text)
             XCTAssertNotNil(text.markedTextRange);XCTAssertEqual(text.selectedRange,selection)
             XCTAssertEqual(Array(text.text.utf8),bytes);XCTAssertTrue(session.canUndo)
@@ -365,15 +373,6 @@ private extension UIView {
 }
 
 extension NotebookFeatureTests {
-    func testReadSwipeThresholdDirectionAndCancellation() {
-        let ids=[UUID(),UUID(),UUID()]
-        XCTAssertEqual(NotebookSearch.swipeTarget(active:ids[1],ids:ids,horizontal:-90,vertical:10,reading:true),ids[2])
-        XCTAssertEqual(NotebookSearch.swipeTarget(active:ids[1],ids:ids,horizontal:90,vertical:10,reading:true),ids[0])
-        for (x,y,reading) in [(40.0,0.0,true),(90,100,true),(90,0,false)] {
-            XCTAssertNil(NotebookSearch.swipeTarget(active:ids[1],ids:ids,horizontal:x,vertical:y,reading:reading))
-        }
-        XCTAssertNil(NotebookSearch.swipeTarget(active:ids[0],ids:ids,horizontal:90,vertical:0,reading:true))
-    }
     func testPersonalFontLabelsRetainVersionIdentityAndExplainIssues() {
         let first=FontVersion(assetHash:"first",postScriptName:"internal-uuid"),second=FontVersion(assetHash:"second",postScriptName:"another-uuid")
         var project=FontProject(name:"My script",versions:[first])
@@ -825,6 +824,8 @@ extension NotebookFeatureTests {
         XCTAssertTrue(text.resignFirstResponder());try await Task.sleep(for:.milliseconds(100))
         controller.refresh();try await session.leave();controller.refresh()
         XCTAssertFalse(text.isFirstResponder);XCTAssertEqual(text.selectedRange,selection)
+        let hiddenCommands=XCTNSPredicateExpectation(predicate:NSPredicate {_,_ in controller.commandBar.isHidden && controller.commandBar.bounds.height == 0},object:nil)
+        await fulfillment(of:[hiddenCommands],timeout:2)
         session.retainsTypingFocusDuringTurn=true;session.navigationLocked=true;controller.refresh()
         XCTAssertFalse(text.isFirstResponder)
         session.retainsTypingFocusDuringTurn=false;session.navigationLocked=false;controller.refresh()
@@ -880,14 +881,17 @@ extension NotebookFeatureTests {
             let symbolHeight=try XCTUnwrap(UIImage(systemName:symbol.rawValue,withConfiguration:UIImage.SymbolConfiguration(font:symbolFont))).size.height
             XCTAssertGreaterThanOrEqual(accessory.bounds.height,ceil(max(44,symbolHeight+8)),"Native \(symbol.rawValue) glyph plus vertical padding must fit")
         }
-        XCTAssertEqual(accessory.bounds.width,320,accuracy:0.5)
+        let availableWidth=controller.view.safeAreaLayoutGuide.layoutFrame.width
+        XCTAssertEqual(window.bounds.width,320,accuracy:0.5)
+        XCTAssertGreaterThan(availableWidth,0)
+        XCTAssertEqual(accessory.bounds.width,availableWidth,accuracy:0.5)
         let capture=UIGraphicsImageRenderer(bounds:host.view.bounds).image {_ in host.view.drawHierarchy(in:host.view.bounds,afterScreenUpdates:true)}
-        let attachment=XCTAttachment(image:capture);attachment.name="Native 320pt AX command bar";attachment.lifetime = .keepAlways;add(attachment)
-        let fitted=commands.sizeThatFits(in:CGSize(width:320,height:800))
-        print("COMMAND_BAR_320 frame=\(accessory.frame) fitted=\(fitted)")
-        XCTAssertLessThanOrEqual(fitted.width,320)
+        let attachment=XCTAttachment(image:capture);attachment.name="Native 320pt window AX command bar";attachment.lifetime = .keepAlways;add(attachment)
+        let fitted=commands.sizeThatFits(in:CGSize(width:availableWidth,height:800))
+        print("COMMAND_BAR_320_WINDOW available=\(availableWidth) frame=\(accessory.frame) fitted=\(fitted)")
+        XCTAssertLessThanOrEqual(fitted.width,availableWidth)
         XCTAssertGreaterThanOrEqual(accessory.bounds.height,ceil(fitted.height))
-        XCTAssertGreaterThanOrEqual(commands.sizeThatFits(in:CGSize(width:320,height:1000)).height,commands.preferredContentSize.height)
+        XCTAssertGreaterThanOrEqual(commands.sizeThatFits(in:CGSize(width:availableWidth,height:1000)).height,commands.preferredContentSize.height)
         XCTAssertNil(text.inputAccessoryView);XCTAssertTrue(text.isFirstResponder)
         XCTAssertEqual(text.selectedRange,selected);XCTAssertEqual(session.activeContent,content)
         let largeHeight=accessory.bounds.height
@@ -926,5 +930,339 @@ extension NotebookFeatureTests {
         XCTAssertTrue(controller.page.subviews.contains{$0 === text})
         XCTAssertEqual(text.selectedRange,NSRange(location:2,length:3))
         XCTAssertEqual(second.activeContent,ivory)
+    }
+}
+
+
+@MainActor @Observable private final class IndexContinuityState {
+    var presented=false
+}
+private struct IndexContinuityFixture: View {
+    let session: EditorSession
+    let notes: [Note]
+    @Bindable var state: IndexContinuityState
+    var body: some View {
+        SpreadWorkspace(session:session,notes:notes,indexIsPresented:state.presented,indexPaper:AnyView(Text("Index").frame(maxWidth:.infinity,maxHeight:.infinity).background(.white)),onIndex:{state.presented.toggle()},onSelect:{_ in},onAdd:{})
+            .environment(\.horizontalSizeClass,.regular)
+    }
+}
+
+extension NotebookFeatureTests {
+    func testIndexIsUnnumberedAndContentLeavesReserveCommandMargin() {
+        let ids=[UUID(),UUID(),UUID()]
+        let notes=[Note(title:"Index fixture",orderKey:0,pageIDs:ids)]
+        let pair=NotebookSearch.spreadIDs(active:ids[1],notes:notes)
+        let index=BookPresentation(size:CGSize(width:1032,height:1165),regular:true,accessibility:false,indexPresented:true)
+        XCTAssertTrue(index.spread);XCTAssertTrue(index.indexPresented)
+        XCTAssertEqual(index.leafPageNumbers(active:2,leading:1,trailing:3),[nil,2])
+        let pairPresentation=BookPresentation(size:CGSize(width:1200,height:800),regular:true,accessibility:false)
+        XCTAssertEqual(pairPresentation.leafPageNumbers(active:3,leading:2,trailing:nil,activeOnRight:true),[2,3])
+        XCTAssertEqual(pairPresentation.leafPageNumbers(active:2,leading:nil,trailing:3),[2,3])
+        XCTAssertEqual(pairPresentation.leafPageNumbers(active:1,leading:nil,trailing:nil,activeOnRight:true),[nil,1])
+        XCTAssertEqual(pairPresentation.contentFrames[0].height,766)
+        XCTAssertEqual(pairPresentation.contentFrames[0].minX,pairPresentation.pages[0].minX+52)
+        XCTAssertEqual(pairPresentation.contentFrames[1].minX,pairPresentation.pages[1].minX)
+        let compactIndex=BookPresentation(size:CGSize(width:440,height:900),regular:false,accessibility:false,indexPresented:true)
+        XCTAssertEqual(compactIndex.leafPageNumbers(active:2,leading:1,trailing:3),[nil])
+        XCTAssertEqual(index.pages.first?.minX,0);XCTAssertEqual(index.pages.last?.maxX,1032)
+        XCTAssertEqual(index.contentFrames[1].maxX,index.pages[1].maxX-52)
+        XCTAssertEqual(index.binding(offset:CGPoint(x:0,y:500),enlarged:false).height,1165)
+        XCTAssertEqual(NotebookSearch.spreadIDs(active:ids[1],notes:notes).left,pair.left)
+        XCTAssertEqual(NotebookSearch.spreadIDs(active:ids[1],notes:notes).right,pair.right)
+        XCTAssertEqual(LibraryRules.displayNumbers(notes:notes)[ids[1]],2)
+        XCTAssertFalse(BookPresentation(size:index.size,regular:true,accessibility:true,indexPresented:true).spread)
+    }
+}
+
+
+@MainActor @Observable private final class IndexCommandProbeState {
+    var enabled: Bool?
+}
+private struct IndexCommandProbe: View {
+    @Environment(\.isEnabled) private var enabled
+    let state: IndexCommandProbeState
+    var body: some View {
+        Button("Export and recovery") {}.onAppear {state.enabled=enabled}.onChange(of:enabled) {_,value in state.enabled=value}
+    }
+}
+extension NotebookFeatureTests {
+    func testUnavailableRetainedDraftKeepsIndexCommandsEnabled() async throws {
+        let store=try await NotebookStore.open(root:FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString))
+        var content=PageContent();content.textBlocks=[TextBlock(text:"Retained e\u{301} 👩🏽‍💻")]
+        let note=try await store.createNote(title:"Retained recovery",contents:[content])
+        let session=EditorSession(store:store,snapshot:note)
+        content.textBlocks[0].text += " unsaved";session.setDraft(content,pageID:session.activePageID,markedText:true)
+        try await store.trash(noteID:note.note.id);try await session.refresh()
+        XCTAssertTrue(session.isUnavailable);XCTAssertFalse(session.draftLeases.isEmpty)
+        let state=IndexCommandProbeState()
+        let scene=try XCTUnwrap(UIApplication.shared.connectedScenes.compactMap{$0 as? UIWindowScene}.first)
+        let window=UIWindow(windowScene:scene)
+        let host=UIHostingController(rootView:SpreadWorkspace(session:session,notes:[note.note],indexIsPresented:true,indexPaper:AnyView(IndexCommandProbe(state:state)),onIndex:{},onSelect:{_ in},onAdd:{}).environment(\.horizontalSizeClass,.compact))
+        window.rootViewController=host;window.makeKeyAndVisible();defer {window.isHidden=true}
+        try await Task.sleep(for:.milliseconds(150));host.view.layoutIfNeeded()
+        XCTAssertEqual(state.enabled,true,"Recovery actions on the index must remain enabled when its retained editor is unavailable")
+        XCTAssertEqual(Array(session.activeContent.textBlocks[0].text.utf8),Array(content.textBlocks[0].text.utf8))
+        XCTAssertEqual(session.saveState,.conflict)
+    }
+}
+
+extension NotebookFeatureTests {
+    func testLeafTurnCompletionCancellationAndStaleToken() {
+        let source=UUID(),target=UUID(),token=UUID()
+        var turn=LeafTurnTransaction(token:token,source:source,target:target)
+        XCTAssertNil(turn.finish(token:UUID(),completed:true))
+        XCTAssertEqual(turn.finish(token:token,completed:true),target)
+        XCTAssertNil(turn.finish(token:token,completed:true),"A native completion commits at most once")
+        turn=LeafTurnTransaction(token:token,source:target,target:source)
+        XCTAssertNil(turn.finish(token:token,completed:false))
+        XCTAssertNil(turn.finish(token:token,completed:true),"Cancelled turns cannot later commit")
+    }
+    func testLeafPlanUsesPhysicalSpreadsAndFallbackGeometry() {
+        let ids=(0..<7).map{_ in UUID()},notes=[Note(title:"Leaves",orderKey:0,pageIDs:ids)]
+        let spread=BookPresentation(size:CGSize(width:1200,height:800),regular:true,accessibility:false)
+        let plan=LeafTurnPlan(active:ids[2],notes:notes,presentation:spread)
+        XCTAssertTrue(plan.centerSpine)
+        XCTAssertEqual(plan.previous,ids[0]);XCTAssertEqual(plan.next,ids[3])
+        XCTAssertNil(plan.direction(to:ids[1]),"Activating the other visible side is not a turn")
+        XCTAssertNil(plan.direction(to:ids[6]),"An index jump is not a physical turn")
+        XCTAssertEqual(plan.direction(to:ids[3]),.forward)
+        XCTAssertEqual(plan.direction(to:ids[0]),.reverse)
+        let unequal=BookPresentation(size:CGSize(width:1400,height:900),regular:true,accessibility:false,regions:[.init(frame:CGRect(x:450,y:0,width:60,height:900),division:true)])
+        XCTAssertFalse(LeafTurnPlan(active:ids[2],notes:notes,presentation:unequal).centerSpine)
+        let stacked=BookPresentation(size:CGSize(width:900,height:1000),regular:true,accessibility:false,regions:[.init(frame:CGRect(x:0,y:450,width:900,height:60),division:true)])
+        XCTAssertFalse(LeafTurnPlan(active:ids[2],notes:notes,presentation:stacked).centerSpine)
+    }
+    func testLeafPreparationIdentityIncludesGeometryStoreRestoreContentAndViewport() {
+        let presentation=BookPresentation(size:CGSize(width:440,height:900),regular:false,accessibility:false)
+        let key=LeafPreparationKey(store:UUID(),restore:0,revision:0,active:UUID(),presentation:presentation,offset:.zero,enlarged:false,density:3,contents:[:])
+        var changed=key;changed.store=UUID();XCTAssertNotEqual(key,changed)
+        changed=key;changed.restore=1;XCTAssertNotEqual(key,changed)
+        changed=key;changed.presentation.size.width += 1;XCTAssertNotEqual(key,changed)
+        changed=key;changed.offset.y=1;XCTAssertNotEqual(key,changed)
+        changed=key;changed.enlarged=true;XCTAssertNotEqual(key,changed)
+        changed=key;changed.density=2;XCTAssertNotEqual(key,changed)
+        changed=key;changed.dynamicType = .accessibility3;XCTAssertNotEqual(key,changed)
+        changed=key;changed.contents[UUID()]=PageContent();XCTAssertNotEqual(key,changed)
+    }
+}
+
+extension NotebookFeatureTests {
+    func testPreparedLeavesAreBoundedDenseAndCancelBeforePublication() async throws {
+        let store=try await NotebookStore.open(root:FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString))
+        var content=PageContent();content.textBlocks=[TextBlock(text:"Exact e\u{301} 👩🏽‍💻")]
+        let points=[CGPoint(x:60,y:100),CGPoint(x:180,y:140)].enumerated().map {index,point in PKStrokePoint(location:point,timeOffset:Double(index)*0.1,size:CGSize(width:3,height:3),opacity:1,force:1,azimuth:0,altitude:.pi/2)}
+        let drawing=PKDrawing(strokes:[PKStroke(ink:PKInk(.pen,color:.black),path:PKStrokePath(controlPoints:points,creationDate:Date(timeIntervalSince1970:0)))])
+        let assets=await store.assets
+        content.drawingAssetHash=try await assets.finalize(assets.stage(data:drawing.dataRepresentation()))
+        let note=try await store.createNote(title:"Leaf fixture",contents:Array(repeating:content,count:7))
+        let editor=EditorSession(store:store,snapshot:note),active=note.pages[2].id
+        let key=LeafPreparationKey(store:store.identity,restore:0,revision:0,active:active,presentation:BookPresentation(size:CGSize(width:1200,height:800),regular:true,accessibility:false),offset:.zero,enlarged:false,density:2,contents:[:])
+        let leaves=try await NotebookFrozenRenderer.leaves(key:key,notes:[note.note],sessions:[note.note.id:editor],store:store)
+        XCTAssertEqual(leaves.targets.count,3);XCTAssertEqual(leaves.images.count,6)
+        XCTAssertEqual(leaves.images[0].cgImage?.width,1200);XCTAssertEqual(leaves.images[0].scale,2)
+        XCTAssertEqual(editor.activeContent,content);XCTAssertEqual(editor.activePageID,note.pages[0].id)
+        let task=Task {try await NotebookFrozenRenderer.leaves(key:key,notes:[note.note],sessions:[note.note.id:editor],store:store)}
+        task.cancel()
+        do {_=try await task.value;XCTFail("Cancelled preparation published leaves")} catch {XCTAssertTrue(error is CancellationError)}
+    }
+    func testNativeCenterAndSingleSpineContainmentAndOneCompletion() async throws {
+        let store=try await NotebookStore.open(root:FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString))
+        var content=PageContent();content.textBlocks=[TextBlock(text:"Source Äß e\u{301} 👩🏽‍💻")]
+        let note=try await store.createNote(title:"Native leaves",contents:Array(repeating:content,count:7))
+        let editor=EditorSession(store:store,snapshot:note)
+        let scene=try XCTUnwrap(UIApplication.shared.connectedScenes.compactMap{$0 as? UIWindowScene}.first)
+        let window=UIWindow(windowScene:scene),root=UIViewController();window.rootViewController=root;window.makeKeyAndVisible()
+        defer {window.isHidden=true}
+        for center in [false,true] {
+            print("LEAF_NATIVE begin center=\(center)")
+            let size=center ? CGSize(width:1200,height:800) : CGSize(width:440,height:800)
+            let key=LeafPreparationKey(store:store.identity,restore:0,revision:0,active:note.pages[2].id,presentation:BookPresentation(size:size,regular:center,accessibility:false),offset:.zero,enlarged:false,density:1,contents:[:])
+            let leaves=try await NotebookFrozenRenderer.leaves(key:key,notes:[note.note],sessions:[note.note.id:editor],store:store)
+            print("LEAF_NATIVE prepared")
+            let destination=try XCTUnwrap(leaves.plan.next)
+            let completed=expectation(description:center ? "Center native forward" : "Single native forward")
+            var count=0
+            let controller=LeafPagerController(leaves:leaves,destination:destination,onBegin:{_,_ in true},onFinish:{token,target,finished in
+                XCTAssertEqual(token,leaves.token);XCTAssertEqual(target,destination);XCTAssertTrue(finished);count+=1;completed.fulfill()
+            })
+            print("LEAF_NATIVE initialized")
+            root.addChild(controller);root.view.addSubview(controller.view);controller.didMove(toParent:root)
+            print("LEAF_NATIVE mounted")
+            controller.view.frame=CGRect(origin:.zero,size:size);controller.view.setNeedsLayout();controller.view.layoutIfNeeded()
+            XCTAssertTrue(controller.pager.parent === controller)
+            XCTAssertEqual(controller.pager.transitionStyle,.pageCurl);XCTAssertEqual(controller.pager.navigationOrientation,.horizontal)
+            XCTAssertEqual(controller.pager.spineLocation,center ? .mid : .min)
+            XCTAssertEqual(controller.pager.isDoubleSided,center);XCTAssertEqual(controller.pager.viewControllers?.count,center ? 2 : 1)
+            print("LEAF_NATIVE laid out")
+            try await Task.sleep(for:.milliseconds(160))
+            print("LEAF_NATIVE screenshot")
+            let image=UIGraphicsImageRenderer(bounds:controller.view.bounds).image {_ in controller.view.drawHierarchy(in:controller.view.bounds,afterScreenUpdates:false)}
+            let attachment=XCTAttachment(image:image);attachment.name=center ? "Native center curl in flight" : "Native single curl in flight";attachment.lifetime = .keepAlways;add(attachment)
+            print("LEAF_NATIVE wait completion")
+            await fulfillment(of:[completed],timeout:4)
+            print("LEAF_NATIVE completed")
+            controller.pageViewController(controller.pager,didFinishAnimating:true,previousViewControllers:[],transitionCompleted:true)
+            XCTAssertEqual(count,1);XCTAssertEqual(editor.activeContent,content)
+            controller.invalidate();controller.willMove(toParent:nil);controller.view.removeFromSuperview();controller.removeFromParent()
+        }
+    }
+}
+
+extension NotebookFeatureTests {
+    func testNativePagerSynchronousContract() throws {
+        let ids=(0..<3).map{_ in UUID()},notes=[Note(title:"Synchronous contract",orderKey:0,pageIDs:ids)]
+        let presentation=BookPresentation(size:CGSize(width:440,height:800),regular:false,accessibility:false)
+        let key=LeafPreparationKey(store:UUID(),restore:0,revision:0,active:ids[1],presentation:presentation,offset:.zero,enlarged:false,density:1,contents:[:])
+        let image=UIGraphicsImageRenderer(size:CGSize(width:440,height:800)).image {context in UIColor.white.setFill();context.fill(CGRect(x:0,y:0,width:440,height:800))}
+        let leaves=PreparedLeaves(key:key,plan:LeafTurnPlan(active:ids[1],notes:notes,presentation:presentation),targets:ids,images:Array(repeating:image,count:3),current:1)
+        let root=UIViewController(),controller=LeafPagerController(leaves:leaves,destination:nil,onBegin:{_,_ in true},onFinish:{_,_,_ in})
+        root.loadViewIfNeeded();root.addChild(controller);root.view.addSubview(controller.view);controller.didMove(toParent:root)
+        XCTAssertFalse(controller.pager.isDoubleSided);XCTAssertEqual(controller.pager.viewControllers?.count,1)
+        controller.view.frame=CGRect(x:0,y:0,width:440,height:800);controller.view.layoutIfNeeded()
+        XCTAssertFalse(controller.pager.gestureRecognizers.isEmpty)
+        XCTAssertTrue(controller.pager.gestureRecognizers.allSatisfy{$0.view === controller.view})
+        XCTAssertTrue(controller.view.hitTest(CGPoint(x:370,y:400),with:nil) === controller.view)
+        XCTAssertNil(controller.view.hitTest(CGPoint(x:200,y:400),with:nil),"The live editor owns the page interior")
+        XCTAssertNil(controller.view.hitTest(CGPoint(x:420,y:100),with:nil),"Outer commands keep gesture ownership")
+        controller.invalidate()
+    }
+}
+
+extension NotebookFeatureTests {
+    func testUnsupportedPaneTransitionKeepsWholeSpreadAndDestinationFrames() async throws {
+        let store=try await NotebookStore.open(root:FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString))
+        var contents=Array(repeating:PageContent(),count:5);contents[3].style.paper="rose";contents[4].style.paper="cream"
+        let note=try await store.createNote(title:"Reserved panes",contents:contents),editor=EditorSession(store:store,snapshot:note)
+        let layouts=[BookPresentation(size:CGSize(width:1400,height:900),regular:true,accessibility:false,regions:[.init(frame:CGRect(x:450,y:0,width:60,height:900),division:true)]),BookPresentation(size:CGSize(width:900,height:1400),regular:true,accessibility:false,regions:[.init(frame:CGRect(x:0,y:650,width:900,height:60),division:true)])]
+        for layout in layouts {
+            let plan=LeafTurnPlan(active:note.pages[2].id,notes:[note.note],presentation:layout)
+            XCTAssertTrue(layout.spread);XCTAssertFalse(plan.supportsCurl)
+            XCTAssertEqual(plan.frame,CGRect(origin:.zero,size:layout.size))
+            let source=try await NotebookFrozenRenderer.image(activeID:note.pages[2].id,notes:[note.note],sessions:[note.note.id:editor],store:store,presentation:layout)
+            let target=try XCTUnwrap(plan.next)
+            XCTAssertEqual(target,note.pages[3].id)
+            let destination=try await NotebookFrozenRenderer.image(activeID:target,notes:[note.note],sessions:[note.note.id:editor],store:store,presentation:layout)
+            XCTAssertEqual(source.size,layout.size);XCTAssertEqual(destination.size,layout.size)
+            let host=SnapshotTurnView(source:source,destination:destination,completion:{})
+            host.frame=plan.frame;host.layoutIfNeeded()
+            XCTAssertEqual(host.subviews.compactMap{$0 as? UIImageView}.map(\.frame),[plan.frame,plan.frame])
+            for (index,paper) in ["rose","cream"].enumerated() {
+                let leaf=layout.pages[index]
+                let pixel=try XCTUnwrap(destination.cgImage?.cropping(to:CGRect(x:leaf.midX,y:leaf.minY+5,width:1,height:1)))
+                var rgba=[UInt8](repeating:0,count:4)
+                rgba.withUnsafeMutableBytes {bytes in CGContext(data:bytes.baseAddress,width:1,height:1,bitsPerComponent:8,bytesPerRow:4,space:CGColorSpaceCreateDeviceRGB(),bitmapInfo:CGImageAlphaInfo.premultipliedLast.rawValue)!.draw(pixel,in:CGRect(x:0,y:0,width:1,height:1))}
+                var r:CGFloat=0,g:CGFloat=0,b:CGFloat=0,a:CGFloat=0
+                PageRenderer.paperColor(paper).getRed(&r,green:&g,blue:&b,alpha:&a)
+                for (actual,expected) in zip(rgba.prefix(3),[r,g,b]) {XCTAssertEqual(Double(actual)/255,Double(expected),accuracy:0.02,"Destination leaf stays in its own reserved pane")}
+            }
+        }
+    }
+    func testNativeLargeFolioMatchesFrozenFolio() async throws {
+        let store=try await NotebookStore.open(root:FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString))
+        let note=try await store.createNote(title:"Folio",contents:[PageContent()]),editor=EditorSession(store:store,snapshot:note)
+        let scene=try XCTUnwrap(UIApplication.shared.connectedScenes.compactMap{$0 as? UIWindowScene}.first)
+        let window=UIWindow(windowScene:scene),root=UIViewController();window.rootViewController=root;window.makeKeyAndVisible();defer {window.isHidden=true}
+        func inkBounds(_ image: UIImage) throws -> (top:Int,height:Int) {
+            let cg=try XCTUnwrap(image.cgImage),w=cg.width,h=cg.height
+            var bytes=[UInt8](repeating:0,count:w*h*4)
+            bytes.withUnsafeMutableBytes {buffer in CGContext(data:buffer.baseAddress,width:w,height:h,bitsPerComponent:8,bytesPerRow:w*4,space:CGColorSpaceCreateDeviceRGB(),bitmapInfo:CGImageAlphaInfo.premultipliedLast.rawValue)!.draw(cg,in:CGRect(x:0,y:0,width:w,height:h))}
+            let rows=(0..<h).filter {y in (0..<w).contains {x in let i=(y*w+x)*4;return bytes[i]<100 && bytes[i+1]<100 && bytes[i+2]<100 && bytes[i+3]>128}}
+            return (rows.first ?? 0,(rows.last ?? 0)-(rows.first ?? 0)+1)
+        }
+        var heights:[Int]=[]
+        for size in [DynamicTypeSize.large,.accessibility3] {
+            let host=UIHostingController(rootView:BookPageNumber(number:1).frame(width:440,height:90).background(.white).environment(\.dynamicTypeSize,size).ignoresSafeArea())
+            host.overrideUserInterfaceStyle = .light;root.addChild(host);root.view.addSubview(host.view);host.didMove(toParent:root);host.view.frame=CGRect(x:0,y:0,width:440,height:90)
+            try await Task.sleep(for:.milliseconds(100));host.view.layoutIfNeeded()
+            let format=UIGraphicsImageRendererFormat();format.scale=1
+            let live=UIGraphicsImageRenderer(size:host.view.bounds.size,format:format).image {_ in host.view.drawHierarchy(in:host.view.bounds,afterScreenUpdates:true)}
+            let layout=BookPresentation(size:CGSize(width:440,height:900),regular:false,accessibility:size.isAccessibilitySize,footerHeight:90)
+            let snapshot=try await NotebookFrozenRenderer.image(activeID:note.pages[0].id,notes:[note.note],sessions:[note.note.id:editor],store:store,presentation:layout,dynamicType:size)
+            let frozen=UIImage(cgImage:try XCTUnwrap(snapshot.cgImage?.cropping(to:CGRect(x:0,y:810,width:440,height:90))))
+            let liveInk=try inkBounds(live),frozenInk=try inkBounds(frozen)
+            XCTAssertEqual(Double(liveInk.height),Double(frozenInk.height),accuracy:2)
+            XCTAssertEqual(Double(liveInk.top),Double(frozenInk.top),accuracy:2,"Live and frozen folios keep the same vertical placement")
+            heights.append(frozenInk.height)
+            for (label,image) in [("Live native folio",live),("Frozen folio",frozen)] {let attachment=XCTAttachment(image:image);attachment.name="\(label) \(size)";attachment.lifetime = .keepAlways;add(attachment)}
+            host.willMove(toParent:nil);host.view.removeFromSuperview();host.removeFromParent()
+        }
+        XCTAssertGreaterThan(heights[1],heights[0]*3/2)
+    }
+}
+
+
+extension NotebookFeatureTests {
+    func testActualOuterCornersKeepWritingAndCommandOwnership() {
+        let hit=LeafHitView(frame:CGRect(x:0,y:0,width:1200,height:800))
+        hit.edgeInsets=UIEdgeInsets(top:0,left:52,bottom:0,right:52)
+        for broad in [true,false] {
+            hit.broadEdges=broad
+            for x:CGFloat in [1,51.9,1148.1,1199] {
+                for y:CGFloat in [1,79.9,720.1,799] {XCTAssertTrue(hit.point(inside:CGPoint(x:x,y:y),with:nil))}
+            }
+            for point in [CGPoint(x:600,y:1),CGPoint(x:600,y:400),CGPoint(x:600,y:799),CGPoint(x:26,y:80),CGPoint(x:1174,y:80),CGPoint(x:26,y:720),CGPoint(x:1174,y:720)] {
+                XCTAssertFalse(hit.point(inside:point,with:nil),"Binding, interior and rail keep ownership")
+            }
+            XCTAssertEqual(hit.point(inside:CGPoint(x:60,y:400),with:nil),broad)
+            XCTAssertEqual(hit.point(inside:CGPoint(x:1140,y:400),with:nil),broad)
+        }
+        hit.broadEdges=false
+        for x:CGFloat in [52,52.1,1148,1147.9] {
+            for y:CGFloat in [1,40,79.9,720.1,760,799] {
+                XCTAssertFalse(hit.point(inside:CGPoint(x:x,y:y),with:nil),"Writing starts immediately beyond the 52pt outer margin")
+            }
+        }
+        hit.edgeInsets.left=0
+        for point in [CGPoint(x:43.9,y:43.9),CGPoint(x:43.9,y:756.1)] {
+            XCTAssertTrue(hit.point(inside:point,with:nil),"A single page keeps its existing left corner")
+        }
+        for point in [CGPoint(x:44,y:40),CGPoint(x:40,y:44),CGPoint(x:40,y:80),CGPoint(x:52,y:40)] {
+            XCTAssertFalse(hit.point(inside:point,with:nil),"An unreserved left edge must not take more writing space")
+        }
+        hit.turning=true
+        XCTAssertTrue(hit.point(inside:CGPoint(x:600,y:400),with:nil),"An active turn follows the finger across the sheet")
+    }
+    func testCornerContactProbeFootprintKeepsWritingOutsideMargin() {
+        let hit=LeafHitView(frame:CGRect(x:0,y:0,width:1344,height:980))
+        hit.edgeInsets=UIEdgeInsets(top:0,left:52,bottom:0,right:52)
+        hit.broadEdges=false
+        // Replay routing7's 61 contact probes: radius37.152/6 steps at a 40pt inset.
+        var offsets=[CGPoint.zero]
+        for ring in 1...5 {
+            for step in 0..<(ring*4) {
+                let angle=Double(step)*2*Double.pi/Double(ring*4),radius=6.192*Double(ring)
+                offsets.append(CGPoint(x:cos(angle)*radius,y:sin(angle)*radius))
+            }
+        }
+        for right in [false,true] {
+            for lower in [false,true] {
+                let admitted=offsets.filter { offset in
+                    let x=40+offset.x,y=40+offset.y
+                    return hit.point(inside:CGPoint(x:right ? hit.bounds.width-x : x,y:lower ? hit.bounds.height-y : y),with:nil)
+                }
+                XCTAssertEqual(admitted.count,45,"Admit the measured contact footprint inside the command margin; 16 writing-side probes remain excluded")
+            }
+        }
+    }
+    func testCornerPreparationAllowsWritingModesWithoutInterruptingDraftGuards() async throws {
+        let store=try await NotebookStore.open(root:FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString))
+        let note=try await store.createNote(title:"Corner guards",contents:[PageContent(),PageContent()])
+        let editor=EditorSession(store:store,snapshot:note)
+        for mode in EditorSession.Mode.allCases {
+            try await editor.setMode(mode)
+            XCTAssertTrue(NotebookView.canPrepareLeafTurn(editor),"Corners remain available in \(mode)")
+        }
+        editor.strokeActive=true;XCTAssertFalse(NotebookView.canPrepareLeafTurn(editor));editor.strokeActive=false
+        let token=editor.beginAssetWrite(pageID:editor.activePageID)
+        XCTAssertFalse(NotebookView.canPrepareLeafTurn(editor));editor.endAssetWrite(token)
+        var content=editor.activeContent;content.textBlocks=[TextBlock(text:"Ä e\u{301} 👩🏽‍💻")]
+        editor.setDraft(content,pageID:note.pages[1].id,markedText:true)
+        XCTAssertFalse(NotebookView.canPrepareLeafTurn(editor),"Even a neighboring marked draft blocks preparation")
+        XCTAssertTrue(editor.drafts[note.pages[1].id]!.markedText)
+        editor.setDraft(content,pageID:note.pages[1].id)
+        XCTAssertFalse(NotebookView.canPrepareLeafTurn(editor),"Wait for the existing save path")
+        try await editor.flush()
+        XCTAssertTrue(NotebookView.canPrepareLeafTurn(editor))
+        XCTAssertEqual(editor.drafts[note.pages[1].id]!.content,content)
     }
 }

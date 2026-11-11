@@ -10570,7 +10570,7 @@
               },
               {
                 "type": "text",
-                "label": "1 = niedrig · 10 = hoch — Zahl einkreisen",
+                "label": "Je Bereich markieren: innen 1 (niedrig), außen 10 (hoch).",
                 "items": [],
                 "rows": 3,
                 "weights": [],
@@ -10631,7 +10631,7 @@
               },
               {
                 "type": "text",
-                "label": "1 = low · 10 = high — circle a number",
+                "label": "Mark each area: inner ring 1 (low), outer ring 10 (high).",
                 "items": [],
                 "rows": 3,
                 "weights": [],
@@ -18192,7 +18192,7 @@
                 "type": "text",
                 "label": "",
                 "items": [
-                  "Updates · Firewall-Regeln · SSH-Keys statt Passwörter · 2FA · Backups verschlüsselt ·",
+                  "Updates · Firewall-Regeln · SSH-Keys statt Passwörter · 2FA · Backups verschlüsselt",
                   "Logs zentral · Least Privilege · offene Ports geprüft · Zertifikate erneuert"
                 ],
                 "rows": 3,
@@ -18225,7 +18225,7 @@
                 "type": "text",
                 "label": "",
                 "items": [
-                  "Updates · firewall rules · SSH keys instead of passwords · 2FA · encrypted backups ·",
+                  "Updates · firewall rules · SSH keys instead of passwords · 2FA · encrypted backups",
                   "Centralized logs · least privilege · open ports checked · certificates renewed"
                 ],
                 "rows": 3,

@@ -5,18 +5,22 @@ struct SpreadWorkspace: View {
     @Bindable var session: EditorSession
     let notes: [Note]
     var navigationPending=false
+    var indexIsPresented=false
+    var indexPaper: AnyView? = nil
+    var onIndex: (() -> Void)? = nil
+    var bookmarkButton: AnyView? = nil
+    var workspaceCommands: AnyView? = nil
+    var libraryCommands: AnyView? = nil
     let onSelect: (UUID) -> Void
     let onAdd: () -> Void
     var body: some View {
         let pair=NotebookSearch.spreadIDs(active:session.activePageID,notes:notes)
-        PageEditor(session:session,navigationPending:navigationPending,navigationIDs:LibraryRules.orderedNotes(notes).flatMap(\.pageIDs),onNavigate:onSelect,
+        let numbers=LibraryRules.displayNumbers(notes:notes)
+        PageEditor(session:session,navigationPending:navigationPending,indexIsPresented:indexIsPresented,indexPaper:indexPaper,onIndex:onIndex,bookmarkButton:bookmarkButton,workspaceCommands:workspaceCommands,libraryCommands:libraryCommands,navigationIDs:LibraryRules.orderedNotes(notes).flatMap(\.pageIDs),onNavigate:onSelect,
+                   leadingPageNumber:pair.left.flatMap{numbers[$0]},trailingPageNumber:pair.right.flatMap{numbers[$0]},
                    leadingPaper:pair.right == session.activePageID ? paper(pair.left,blank:true) : nil,
                    trailingPaper:pair.left == session.activePageID ? paper(pair.right) : nil)
-        .simultaneousGesture(DragGesture(minimumDistance:24).onEnded { value in
-            guard !session.navigationLocked,!session.busy,!session.hasCurrentAssetWrites,
-                  let target=NotebookSearch.swipeTarget(active:session.activePageID,ids:LibraryRules.orderedNotes(notes).flatMap(\.pageIDs),horizontal:value.translation.width,vertical:value.translation.height,reading:session.mode == .reading) else { return }
-            onSelect(target)
-        },including:session.mode == .reading ? .all : .none)
+
     }
     private func paper(_ id: UUID?,blank: Bool=false) -> AnyView {
         if id == nil && blank {return AnyView(BookPlaceholder(paper:session.activeContent.style.paper,add:false,enlarged:session.mode == .reading && session.largerReadingView).accessibilityHidden(true))}
@@ -50,28 +54,31 @@ struct BookPlaceholder: View {
 }
 
 private struct FrozenPage: View {
-    private struct RenderKey: Equatable { let id: UUID;let content: PageContent? }
+    private struct RenderKey: Equatable { let id: UUID;let content: PageContent?;let store: UUID;let width: CGFloat;let density: CGFloat;let enlarged: Bool }
     let store: NotebookStore
     let pageID: UUID
     let content: PageContent?
     let enlarged: Bool
     let onSelect: (UUID) -> Void
+    @Environment(\.displayScale) private var density
     @State private var image: UIImage?
     @State private var error: String?
     var body: some View {
+        GeometryReader { geometry in
         Group {
             if let image { FrozenPaperHost(image:image,enlarged:enlarged,onSelect:{onSelect(pageID)}) }
             else if let error { Text(error).foregroundStyle(.red) }
             else { ProgressView().frame(maxWidth:.infinity,maxHeight:.infinity) }
         }
         .paperSurface()
-        .task(id:RenderKey(id:pageID,content:content)) {
+        .task(id:RenderKey(id:pageID,content:content,store:store.identity,width:geometry.size.width,density:density,enlarged:enlarged)) {
             do {
                 let value: PageContent
                 if let content { value=content } else { value=try await store.openPage(id:pageID).content }
                 let resources=try await PageRenderer.resources(for:value,store:store);try Task.checkCancellation()
-                image=try PageRenderer.image(value,resources:resources,scale:0.7)
+                image=try PageRenderer.image(value,resources:resources,scale:max(1,geometry.size.width/720*(enlarged ? 2 : 1)*density))
             } catch is CancellationError {} catch { self.error=error.localizedDescription }
+        }
         }
     }
 }

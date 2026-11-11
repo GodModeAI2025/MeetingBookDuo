@@ -11,17 +11,25 @@ struct PageEditor: View {
     @Environment(\.personalSymbols) private var personalSymbols
     @Bindable var session: EditorSession
     var navigationPending=false
+    var indexIsPresented=false
+    var indexPaper: AnyView? = nil
+    var onIndex: (() -> Void)? = nil
+    var bookmarkButton: AnyView? = nil
+    var workspaceCommands: AnyView? = nil
+    var libraryCommands: AnyView? = nil
     var navigationIDs: [UUID]? = nil
     var onNavigate: ((UUID) -> Void)? = nil
+    var leadingPageNumber: Int? = nil
+    var trailingPageNumber: Int? = nil
     var leadingPaper: AnyView? = nil
     var trailingPaper: AnyView? = nil
     private var pageIDs: [UUID] { navigationIDs ?? session.snapshot.note.pageIDs }
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @Environment(\.verticalSizeClass) private var verticalSizeClass
-    @State private var softwareKeyboardVisible=false
     @State private var keyboardActions=EditorKeyboardActions()
+    @State private var softwareKeyboardVisible=false
     @Environment(\.dynamicTypeSize) private var typeSize
     @Environment(\.layoutDirection) private var layoutDirection
+    @ScaledMetric(relativeTo:.caption) private var footerHeight: CGFloat = 34
     @State private var viewportOffset=CGPoint.zero
     @State private var photo: PhotosPickerItem?
     @State private var showingPhotoPicker=false
@@ -31,47 +39,51 @@ struct PageEditor: View {
     var body: some View {
         VStack(spacing:0) {
             GeometryReader { geometry in
-                let presentation=BookPresentation.resolve(geometry,regular:horizontalSizeClass == .regular,accessibility:typeSize.isAccessibilitySize,layoutDirection:layoutDirection)
-                let active=presentation.pages[presentation.spread && leadingPaper != nil ? 1 : 0]
-                let passive=presentation.spread ? presentation.pages[leadingPaper != nil ? 0 : 1] : .zero
+                let presentation=BookPresentation.resolve(geometry,regular:horizontalSizeClass == .regular,accessibility:typeSize.isAccessibilitySize,layoutDirection:layoutDirection,indexPresented:indexIsPresented,footerHeight:footerHeight)
+                let activeIndex=presentation.spread && (indexIsPresented || leadingPaper != nil) ? 1 : 0
+                let active=presentation.contentFrames[activeIndex]
+                let passive=presentation.spread ? (indexIsPresented ? presentation.pages[0] : presentation.contentFrames[leadingPaper != nil ? 0 : 1]) : .zero
+                let activeLeaf=presentation.pages[activeIndex]
+                let hidingEditor=indexIsPresented && !presentation.spread
+                let numbers=presentation.leafPageNumbers(active:(pageIDs.firstIndex(of:session.activePageID) ?? 0)+1,leading:leadingPageNumber,trailing:trailingPageNumber,activeOnRight:leadingPaper != nil)
                 let binding=presentation.binding(offset:viewportOffset,enlarged:session.mode == .reading && session.largerReadingView)
                 ZStack(alignment:.topLeading) {
                     paperAppearance.color
-                    CanvasHost(session:session,error:$error,keyboardCommands:AnyView(keyboardCommands.environment(\.personalSymbols,personalSymbols).paperContext(paperAppearance)),onOffset:{ value in if viewportOffset != value {viewportOffset=value} },onSoftwareKeyboard:{softwareKeyboardVisible=$0},keyboardActions:keyboardActions)
+                    CanvasHost(session:session,indexObscuresEditor:hidingEditor,error:$error,keyboardCommands:AnyView(keyboardCommands.environment(\.personalSymbols,personalSymbols).paperContext(paperAppearance)),onOffset:{ value in if viewportOffset != value {viewportOffset=value} },onSoftwareKeyboard:{softwareKeyboardVisible=$0},keyboardActions:keyboardActions)
                         .frame(width:active.width,height:active.height).position(x:active.midX,y:active.midY)
+                        .allowsHitTesting(!hidingEditor && !session.isUnavailable).accessibilityHidden(hidingEditor)
                     if presentation.spread {
-                        (leadingPaper ?? trailingPaper)
+                        (indexIsPresented ? indexPaper : (leadingPaper ?? trailingPaper))
                             .environment(\.paperViewportOffset,viewportOffset)
                             .frame(width:passive.width,height:passive.height).position(x:passive.midX,y:passive.midY)
-                        Rectangle().fill(.primary.opacity(0.08))
-                            .frame(width:binding.width,height:binding.height)
-                            .position(x:binding.midX,y:binding.midY)
+                        BookBinding(frame:binding)
                             .allowsHitTesting(false).accessibilityHidden(true)
                     }
-                }.preference(key:BookPresentationPreference.self,value:presentation)
+                    if hidingEditor {
+                        indexPaper.frame(width:activeLeaf.width,height:activeLeaf.height).position(x:activeLeaf.midX,y:activeLeaf.midY)
+                    }
+                    if !hidingEditor && !softwareKeyboardVisible {
+                        edgeCommands.frame(width:BookPresentation.commandMargin,height:max(0,activeLeaf.height-LeafHitView.cornerHeight*2),alignment:.top)
+                            .position(x:presentation.spread && activeIndex == 0 ? activeLeaf.minX+BookPresentation.commandMargin/2 : activeLeaf.maxX-BookPresentation.commandMargin/2,y:activeLeaf.midY)
+                    }
+                    ForEach(presentation.pages.indices,id: \.self) { index in
+                        if let number=numbers[index] {
+                            footer(number:number,active:presentation.pages[index] == activeLeaf)
+                                .frame(width:presentation.pages[index].width,height:footerHeight)
+                                .position(x:presentation.pages[index].midX,y:presentation.pages[index].maxY-footerHeight/2)
+                        }
+                    }
+                }.contentShape(.accessibility,Rectangle())
+                 .accessibilityElement(children:.contain).accessibilityIdentifier("notebook.paper")
+                 .preference(key:BookPresentationPreference.self,value:presentation)
                  .preference(key:PaperViewportPreference.self,value:viewportOffset)
-            }
-            ViewThatFits(in:.horizontal) {
-                HStack { Text("Page \((pageIDs.firstIndex(of:session.activePageID) ?? 0)+1)");Spacer();status }
-                VStack(alignment:.leading) { Text("Page \((pageIDs.firstIndex(of:session.activePageID) ?? 0)+1)");status }
-            }.font(.caption).padding(.horizontal,12).padding(.vertical,6)
-        }
-        .paperSurface()
-        .ignoresSafeArea(.keyboard,edges:.bottom)
-        .toolbar {
-            ToolbarItemGroup(placement:.bottomBar) {
-                EditorModeMenu(session:session,error:$error).accessibilityIdentifier("editor.mode").disabled(navigationPending)
-                navigationButtons().disabled(navigationPending)
-                EditorPageMenu(session:session,showingPhotoPicker:$showingPhotoPicker,error:$error,altText:$altText,editingAlt:$editingAlt).accessibilityIdentifier("editor.pageMenu").disabled(navigationPending)
             }
 
         }
-        .disabled(session.isUnavailable || (session.navigationLocked && !session.retainsTypingFocusDuringTurn))
-        .allowsHitTesting(!session.isUnavailable && !session.navigationLocked)
-        .toolbar(session.mode == .typing ? .hidden : .automatic,for:.bottomBar)
-        .toolbar(verticalSizeClass == .compact && softwareKeyboardVisible ? .hidden : .visible,for:.navigationBar)
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(session.strokeActive)
+        .paperSurface()
+        .ignoresSafeArea(.keyboard,edges:.bottom)
+        .disabled(session.navigationLocked && !session.retainsTypingFocusDuringTurn)
+        .allowsHitTesting(!session.navigationLocked)
         .interactiveDismissDisabled(session.strokeActive)
         .task { await session.loadFonts();if let warning=session.errorMessage { error=warning } }
         .photosPicker(isPresented:$showingPhotoPicker,selection:$photo,matching:.images)
@@ -89,6 +101,51 @@ struct PageEditor: View {
             Button("Save") { session.setAltText(altText) };Button("Cancel",role:.cancel) {}
         }
         .onDisappear { run { try await session.leave() } }
+    }
+    private func footer(number: Int,active: Bool) -> some View {
+        BookPageNumber(number:number).frame(maxWidth:.infinity)
+            .overlay(alignment:typeSize.isAccessibilitySize ? .bottom : .trailing) {
+                if active {
+                    status.font(.caption2).fixedSize(horizontal:false,vertical:typeSize.isAccessibilitySize)
+                        .padding(.trailing,typeSize.isAccessibilitySize ? 0 : 12)
+                        .frame(maxWidth:typeSize.isAccessibilitySize ? .infinity : 120,alignment:typeSize.isAccessibilitySize ? .center : .trailing)
+                }
+            }
+    }
+    private var edgeCommands: some View {
+        ViewThatFits(in:.vertical) {
+            VStack(spacing:4) {
+                indexButton
+                if !typeSize.isAccessibilitySize {bookmarkButton}
+                modeButton
+                if !typeSize.isAccessibilitySize {navigationButtons();pageButton}
+                moreButton
+            }
+            VStack(spacing:4) {indexButton;modeButton;moreButton}
+        }.labelStyle(.iconOnly).buttonStyle(.plain).font(.system(size:18))
+         .foregroundStyle(Color(uiColor:.darkText)).padding(.vertical,8)
+         .disabled(navigationPending)
+    }
+    @ViewBuilder private var indexButton: some View {
+        if let onIndex {
+            Button(action:onIndex) {Label {Text("Index")} icon: {AppSymbol.library.image(in:personalSymbols)}.frame(minWidth:44,minHeight:44).contentShape(Rectangle())}
+                .disabled(session.strokeActive).accessibilityIdentifier("notebook.showIndex").keyboardShortcut("i",modifiers:[.command,.shift])
+        }
+    }
+    private var modeButton: some View {
+        EditorModeMenu(session:session,error:$error,minimumTarget:44).accessibilityIdentifier("editor.mode").disabled(session.isUnavailable)
+    }
+    private var pageButton: some View {
+        EditorPageMenu(session:session,showingPhotoPicker:$showingPhotoPicker,error:$error,altText:$altText,editingAlt:$editingAlt,minimumTarget:44).accessibilityIdentifier("editor.pageMenu").disabled(session.isUnavailable)
+    }
+    private var moreButton: some View {
+        Menu {
+            bookmarkButton
+            navigationButtons()
+            pageButton
+            workspaceCommands.disabled(session.isUnavailable)
+            libraryCommands
+        } label: {Label {Text("More")} icon: {AppSymbol.appearance.image(in:personalSymbols)}.frame(minWidth:44,minHeight:44)}.accessibilityIdentifier("editor.more")
     }
     private var keyboardCommands: some View {
         ViewThatFits(in:.horizontal) {
@@ -108,18 +165,18 @@ struct PageEditor: View {
         }
     }
     private var keyboardNavigationCommands: some View {
-        HStack(spacing:4) {navigationButtons(minimumTarget:44)}
+        HStack(spacing:4) {navigationButtons(keyboard:true)}
     }
-    @ViewBuilder private func navigationButtons(minimumTarget: CGFloat=0) -> some View {
-        Button {navigate(-1)} label: {Label { Text("Previous page") } icon: { AppSymbol.previous.image(in:personalSymbols) }.fixedSize(horizontal:minimumTarget>0,vertical:minimumTarget>0).frame(minWidth:minimumTarget,minHeight:minimumTarget).contentShape(Rectangle())}
-            .accessibilityIdentifier(minimumTarget>0 ? "editor.keyboard.previous" : "editor.previous")
-            .disabled(session.navigationLocked || session.strokeActive || pageIDs.first == session.activePageID)
-        Button {navigate(1)} label: {Label { Text("Next page") } icon: { AppSymbol.next.image(in:personalSymbols) }.fixedSize(horizontal:minimumTarget>0,vertical:minimumTarget>0).frame(minWidth:minimumTarget,minHeight:minimumTarget).contentShape(Rectangle())}
-            .accessibilityIdentifier(minimumTarget>0 ? "editor.keyboard.next" : "editor.next")
-            .disabled(session.navigationLocked || session.strokeActive || pageIDs.last == session.activePageID)
-        Button {run {try await session.flush();try await session.undo()}} label: {Label { Text("Undo") } icon: { AppSymbol.undo.image(in:personalSymbols) }.fixedSize(horizontal:minimumTarget>0,vertical:minimumTarget>0).frame(minWidth:minimumTarget,minHeight:minimumTarget).contentShape(Rectangle())}
-            .accessibilityIdentifier(minimumTarget>0 ? "editor.keyboard.undo" : "editor.undo")
-            .disabled(session.navigationLocked || (!session.canUndo && session.saveState == .saved))
+    @ViewBuilder private func navigationButtons(keyboard: Bool=false) -> some View {
+        Button {navigate(-1)} label: {Label { Text("Previous page") } icon: { AppSymbol.previous.image(in:personalSymbols) }.fixedSize(horizontal:false,vertical:false).frame(minWidth:44,minHeight:44).contentShape(Rectangle())}
+            .keyboardShortcut(.leftArrow,modifiers:.command).accessibilityIdentifier(keyboard ? "editor.keyboard.previous" : "editor.previous")
+            .disabled(session.isUnavailable || session.navigationLocked || session.strokeActive || pageIDs.first == session.activePageID)
+        Button {navigate(1)} label: {Label { Text("Next page") } icon: { AppSymbol.next.image(in:personalSymbols) }.fixedSize(horizontal:false,vertical:false).frame(minWidth:44,minHeight:44).contentShape(Rectangle())}
+            .keyboardShortcut(.rightArrow,modifiers:.command).accessibilityIdentifier(keyboard ? "editor.keyboard.next" : "editor.next")
+            .disabled(session.isUnavailable || session.navigationLocked || session.strokeActive || pageIDs.last == session.activePageID)
+        Button {run {try await session.flush();try await session.undo()}} label: {Label { Text("Undo") } icon: { AppSymbol.undo.image(in:personalSymbols) }.fixedSize(horizontal:false,vertical:false).frame(minWidth:44,minHeight:44).contentShape(Rectangle())}
+            .keyboardShortcut("z").accessibilityIdentifier(keyboard ? "editor.keyboard.undo" : "editor.undo")
+            .disabled(session.isUnavailable || session.navigationLocked || (!session.canUndo && session.saveState == .saved))
     }
     @ViewBuilder private var status: some View {
         switch session.saveState {
@@ -151,7 +208,7 @@ private struct EditorModeMenu: View {
                 Label { Text("Draw") } icon: { AppSymbol.drawing.image(in:personalSymbols) }.tag(EditorSession.Mode.drawing)
                 Label { Text("Select") } icon: { AppSymbol.selecting.image(in:personalSymbols) }.tag(EditorSession.Mode.selecting)
             }
-        } label: { Label { Text("Mode") } icon: { AppSymbol.mode.image(in:personalSymbols) }.fixedSize(horizontal:minimumTarget>0,vertical:minimumTarget>0).frame(minWidth:minimumTarget,minHeight:minimumTarget).contentShape(Rectangle()) }.disabled(session.navigationLocked)
+        } label: { Label { Text("Mode") } icon: { AppSymbol.mode.image(in:personalSymbols) }.fixedSize(horizontal:false,vertical:false).frame(minWidth:minimumTarget,minHeight:minimumTarget).contentShape(Rectangle()) }.disabled(session.navigationLocked)
     }
 }
 private struct EditorPageMenu: View {
@@ -178,7 +235,7 @@ private struct EditorPageMenu: View {
             if let id=session.selectedElementID,let image=session.activeContent.images.first(where: { $0.id == id }) {
                 Button("Edit alternative text") { altText=image.altText;editingAlt=true }
             }
-        } label: {Label { Text("Page") } icon: { AppSymbol.page.image(in:personalSymbols) }.fixedSize(horizontal:minimumTarget>0,vertical:minimumTarget>0).frame(minWidth:minimumTarget,minHeight:minimumTarget).contentShape(Rectangle())}
+        } label: {Label { Text("Page") } icon: { AppSymbol.page.image(in:personalSymbols) }.fixedSize(horizontal:false,vertical:false).frame(minWidth:minimumTarget,minHeight:minimumTarget).contentShape(Rectangle())}
         .disabled(session.navigationLocked || session.strokeActive || session.busy || session.hasCurrentAssetWrites)
     }
     private func run(_ operation: @escaping @MainActor () async throws -> Void) { Task { do { try await operation() } catch { self.error=error.localizedDescription } } }
@@ -186,6 +243,7 @@ private struct EditorPageMenu: View {
 
 private struct CanvasHost: UIViewControllerRepresentable {
     let session: EditorSession
+    let indexObscuresEditor: Bool
     @Binding var error: String?
     var keyboardCommands: AnyView
     var onOffset: (CGPoint)->Void
@@ -207,7 +265,7 @@ private struct CanvasHost: UIViewControllerRepresentable {
         #endif
         controller.setPaperAppearance(context.environment.paperAppearance)
         controller.setKeyboardCommands(keyboardCommands,dynamicTypeSize:context.environment.dynamicTypeSize)
-        configureCallbacks(controller);controller.setCoverPresented(context.environment.notebookCovered);controller.refresh()
+        configureCallbacks(controller);controller.setCoverPresented(context.environment.notebookCovered || indexObscuresEditor);controller.refresh()
     }
     private func configureCallbacks(_ controller: PageCanvasController) {
         keyboardActions.controller=controller
